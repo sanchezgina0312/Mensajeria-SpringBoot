@@ -12,5 +12,5 @@ public interface PaqueteAlimenticioRepository extends CrudRepository<PaqueteAlim
 	public Optional<List<PaqueteAlimenticio>> findByTamanio(String tamanio);
 	public Optional<List<PaqueteAlimenticio>> findBySeEnviaHoy(boolean seEnviaHoy);
 	public Optional<List<PaqueteAlimenticio>> findByTipoDeAlimento(String tipoDeAlimento);
-	public Optional<List<PaqueteAlimenticio>> findByTamanioYTipoDeAlimento(boolean esFragil, String tipoDeAlimento);
+	public Optional<List<PaqueteAlimenticio>> findByTamanioYTipoDeAlimento(String tamanio, String tipoDeAlimento);
 }

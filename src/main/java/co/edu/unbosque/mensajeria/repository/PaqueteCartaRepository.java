@@ -11,6 +11,6 @@ public interface PaqueteCartaRepository extends CrudRepository<PaqueteCarta, Lon
 
 	public Optional<List<PaqueteCarta>> findByTamanio(String tamanio);
 	public Optional<List<PaqueteCarta>> findByTipoCarta(String tipoCarta);
-	public Optional<List<PaqueteCarta>> findByTamanioYTipoCarta(boolean esFragil, String tipoCarta);
+	public Optional<List<PaqueteCarta>> findByTamanioYTipoCarta(String tamanio, String tipoCarta);
 
 }
