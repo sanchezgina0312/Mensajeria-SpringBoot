@@ -1,0 +1,98 @@
+package co.edu.unbosque.mensajeria.controller;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import co.edu.unbosque.mensajeria.dto.AdministradorDTO;
+import co.edu.unbosque.mensajeria.service.AdministradorService;
+
+@RestController
+@RequestMapping("/administrador")
+@CrossOrigin(origins = { "http://localhost:8080", "*" })
+public class AdministradorController {
+
+	@Autowired
+	private AdministradorService administradorSer;
+
+	public AdministradorController() {
+		
+	}
+	
+	// http://localhost:8080/administrador/crear?nombre=Admin1&cedula=999&correo=a@mail.com&telefono=000&turno=N&usuario=admin&contrasenia=1234
+	@PostMapping("/crear")
+	public ResponseEntity<String> crearAdministrador(@RequestParam String nombre, @RequestParam String cedula,
+			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno,
+			@RequestParam String usuario, @RequestParam String contrasenia) {
+
+		AdministradorDTO nuevo = new AdministradorDTO();
+		nuevo.setNombre(nombre);
+		nuevo.setCedula(cedula);
+		nuevo.setCorreo(correo);
+		nuevo.setTelefono(telefono);
+		nuevo.setTurno(turno);
+		nuevo.setUsuario(usuario);
+		nuevo.setContrasenia(contrasenia);
+
+		int status = administradorSer.create(nuevo);
+		if (status == 0) {
+			return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>("Error al crear el administrador", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	// http://localhost:8080/administrador/mostrartodo
+	@GetMapping("/mostrartodo")
+	public ResponseEntity<List<AdministradorDTO>> mostrarTodo() {
+		List<AdministradorDTO> administradores = administradorSer.getAll();
+		if (administradores.isEmpty()) {
+			return new ResponseEntity<>(administradores, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(administradores, HttpStatus.ACCEPTED);
+		}
+	}
+
+	// http://localhost:8080/administrador/actualizar?id=1&nombre=Jefe&cedula=001&correo=admin@mail.com&telefono=100&turno=T&usuario=admin2&contrasenia=nueva
+	@PutMapping("/actualizar")
+	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam String nombre,
+			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
+			@RequestParam char turno, @RequestParam String usuario, @RequestParam String contrasenia) {
+
+		AdministradorDTO nuevo = new AdministradorDTO();
+		nuevo.setNombre(nombre);
+		nuevo.setCedula(cedula);
+		nuevo.setCorreo(correo);
+		nuevo.setTelefono(telefono);
+		nuevo.setTurno(turno);
+		nuevo.setUsuario(usuario);
+		nuevo.setContrasenia(contrasenia);
+
+		int status = administradorSer.updateById(id, nuevo);
+		if (status == 0) {
+			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	// http://localhost:8080/administrador/eliminar?id=1
+	@DeleteMapping("/eliminar")
+	public ResponseEntity<String> delete(@RequestParam Long id) {
+		int status = administradorSer.deleteById(id);
+		if (status == 0) {
+			return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+		}
+	}
+}

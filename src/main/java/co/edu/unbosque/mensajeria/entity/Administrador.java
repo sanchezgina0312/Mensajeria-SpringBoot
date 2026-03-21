@@ -1,0 +1,100 @@
+package co.edu.unbosque.mensajeria.entity;
+
+import java.util.Objects;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "administrador")
+public class Administrador extends Trabajador {
+
+	private String usuario = "admin";
+	private String contrasenia = "1234";
+
+	public Administrador() {
+
+	}
+
+	public Administrador(String usuario, String contrasenia) {
+		super();
+		this.usuario = usuario;
+		this.contrasenia = contrasenia;
+	}
+
+	public Administrador(char turno, String usuario, String contrasenia) {
+		super(turno);
+		this.usuario = usuario;
+		this.contrasenia = contrasenia;
+	}
+
+	public Administrador(String nombre, String cedula, String correo, String telefono, char turno, String usuario,
+			String contrasenia) {
+		super(nombre, cedula, correo, telefono, turno);
+		this.usuario = usuario;
+		this.contrasenia = contrasenia;
+	}
+
+	public Administrador(String nombre, String cedula, String correo, String telefono, String usuario,
+			String contrasenia) {
+		super(nombre, cedula, correo, telefono);
+		this.usuario = usuario;
+		this.contrasenia = contrasenia;
+	}
+
+	public Administrador(char turno) {
+		super(turno);
+	}
+
+	public Administrador(String nombre, String cedula, String correo, String telefono, char turno) {
+		super(nombre, cedula, correo, telefono, turno);
+	}
+
+	public Administrador(String nombre, String cedula, String correo, String telefono) {
+		super(nombre, cedula, correo, telefono);
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getContrasenia() {
+		return contrasenia;
+	}
+
+	public void setContrasenia(String contrasenia) {
+		this.contrasenia = contrasenia;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "\n Administrador:\n Usuario:" + usuario + "\n Contraseña:" + contrasenia + ".";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(contrasenia, usuario);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Administrador other = (Administrador) obj;
+		return Objects.equals(contrasenia, other.contrasenia) && Objects.equals(usuario, other.usuario);
+	}
+
+}
