@@ -176,21 +176,6 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 		}
 	}
 
-	public List<AdministradorDTO> findByTurno(char turno) {
-		Optional<List<Administrador>> encontrados = administradorRep.findByTurno(turno);
-		List<Administrador> entityList = encontrados.get();
-		List<AdministradorDTO> dtoList = new ArrayList<>();
-		
-		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			entityList.forEach((entity) -> {
-				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
-				dtoList.add(dto);
-			});
-			return dtoList;
-		} else {
-			return new ArrayList<AdministradorDTO>(); 
-		}
-	}
 
 	public List<AdministradorDTO> findByNombreYCedula(String nombre, String cedula) {
 		Optional<List<Administrador>> encontrados = administradorRep.findByNombreYCedula(nombre, cedula);

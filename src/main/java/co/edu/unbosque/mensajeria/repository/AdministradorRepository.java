@@ -15,7 +15,6 @@ public interface AdministradorRepository extends CrudRepository<Administrador, L
 	public Optional<List<Administrador>> findByTelefono(String telefono);		
 	public Optional<List<Administrador>> findByUsuario(String usuario);		
 	public Optional<List<Administrador>> findByContrasenia(String contrasenia);		
-	public Optional<List<Administrador>> findByTurno(char turno);
 	
 	public Optional<List<Administrador>> findByNombreYCedula(String nombre, String cedula);	
 	public Optional<List<Administrador>> findByUsuarioYContrasenia(String usuario, String contrasenia);
