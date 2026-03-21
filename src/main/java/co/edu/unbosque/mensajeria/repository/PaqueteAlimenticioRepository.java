@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
 import co.edu.unbosque.mensajeria.entity.PaqueteAlimenticio;
+import co.edu.unbosque.mensajeria.entity.PaqueteNoAlimenticio;
 
 public interface PaqueteAlimenticioRepository extends CrudRepository<PaqueteAlimenticio, Long> {
 	
@@ -16,4 +17,6 @@ public interface PaqueteAlimenticioRepository extends CrudRepository<PaqueteAlim
 	public Optional<List<PaqueteAlimenticio>>findByFechaEstimadaEntrega(LocalDateTime fechaEstimadaEntrega);
 	public Optional<List<PaqueteAlimenticio>>findBySeEnviaHoy(boolean seEnviaHoy);	
 	public Optional<List<PaqueteAlimenticio>>findByTipoDeAlimento(String tipoDeAlimento);
+	
+	public Optional<List<PaqueteAlimenticio>>findByTamanioYTipoDeAlimento(boolean esFragil, String tipoDeAlimento);
 }
