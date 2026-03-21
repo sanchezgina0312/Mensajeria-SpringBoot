@@ -78,4 +78,135 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	public boolean exist(Long id) {
 		return administradorRep.existsById(id) ? true : false;
 	}
+	
+	
+	public List<AdministradorDTO> findByNombre(String nombre) {
+		Optional<List<Administrador>> encontrados = administradorRep.findByNombre(nombre);
+		List<Administrador> entityList = encontrados.get();
+		List<AdministradorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<AdministradorDTO>(); 
+		}
+	}
+
+	public List<AdministradorDTO> findByCedula(String cedula) {
+		Optional<List<Administrador>> encontrados = administradorRep.findByCedula(cedula);
+		List<Administrador> entityList = encontrados.get();
+		List<AdministradorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<AdministradorDTO>(); 
+		}
+	}
+
+	public List<AdministradorDTO> findByCorreo(String correo) {
+		Optional<List<Administrador>> encontrados = administradorRep.findByCorreo(correo);
+		List<Administrador> entityList = encontrados.get();
+		List<AdministradorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<AdministradorDTO>();
+		}
+	}
+
+	public List<AdministradorDTO> findByTelefono(String telefono) {
+		Optional<List<Administrador>> encontrados = administradorRep.findByTelefono(telefono);
+		List<Administrador> entityList = encontrados.get();
+		List<AdministradorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<AdministradorDTO>(); 
+		}
+	}
+
+	public List<AdministradorDTO> findByUsuario(String usuario) {
+		Optional<List<Administrador>> encontrados = administradorRep.findByUsuario(usuario);
+		List<Administrador> entityList = encontrados.get();
+		List<AdministradorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<AdministradorDTO>(); 
+		}
+	}
+
+	public List<AdministradorDTO> findByContrasenia(String contrasenia) {
+		Optional<List<Administrador>> encontrados = administradorRep.findByContrasenia(contrasenia);
+		List<Administrador> entityList = encontrados.get();
+		List<AdministradorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<AdministradorDTO>(); 
+		}
+	}
+
+
+	public List<AdministradorDTO> findByNombreYCedula(String nombre, String cedula) {
+		Optional<List<Administrador>> encontrados = administradorRep.findByNombreYCedula(nombre, cedula);
+		List<Administrador> entityList = encontrados.get();
+		List<AdministradorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<AdministradorDTO>();
+		}
+	}
+
+	public List<AdministradorDTO> findByUsuarioYContrasenia(String usuario, String contrasenia) {
+		Optional<List<Administrador>> encontrados = administradorRep.findByUsuarioYContrasenia(usuario, contrasenia);
+		List<Administrador> entityList = encontrados.get();
+		List<AdministradorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<AdministradorDTO>(); 
+		}
+	}
+
 }
