@@ -75,4 +75,103 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
     public boolean exist(Long id) {
         return manipuladorRep.existsById(id) ? true : false;
     }
+    
+    
+    
+    public List<ManipuladorDePaqueteDTO> findByNombre(String nombre) {
+        Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByNombre(nombre);
+        List<ManipuladorDePaquete> entityList = encontrados.get();
+        List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
+        
+        if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+            entityList.forEach((entity) -> {
+                ManipuladorDePaqueteDTO dto = mapper.map(entity, ManipuladorDePaqueteDTO.class);
+                dtoList.add(dto);
+            });
+            return dtoList;
+        } else {
+            return new ArrayList<ManipuladorDePaqueteDTO>(); 
+        }
+    }
+
+    public List<ManipuladorDePaqueteDTO> findByCedula(String cedula) {
+        Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByCedula(cedula);
+        List<ManipuladorDePaquete> entityList = encontrados.get();
+        List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
+        
+        if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+            entityList.forEach((entity) -> {
+                ManipuladorDePaqueteDTO dto = mapper.map(entity, ManipuladorDePaqueteDTO.class);
+                dtoList.add(dto);
+            });
+            return dtoList;
+        } else {
+            return new ArrayList<ManipuladorDePaqueteDTO>(); 
+        }
+    }
+
+    public List<ManipuladorDePaqueteDTO> findByCorreo(String correo) {
+        Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByCorreo(correo);
+        List<ManipuladorDePaquete> entityList = encontrados.get();
+        List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
+        
+        if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+            entityList.forEach((entity) -> {
+                ManipuladorDePaqueteDTO dto = mapper.map(entity, ManipuladorDePaqueteDTO.class);
+                dtoList.add(dto);
+            });
+            return dtoList;
+        } else {
+            return new ArrayList<ManipuladorDePaqueteDTO>(); 
+        }
+    }
+
+    public List<ManipuladorDePaqueteDTO> findByTelefono(String telefono) {
+        Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByTelefono(telefono);
+        List<ManipuladorDePaquete> entityList = encontrados.get();
+        List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
+        
+        if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+            entityList.forEach((entity) -> {
+                ManipuladorDePaqueteDTO dto = mapper.map(entity, ManipuladorDePaqueteDTO.class);
+                dtoList.add(dto);
+            });
+            return dtoList;
+        } else {
+            return new ArrayList<ManipuladorDePaqueteDTO>(); 
+        }
+    }
+
+    public List<ManipuladorDePaqueteDTO> findByTipoManipulador(String tipoManipulador) {
+        Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByTipoManipulador(tipoManipulador);
+        List<ManipuladorDePaquete> entityList = encontrados.get();
+        List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
+        
+        if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+            entityList.forEach((entity) -> {
+                ManipuladorDePaqueteDTO dto = mapper.map(entity, ManipuladorDePaqueteDTO.class);
+                dtoList.add(dto);
+            });
+            return dtoList;
+        } else {
+            return new ArrayList<ManipuladorDePaqueteDTO>(); 
+        }
+    }
+
+    public List<ManipuladorDePaqueteDTO> findByNombreYCedula(String nombre, String cedula) {
+        Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByNombreYCedula(nombre, cedula);
+        List<ManipuladorDePaquete> entityList = encontrados.get();
+        List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
+        
+        if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+            entityList.forEach((entity) -> {
+                ManipuladorDePaqueteDTO dto = mapper.map(entity, ManipuladorDePaqueteDTO.class);
+                dtoList.add(dto);
+            });
+            return dtoList;
+        } else {
+            return new ArrayList<ManipuladorDePaqueteDTO>(); 
+        }
+    }
+    
 }
