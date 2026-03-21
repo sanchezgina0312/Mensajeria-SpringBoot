@@ -15,7 +15,7 @@ public interface ClienteNormalRepository extends CrudRepository<ClienteNormal, L
 	public Optional<List<ClienteNormal>> findByTelefono(String telefono);		
 	public Optional<List<ClienteNormal>> findByMetodoPago(String metodoPago);	
 	public Optional<List<ClienteNormal>> findByTipoPedido(String tipoPedido);	
-	public Optional<List<ClienteNormal>> findByTarifaNormal(double tarifaNormal);
+
 	
 	public Optional<List<ClienteNormal>> findByNombreYCedula(String nombre, String cedula);	
 	public Optional<List<ClienteNormal>> findByTipoPedidoYMetodoPago(String tipoPedido, String metodoPago);

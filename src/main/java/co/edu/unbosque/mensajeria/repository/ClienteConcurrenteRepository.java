@@ -15,7 +15,7 @@ public interface ClienteConcurrenteRepository extends CrudRepository<ClienteConc
 	public Optional<List<ClienteConcurrente>> findByTelefono(String telefono);		
 	public Optional<List<ClienteConcurrente>> findByMetodoPago(String metodoPago);	
 	public Optional<List<ClienteConcurrente>> findByTipoPedido(String tipoPedido);	
-	public Optional<List<ClienteConcurrente>> findByTarifaConcurrente(double tarifaConcurrente);
+	
 	
 	public Optional<List<ClienteConcurrente>> findByNombreYCedula(String nombre, String cedula);	
 	public Optional<List<ClienteConcurrente>> findByTipoPedidoYMetodoPago(String tipoPedido, String metodoPago);
