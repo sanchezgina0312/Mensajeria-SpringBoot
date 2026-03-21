@@ -110,7 +110,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteConcurrenteDTO>();
 		}
 	}
 
@@ -130,7 +130,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteConcurrenteDTO>();
 		}
 	}
 
@@ -150,7 +150,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteConcurrenteDTO>();
 		}
 	}
 
@@ -170,7 +170,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteConcurrenteDTO>();
 		}
 	}
 
@@ -190,7 +190,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteConcurrenteDTO>();
 		}
 	}
 
@@ -210,7 +210,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteConcurrenteDTO>();
 		}
 	}
 
@@ -230,7 +230,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteConcurrenteDTO>();
 		}
 
 	}
@@ -252,7 +252,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteConcurrenteDTO>();
 		}
 	}
 }

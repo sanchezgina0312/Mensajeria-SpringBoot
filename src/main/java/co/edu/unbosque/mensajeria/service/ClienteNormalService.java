@@ -149,7 +149,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteNormalDTO>();
 		}
 	}
 
@@ -170,7 +170,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteNormalDTO>();
 		}
 	}
 
@@ -191,7 +191,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteNormalDTO>();
 		}
 	}
 
@@ -211,7 +211,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteNormalDTO>();
 		}
 	}
 	
@@ -232,7 +232,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteNormalDTO>();
 		}
 	}
 	
@@ -253,7 +253,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 			return dtoList;
 
 		} else {
-			return new ArrayList<>();
+			return new ArrayList<ClienteNormalDTO>();
 		}
 	}
 	
