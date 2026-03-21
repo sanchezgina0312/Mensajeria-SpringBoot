@@ -93,7 +93,166 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 	public boolean exist(Long id) {
 		return clienteConcurrenteRep.existsById(id) ? true : false;
 	}
-	
-	
 
+	public List<ClienteConcurrenteDTO> findByNombre(String nombre) {
+
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByNombre(nombre);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteConcurrente> entityList = encontrados.get();
+			List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	public List<ClienteConcurrenteDTO> findByCedula(String cedula) {
+
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByCedula(cedula);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteConcurrente> entityList = encontrados.get();
+			List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	public List<ClienteConcurrenteDTO> findByCorreo(String correo) {
+
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByCorreo(correo);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteConcurrente> entityList = encontrados.get();
+			List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	public List<ClienteConcurrenteDTO> findByTelefono(String telefono) {
+
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByTelefono(telefono);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteConcurrente> entityList = encontrados.get();
+			List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	public List<ClienteConcurrenteDTO> findByMetodoPago(String metodoPago) {
+
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByMetodoPago(metodoPago);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteConcurrente> entityList = encontrados.get();
+			List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	public List<ClienteConcurrenteDTO> findByTipoPedido(String tipoPedido) {
+
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByTipoPedido(tipoPedido);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteConcurrente> entityList = encontrados.get();
+			List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	public List<ClienteConcurrenteDTO> findByNombreYCedula(String nombre, String cedula) {
+
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByNombreYCedula(nombre, cedula);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteConcurrente> entityList = encontrados.get();
+			List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+
+	}
+
+	public List<ClienteConcurrenteDTO> findByTipoPedidoYMetodoPago(String tipoPedido, String metodoPago) {
+
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByTipoPedidoYMetodoPago(tipoPedido,
+				metodoPago);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteConcurrente> entityList = encontrados.get();
+			List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
 }

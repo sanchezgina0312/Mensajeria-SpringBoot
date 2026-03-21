@@ -90,5 +90,165 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		return clientepremiumRep.existsById(id) ? true : false;
 	}
 
+	public List<ClientePremiumDTO> findByNombre(String nombre) {
+
+		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByNombre(nombre);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClientePremium> entitylist = encontrados.get();
+			List<ClientePremiumDTO> dtoList = new ArrayList<>();
+
+			entitylist.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	public List<ClientePremiumDTO> findByCedula(String cedula) {
+
+		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByCedula(cedula);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClientePremium> entitylist = encontrados.get();
+			List<ClientePremiumDTO> dtoList = new ArrayList<>();
+
+			entitylist.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	public List<ClientePremiumDTO> findByCorreo(String correo) {
+
+		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByCorreo(correo);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClientePremium> entitylist = encontrados.get();
+			List<ClientePremiumDTO> dtoList = new ArrayList<>();
+
+			entitylist.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	public List<ClientePremiumDTO> findByTelefono(String telefono) {
+
+		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByTelefono(telefono);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClientePremium> entitylist = encontrados.get();
+			List<ClientePremiumDTO> dtoList = new ArrayList<>();
+
+			entitylist.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	public List<ClientePremiumDTO> findByMetodoPago(String metodoPago) {
+
+		
+		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByMetodoPago(metodoPago);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClientePremium> entitylist = encontrados.get();
+			List<ClientePremiumDTO> dtoList = new ArrayList<>();
+
+			entitylist.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	public List<ClientePremiumDTO> findByTipoPedido(String tipoPedido) {
+
+		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByTipoPedido(tipoPedido);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClientePremium> entitylist = encontrados.get();
+			List<ClientePremiumDTO> dtoList = new ArrayList<>();
+
+			entitylist.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	public List<ClientePremiumDTO> findByNombreYCedula(String nombre, String cedula) {
+
+		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByNombreYCedula(nombre, cedula);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClientePremium> entitylist = encontrados.get();
+			List<ClientePremiumDTO> dtoList = new ArrayList<>();
+
+			entitylist.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	public List<ClientePremiumDTO> findByTipoPedidoYMetodoPago(String tipoPedido, String metodoPago) {
+
+		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByTipoPedidoYMetodoPago(tipoPedido, metodoPago);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClientePremium> entitylist = encontrados.get();
+			List<ClientePremiumDTO> dtoList = new ArrayList<>();
+
+			entitylist.forEach(entity -> {
+				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
 
 }
