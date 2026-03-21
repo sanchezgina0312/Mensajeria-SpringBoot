@@ -88,5 +88,93 @@ public class ClienteNormalController {
 		}
 
 	}
+	
+	@GetMapping("/buscarpornombre")
+	public ResponseEntity<List<ClienteNormalDTO>> findByNombre(@RequestParam String nombre) {
+
+		List<ClienteNormalDTO> lista = clienteNormalService.findByNombre(nombre);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarporcedula")
+	public ResponseEntity<List<ClienteNormalDTO>> findByCedula(@RequestParam String cedula) {
+
+		List<ClienteNormalDTO> lista = clienteNormalService.findByCedula(cedula);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarporcorreo")
+	public ResponseEntity<List<ClienteNormalDTO>> findByCorreo(@RequestParam String correo) {
+
+		List<ClienteNormalDTO> lista = clienteNormalService.findByCorreo(correo);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarpormetodopago")
+	public ResponseEntity<List<ClienteNormalDTO>> findByMetodoPago(@RequestParam String metodoPago) {
+
+		List<ClienteNormalDTO> lista = clienteNormalService.findByMetodoPago(metodoPago);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarportipopedido")
+	public ResponseEntity<List<ClienteNormalDTO>> findByTipoPedido(@RequestParam String tipoPedido) {
+
+		List<ClienteNormalDTO> lista = clienteNormalService.findByTipoPedido(tipoPedido);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarpornombreycedula")
+	public ResponseEntity<List<ClienteNormalDTO>> findByNombreYCedula(
+			@RequestParam String nombre,
+			@RequestParam String cedula) {
+
+		List<ClienteNormalDTO> lista = clienteNormalService.findByNombreYCedula(nombre, cedula);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarportipopedidoymetodopago")
+	public ResponseEntity<List<ClienteNormalDTO>> findByTipoPedidoYMetodoPago(
+			@RequestParam String tipoPedido,
+			@RequestParam String metodoPago) {
+
+		List<ClienteNormalDTO> lista = clienteNormalService.findByTipoPedidoYMetodoPago(tipoPedido, metodoPago);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
 
 }

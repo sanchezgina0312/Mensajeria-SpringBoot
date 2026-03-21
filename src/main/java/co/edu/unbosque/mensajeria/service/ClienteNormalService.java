@@ -110,7 +110,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 
 	}
 
-	public List<ClienteNormalDTO> findbyCedula(String cedula) {
+	public List<ClienteNormalDTO> findByCedula(String cedula) {
 
 		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByCedula(cedula);
 

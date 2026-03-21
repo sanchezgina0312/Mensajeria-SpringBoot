@@ -88,5 +88,105 @@ public class ClienteConcurrenteController {
 		}
 
 	}
+	
+	@GetMapping("/buscarpornombre")
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByNombre(@RequestParam String nombre) {
+
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByNombre(nombre);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarporcedula")
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByCedula(@RequestParam String cedula) {
+
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByCedula(cedula);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarporcorreo")
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByCorreo(@RequestParam String correo) {
+
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByCorreo(correo);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarportelefono")
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTelefono(@RequestParam String telefono) {
+
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTelefono(telefono);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarpormetodopago")
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByMetodoPago(@RequestParam String metodoPago) {
+
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByMetodoPago(metodoPago);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarportipopedido")
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTipoPedido(@RequestParam String tipoPedido) {
+
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTipoPedido(tipoPedido);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarpornombreycedula")
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByNombreYCedula(
+			@RequestParam String nombre,
+			@RequestParam String cedula) {
+
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByNombreYCedula(nombre, cedula);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/buscarportipopedidoymetodopago")
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTipoPedidoYMetodoPago(
+			@RequestParam String tipoPedido,
+			@RequestParam String metodoPago) {
+
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTipoPedidoYMetodoPago(tipoPedido, metodoPago);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		}
+	}
 
 }
