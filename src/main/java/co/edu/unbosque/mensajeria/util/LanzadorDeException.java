@@ -13,6 +13,9 @@ import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TipoDeAlimentoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TipoDeCartaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.TipoManipuladorInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TipoPedidoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 
 public class LanzadorDeException {
 	
@@ -263,6 +266,94 @@ public class LanzadorDeException {
 	        !tipo.equals("PUBLICITARIA")) {
 	        
 	        throw new TipoDeCartaInvalidaException("Tipo de carta no válido");
+	    }
+	}
+	
+	public static void verificarTipoManipulador(String tipo) throws TipoManipuladorInvalidoException {
+
+	    /*
+	     * Tipos de manipulador aceptados:
+	     * 
+	     * PAQUETES_ALIMENTICIOS
+	     * PAQUETES_NO_ALIMENTICIOS
+	     * CARTAS
+	     * 
+	     */
+
+	    if (tipo == null || tipo.isEmpty()) {
+	        throw new TipoManipuladorInvalidoException("El tipo de manipulador no puede estar vacío");
+	    }
+
+	    if (tipo.contains(" ")) {
+	        throw new TipoManipuladorInvalidoException("El tipo no debe contener espacios");
+	    }
+
+	    // Normalizar a mayúsculas
+	    tipo = tipo.toUpperCase();
+
+	    if (!tipo.equals("PAQUETES_ALIMENTICIOS") &&
+	        !tipo.equals("PAQUETES_NO_ALIMENTICIOS") &&
+	        !tipo.equals("CARTAS")) {
+	        
+	        throw new TipoManipuladorInvalidoException("Tipo de manipulador no válido");
+	    }
+	}
+	
+	public static void verificarTipoPedido(String tipo) throws TipoPedidoInvalidoException {
+
+	    /*
+	     * Tipos de pedido aceptados:
+	     * 
+	     * ALIMENTICIO
+	     * NO_ALIMENTICIO
+	     * CARTA
+	     * 
+	     */
+
+	    if (tipo == null || tipo.isEmpty()) {
+	        throw new TipoPedidoInvalidoException("El tipo de pedido no puede estar vacío");
+	    }
+
+	    if (tipo.contains(" ")) {
+	        throw new TipoPedidoInvalidoException("El tipo no debe contener espacios");
+	    }
+
+	    tipo = tipo.toUpperCase();
+
+	    if (!tipo.equals("ALIMENTICIO") &&
+	        !tipo.equals("NO_ALIMENTICIO") &&
+	        !tipo.equals("CARTA")) {
+	        
+	        throw new TipoPedidoInvalidoException("Tipo de pedido no válido");
+	    }
+	}
+	
+	public static void verificarTurno(String turno) throws TurnoInvalidoException {
+
+	    /*
+	     * Turnos aceptados:
+	     * 
+	     * DIA
+	     * NOCHE
+	     * MIXTO
+	     */
+
+	    if (turno == null || turno.isEmpty()) {
+	        throw new TurnoInvalidoException("El turno no puede estar vacío");
+	    }
+
+	    if (turno.contains(" ")) {
+	        throw new TurnoInvalidoException("El turno no debe contener espacios");
+	    }
+
+	    // Normalizar a mayúsculas
+	    turno = turno.toUpperCase();
+
+	    if (!turno.equals("DIA") &&
+	        !turno.equals("NOCHE") &&
+	        !turno.equals("MIXTO")) {
+	        
+	        throw new TurnoInvalidoException("Turno no válido");
 	    }
 	}
 }
