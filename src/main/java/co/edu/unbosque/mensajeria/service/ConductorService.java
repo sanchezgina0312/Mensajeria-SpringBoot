@@ -84,4 +84,117 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 	public boolean exist(Long id) {
 		return conductorRep.existsById(id) ? true : false;
 	}
+	
+	
+	public List<ConductorDTO> findByNombre(String nombre) {
+		Optional<List<Conductor>> encontrados = conductorRep.findByNombre(nombre);
+		List<Conductor> entityList = encontrados.get();
+		List<ConductorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				ConductorDTO dto = mapper.map(entity, ConductorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<ConductorDTO>(); 
+		}
+	}
+
+	public List<ConductorDTO> findByCedula(String cedula) {
+		Optional<List<Conductor>> encontrados = conductorRep.findByCedula(cedula);
+		List<Conductor> entityList = encontrados.get();
+		List<ConductorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				ConductorDTO dto = mapper.map(entity, ConductorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<ConductorDTO>(); 
+		}
+	}
+
+	public List<ConductorDTO> findByCorreo(String correo) {
+		Optional<List<Conductor>> encontrados = conductorRep.findByCorreo(correo);
+		List<Conductor> entityList = encontrados.get();
+		List<ConductorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				ConductorDTO dto = mapper.map(entity, ConductorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<ConductorDTO>();
+		}
+	}
+
+	public List<ConductorDTO> findByTelefono(String telefono) {
+		Optional<List<Conductor>> encontrados = conductorRep.findByTelefono(telefono);
+		List<Conductor> entityList = encontrados.get();
+		List<ConductorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				ConductorDTO dto = mapper.map(entity, ConductorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<ConductorDTO>(); 
+		}
+	}
+
+	public List<ConductorDTO> findByPlacaVehiculo(String placaVehiculo) {
+		Optional<List<Conductor>> encontrados = conductorRep.findByPlacaVehiculo(placaVehiculo);
+		List<Conductor> entityList = encontrados.get();
+		List<ConductorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				ConductorDTO dto = mapper.map(entity, ConductorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<ConductorDTO>(); 
+		}
+	}
+
+	public List<ConductorDTO> findByNombreYCedula(String nombre, String cedula) {
+		Optional<List<Conductor>> encontrados = conductorRep.findByNombreYCedula(nombre, cedula);
+		List<Conductor> entityList = encontrados.get();
+		List<ConductorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				ConductorDTO dto = mapper.map(entity, ConductorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<ConductorDTO>();
+		}
+	}
+
+	public List<ConductorDTO> findByPlacaVehiculoYNombre(String placaVehiculo, String nombre) {
+		Optional<List<Conductor>> encontrados = conductorRep.findByPlacaVehiculoYNombre(placaVehiculo, nombre);
+		List<Conductor> entityList = encontrados.get();
+		List<ConductorDTO> dtoList = new ArrayList<>();
+		
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			entityList.forEach((entity) -> {
+				ConductorDTO dto = mapper.map(entity, ConductorDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<ConductorDTO>();
+		}
+	}
 }

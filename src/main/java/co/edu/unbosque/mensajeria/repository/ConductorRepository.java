@@ -13,7 +13,6 @@ public interface ConductorRepository extends CrudRepository<Conductor, Long> {
 	public Optional<List<Conductor>> findByCedula(String cedula);
 	public Optional<List<Conductor>> findByCorreo(String correo);	
 	public Optional<List<Conductor>> findByTelefono(String telefono);		
-	public Optional<List<Conductor>> findByTurno(char turno);
 	public Optional<List<Conductor>> findByPlacaVehiculo(String placaVehiculo);
 	
 	public Optional<List<Conductor>> findByNombreYCedula(String nombre, String cedula);	
