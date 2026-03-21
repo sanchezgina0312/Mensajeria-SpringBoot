@@ -7,6 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import co.edu.unbosque.mensajeria.entity.ClienteNormal;
 
+
+
 public interface ClienteNormalRepository extends CrudRepository<ClienteNormal, Long> {
 	
 	public Optional<List<ClienteNormal>> findByNombre(String nombre);
@@ -19,5 +21,6 @@ public interface ClienteNormalRepository extends CrudRepository<ClienteNormal, L
 	
 	public Optional<List<ClienteNormal>> findByNombreYCedula(String nombre, String cedula);	
 	public Optional<List<ClienteNormal>> findByTipoPedidoYMetodoPago(String tipoPedido, String metodoPago);
-	
+
+
 }

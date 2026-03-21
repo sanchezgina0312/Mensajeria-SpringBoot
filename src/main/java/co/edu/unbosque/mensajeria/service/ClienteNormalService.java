@@ -1,6 +1,7 @@
 package co.edu.unbosque.mensajeria.service;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ import co.edu.unbosque.mensajeria.repository.ClienteNormalRepository;
 public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 
 	@Autowired
-	private ClienteNormalRepository clientenormalRep;
+	private ClienteNormalRepository clienteNormalRep;
 
 	@Autowired
 	private ModelMapper mapper;
@@ -24,13 +25,13 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 	@Override
 	public int create(ClienteNormalDTO data) {
 		ClienteNormal entity = mapper.map(data, ClienteNormal.class);
-		clientenormalRep.save(entity);
+		clienteNormalRep.save(entity);
 		return 0;
 	}
 
 	@Override
 	public List<ClienteNormalDTO> getAll() {
-		List<ClienteNormal> entityList = (List<ClienteNormal>) clientenormalRep.findAll();
+		List<ClienteNormal> entityList = (List<ClienteNormal>) clienteNormalRep.findAll();
 		List<ClienteNormalDTO> dtoList = new ArrayList<>();
 
 		entityList.forEach((entity) -> {
@@ -44,10 +45,10 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 
 	@Override
 	public int deleteById(Long id) {
-		Optional<ClienteNormal> encontrado = clientenormalRep.findById(id);
+		Optional<ClienteNormal> encontrado = clienteNormalRep.findById(id);
 
 		if (encontrado.isPresent()) {
-			clientenormalRep.delete(encontrado.get());
+			clienteNormalRep.delete(encontrado.get());
 			return 0;
 		}
 		return 1;
@@ -55,7 +56,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 
 	@Override
 	public int updateById(Long id, ClienteNormalDTO data) {
-		Optional<ClienteNormal> encontrado = clientenormalRep.findById(id);
+		Optional<ClienteNormal> encontrado = clienteNormalRep.findById(id);
 
 		if (encontrado.isPresent()) {
 
@@ -69,7 +70,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 			temp.setMetodoPago(data.getMetodoPago());
 			temp.setTarifaNormal(data.getTarifaNormal());
 
-			clientenormalRep.save(temp);
+			clienteNormalRep.save(temp);
 			return 0;
 		}
 
@@ -78,12 +79,184 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 
 	@Override
 	public long count() {
-		return clientenormalRep.count();
+		return clienteNormalRep.count();
 	}
 
 	@Override
 	public boolean exist(Long id) {
-		return clientenormalRep.existsById(id) ? true : false;
+		return clienteNormalRep.existsById(id) ? true : false;
 	}
+
+	public List<ClienteNormalDTO> findByNombre(String nombre) {
+
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByNombre(nombre);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteNormal> entityList = encontrados.get();
+			List<ClienteNormalDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach((entity) -> {
+				ClienteNormalDTO dto = mapper.map(entity, ClienteNormalDTO.class);
+				dtoList.add(dto);
+			});
+
+			return dtoList;
+		} else {
+
+			return new ArrayList<ClienteNormalDTO>();
+
+		}
+
+	}
+
+	public List<ClienteNormalDTO> findbyCedula(String cedula) {
+
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByCedula(cedula);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteNormal> entityList = encontrados.get();
+			List<ClienteNormalDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach((entity) -> {
+				ClienteNormalDTO dto = mapper.map(entity, ClienteNormalDTO.class);
+				dtoList.add(dto);
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<ClienteNormalDTO>();
+		}
+
+	}
+
+	public List<ClienteNormalDTO> findByCorreo(String correo) {
+
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByCorreo(correo);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteNormal> entityList = encontrados.get();
+			List<ClienteNormalDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach((entity) -> {
+				ClienteNormalDTO dto = mapper.map(entity, ClienteNormalDTO.class);
+				dtoList.add(dto);
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	public List<ClienteNormalDTO> findByTelefono(String telefono) {
+
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByTelefono(telefono);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteNormal> entityList = encontrados.get();
+			List<ClienteNormalDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach((entity) -> {
+				ClienteNormalDTO dto = mapper.map(entity, ClienteNormalDTO.class);
+				dtoList.add(dto);
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	public List<ClienteNormalDTO> findByMetodoPago(String metodoPago) {
+
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByMetodoPago(metodoPago);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteNormal> entityList = encontrados.get();
+			List<ClienteNormalDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach((entity) -> {
+				ClienteNormalDTO dto = mapper.map(entity, ClienteNormalDTO.class);
+				dtoList.add(dto);
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
+	public List<ClienteNormalDTO> findByTipoPedido(String tipoPedido) {
+
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByTipoPedido(tipoPedido);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			List<ClienteNormal> entityList = encontrados.get();
+			List<ClienteNormalDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach((entity) -> {
+				ClienteNormalDTO dto = mapper.map(entity, ClienteNormalDTO.class);
+				dtoList.add(dto);
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	public List<ClienteNormalDTO> findByNombreYCedula(String nombre, String cedula) {
+
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByNombreYCedula(nombre, cedula);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteNormal> entityList = encontrados.get();
+			List<ClienteNormalDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach((entity) -> {
+				ClienteNormalDTO dto = mapper.map(entity, ClienteNormalDTO.class);
+				dtoList.add(dto);
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	public List<ClienteNormalDTO> findByTipoPedidoYMetodoPago(String tipoPedido, String metodoPago) {
+
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByTipoPedidoYMetodoPago(tipoPedido, metodoPago);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+
+			List<ClienteNormal> entityList = encontrados.get();
+			List<ClienteNormalDTO> dtoList = new ArrayList<>();
+
+			entityList.forEach((entity) -> {
+				ClienteNormalDTO dto = mapper.map(entity, ClienteNormalDTO.class);
+				dtoList.add(dto);
+			});
+
+			return dtoList;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
+	
+	
 
 }

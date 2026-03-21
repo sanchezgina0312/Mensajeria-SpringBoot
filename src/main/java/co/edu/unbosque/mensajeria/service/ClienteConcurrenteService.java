@@ -93,5 +93,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 	public boolean exist(Long id) {
 		return clienteConcurrenteRep.existsById(id) ? true : false;
 	}
+	
+	
 
 }
