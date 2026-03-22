@@ -53,10 +53,13 @@ public class ClienteNormalController {
 			nuevoclienteNormal.setTipoPedido(tipoPedido);
 			nuevoclienteNormal.setTarifaNormal(tarifaNormal);
 
-			clienteNormalService.create(nuevoclienteNormal);
+			int status=clienteNormalService.create(nuevoclienteNormal);
 
-			return new ResponseEntity<>("Cliente normal creado con éxito", HttpStatus.CREATED);
-
+			if(status==0) {
+				return new ResponseEntity<>("Dato creado con exito",HttpStatus.CREATED);
+			}else {
+				return new ResponseEntity<>("Error al crear cliente", HttpStatus.BAD_REQUEST);
+			}
 		} catch (NombreInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 

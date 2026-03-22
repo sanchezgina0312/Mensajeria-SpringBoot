@@ -54,10 +54,13 @@ public class ClienteConcurrenteController {
 			nuevoClienteConcurrente.setTipoPedido(tipoPedido);
 			nuevoClienteConcurrente.setTarifaConcurrente(tarifaConcurrente);
 
-			clienteConcurrenteService.create(nuevoClienteConcurrente);
+			int status =clienteConcurrenteService.create(nuevoClienteConcurrente);
 
-			return new ResponseEntity<>("Cliente concurrente creado con éxito", HttpStatus.CREATED);
-
+			if(status==0) {
+				return new ResponseEntity<>("Dato creado con exito",HttpStatus.CREATED);
+			}else {
+				return new ResponseEntity<>("Error al crear Cliente", HttpStatus.BAD_REQUEST);
+			}
 		} catch (NombreInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 

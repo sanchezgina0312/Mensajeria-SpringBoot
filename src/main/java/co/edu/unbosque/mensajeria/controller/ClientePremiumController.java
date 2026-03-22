@@ -53,10 +53,13 @@ public class ClientePremiumController {
 			nuevoClientePremium.setTipoPedido(tipoPedido);
 			nuevoClientePremium.setTarifaPremium(tarifaPremium);
 
-			clientePremiumService.create(nuevoClientePremium);
+			int status =clientePremiumService.create(nuevoClientePremium);
 
-			return new ResponseEntity<>("Cliente premium creado con éxito", HttpStatus.CREATED);
-
+			if(status==0) {
+				return new ResponseEntity<>("Dato creado con exito",HttpStatus.CREATED);
+			}else {
+				return new ResponseEntity<>("Error al crear cliente", HttpStatus.BAD_REQUEST);
+			}
 		} catch (NombreInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
