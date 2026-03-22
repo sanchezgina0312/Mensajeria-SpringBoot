@@ -328,32 +328,19 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarTurno(String turno) throws TurnoInvalidoException {
+	public static void verificarTurno(char turno) throws TurnoInvalidoException {
 
 	    /*
 	     * Turnos aceptados:
-	     * 
-	     * DIA
-	     * NOCHE
-	     * MIXTO
+	     * D -> Día
+	     * N -> Noche
+	     * M -> Mixto
 	     */
 
-	    if (turno == null || turno.isEmpty()) {
-	        throw new TurnoInvalidoException("El turno no puede estar vacío");
-	    }
+	    turno = Character.toUpperCase(turno);
 
-	    if (turno.contains(" ")) {
-	        throw new TurnoInvalidoException("El turno no debe contener espacios");
-	    }
-
-	    // Normalizar a mayúsculas
-	    turno = turno.toUpperCase();
-
-	    if (!turno.equals("DIA") &&
-	        !turno.equals("NOCHE") &&
-	        !turno.equals("MIXTO")) {
-	        
-	        throw new TurnoInvalidoException("Turno no válido");
+	    if (turno != 'D' && turno != 'N' && turno != 'M') {
+	        throw new TurnoInvalidoException("Turno no válido. Use D, N o M");
 	    }
 	}
 }
