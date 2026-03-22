@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.entity.ClienteNormal;
 import co.edu.unbosque.mensajeria.repository.ClienteNormalRepository;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 @Service
 public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
@@ -24,6 +25,12 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 
 	@Override
 	public int create(ClienteNormalDTO data) {
+		LanzadorDeException.verificarNombre(data.getNombre());
+		LanzadorDeException.verificarCedula(data.getCedula());
+		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+		LanzadorDeException.verificarTelefono(data.getTelefono());
+		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
+		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
 		ClienteNormal entity = mapper.map(data, ClienteNormal.class);
 		clienteNormalRep.save(entity);
 		return 0;
@@ -45,6 +52,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 
 	@Override
 	public int deleteById(Long id) {
+		LanzadorDeException.verificarId(id);
 		Optional<ClienteNormal> encontrado = clienteNormalRep.findById(id);
 
 		if (encontrado.isPresent()) {
