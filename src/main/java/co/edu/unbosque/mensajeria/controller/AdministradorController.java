@@ -32,7 +32,7 @@ public class AdministradorController {
 		
 	}
 	
-	// http://localhost:8080/administrador/crear?nombre=Admin1&cedula=999&correo=a@mail.com&telefono=000&turno=N&usuario=admin&contrasenia=1234
+	// http://localhost:8080/administrador/crear?nombre=Admin1&cedula=999&correo=a@mail.com&telefono=000&turno=N
 	@PostMapping("/crear")
     public ResponseEntity<String> crearAdministrador(@RequestParam String nombre, @RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono, @RequestParam char turno) {
 
