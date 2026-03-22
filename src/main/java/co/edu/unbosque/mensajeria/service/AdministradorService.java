@@ -8,11 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.AdministradorDTO;
 import co.edu.unbosque.mensajeria.entity.Administrador;
-import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
-import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.repository.AdministradorRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
@@ -191,7 +186,8 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	}
 
 
-	public List<AdministradorDTO> findByNombreYCedula(String nombre, String cedula) {
+
+	public List<AdministradorDTO> findByNombreAndCedula(String nombre, String cedula) {
 		Optional<List<Administrador>> encontrados = administradorRep.findByNombreAndCedula(nombre, cedula);
 		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
@@ -207,8 +203,8 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 		}
 	}
 
-	public List<AdministradorDTO> findByUsuarioYContrasenia(String usuario, String contrasenia) {
-		Optional<List<Administrador>> encontrados = administradorRep.findByUsuarioYContrasenia(usuario, contrasenia);
+	public List<AdministradorDTO> findByUsuarioAndContrasenia(String usuario, String contrasenia) {
+		Optional<List<Administrador>> encontrados = administradorRep.findByUsuarioAndContrasenia(usuario, contrasenia);
 		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
 		

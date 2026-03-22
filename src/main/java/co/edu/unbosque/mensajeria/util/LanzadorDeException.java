@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
 import co.edu.unbosque.mensajeria.exception.PlacaInvalidaException;
@@ -341,6 +342,17 @@ public class LanzadorDeException {
 
 	    if (turno != 'D' && turno != 'N' && turno != 'M') {
 	        throw new TurnoInvalidoException("Turno no válido. Use D, N o M");
+	    }
+	}
+	
+	public static void verificarId(String id) throws IdInvalidoException {
+
+	    if (id == null || id.isEmpty()) {
+	        throw new IdInvalidoException("El ID no puede estar vacío");
+	    }
+
+	    if (!id.matches("^[0-9]+$")) {
+	        throw new IdInvalidoException("El ID solo debe contener números sin espacios ni caracteres");
 	    }
 	}
 }
