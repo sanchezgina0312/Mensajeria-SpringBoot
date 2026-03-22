@@ -29,13 +29,13 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 
 	@Override
 	public int create(PaqueteNoAlimenticioDTO data) {
-		
+
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 
 		PaqueteNoAlimenticio entity = mapper.map(data, PaqueteNoAlimenticio.class);
 		paqueteNoAlimenticioRep.save(entity);
-		
+
 		return 0;
 	}
 
@@ -97,5 +97,53 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		}
 		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(24));
 		return 0;
+	}
+
+	public List<PaqueteNoAlimenticioDTO> findByTamanio(String tamanio) {
+		LanzadorDeException.verificarTamanoPaquete(tamanio);
+		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByTamanio(tamanio);
+		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteNoAlimenticioDTO dto = mapper.map(entity, PaqueteNoAlimenticioDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteNoAlimenticioDTO>();
+		}
+	}
+
+	public List<PaqueteNoAlimenticioDTO> findByEsFragil(boolean esFragil) {
+		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByEsFragil(esFragil);
+		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteNoAlimenticioDTO dto = mapper.map(entity, PaqueteNoAlimenticioDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteNoAlimenticioDTO>();
+		}
+	}
+
+	public List<PaqueteNoAlimenticioDTO> findByTamanioAndEsFragil(String tamanio, boolean esFragil) {
+		LanzadorDeException.verificarTamanoPaquete(tamanio);
+		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByTamanioAndEsFragil(tamanio,
+				esFragil);
+		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteNoAlimenticioDTO dto = mapper.map(entity, PaqueteNoAlimenticioDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteNoAlimenticioDTO>();
+		}
 	}
 }
