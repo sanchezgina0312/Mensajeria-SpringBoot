@@ -53,6 +53,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 	@Override
 	public int deleteById(Long id) {
+		LanzadorDeException.verificarId(id);
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
 			paqueteAlimenticioRep.delete(encontrado.get());
@@ -92,18 +93,83 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	}
 
 	public int registrarYValidarHorasEntrega(PaqueteAlimenticioDTO data) {
-	    if (data.getFechaCreacionPedido() == null) {
-	        data.setFechaCreacionPedido(LocalDateTime.now());
-	    }
-	    
-	    LocalDateTime fechaCreacion = data.getFechaCreacionPedido();
-	    LocalDateTime fechaEstimada = fechaCreacion.plusHours(6);
-	    data.setFechaEstimadaEntrega(fechaEstimada);
-	    
-	    if (fechaEstimada.toLocalDate().isAfter(fechaCreacion.toLocalDate())) {
-	        return 2;
-	    }
-	    
-	    return 0;
+		if (data.getFechaCreacionPedido() == null) {
+			data.setFechaCreacionPedido(LocalDateTime.now());
+		}
+
+		LocalDateTime fechaCreacion = data.getFechaCreacionPedido();
+		LocalDateTime fechaEstimada = fechaCreacion.plusHours(6);
+		data.setFechaEstimadaEntrega(fechaEstimada);
+
+		if (fechaEstimada.toLocalDate().isAfter(fechaCreacion.toLocalDate())) {
+			return 2;
+		}
+
+		return 0;
+	}
+
+	public List<PaqueteAlimenticioDTO> findByTamanio(String tamanio) {
+		LanzadorDeException.verificarTamanoPaquete(tamanio);
+		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByTamanio(tamanio);
+		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteAlimenticioDTO dto = mapper.map(entity, PaqueteAlimenticioDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteAlimenticioDTO>();
+		}
+	}
+
+	public List<PaqueteAlimenticioDTO> findBySeEnviaHoy(boolean seEnviaHoy) {
+		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findBySeEnviaHoy(seEnviaHoy);
+		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteAlimenticioDTO dto = mapper.map(entity, PaqueteAlimenticioDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteAlimenticioDTO>();
+		}
+	}
+
+	public List<PaqueteAlimenticioDTO> findByTipoDeAlimento(String tipoDeAlimento) {
+		LanzadorDeException.verificarTipoAlimento(tipoDeAlimento);
+		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByTipoDeAlimento(tipoDeAlimento);
+		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteAlimenticioDTO dto = mapper.map(entity, PaqueteAlimenticioDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteAlimenticioDTO>();
+		}
+	}
+
+	public List<PaqueteAlimenticioDTO> findByTamanioAndTipoDeAlimento(String tamanio, String tipoDeAlimento) {
+		LanzadorDeException.verificarTamanoPaquete(tamanio);
+		LanzadorDeException.verificarTipoAlimento(tipoDeAlimento);
+		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByTamanioAndTipoDeAlimento(tamanio,
+				tipoDeAlimento);
+		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteAlimenticioDTO dto = mapper.map(entity, PaqueteAlimenticioDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteAlimenticioDTO>();
+		}
 	}
 }

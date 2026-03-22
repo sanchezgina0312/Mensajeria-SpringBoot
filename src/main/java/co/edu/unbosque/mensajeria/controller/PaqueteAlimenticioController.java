@@ -17,6 +17,7 @@ import co.edu.unbosque.mensajeria.dto.PaqueteAlimenticioDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
@@ -56,6 +57,7 @@ public class PaqueteAlimenticioController {
          nuevo.setFechaCreacionPedido(fechaCreacionPedido);
          nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
          
+         int statusA = paqueteAlimenticioSer.registrarYValidarHorasEntrega(nuevo);
          paqueteAlimenticioSer.create(nuevo);
 		
          return new ResponseEntity<>("Paquete alimenticio creado con éxito", HttpStatus.CREATED);
@@ -111,12 +113,17 @@ public class PaqueteAlimenticioController {
 	// http://localhost:8080/paquetealimenticio/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> delete(@RequestParam Long id) {
+		
+		try {
 		int status = paqueteAlimenticioSer.deleteById(id);
 		if (status == 0) {
 			return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
 		}
+		} catch (IdInvalidoException e) {
+			   return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			    
+		}  
+		}
 	}
-
-}

@@ -15,6 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.mensajeria.dto.ClientePremiumDTO;
+import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
+import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TipoPedidoInvalidoException;
 import co.edu.unbosque.mensajeria.service.ClientePremiumService;
 
 @RestController
@@ -35,15 +42,37 @@ public class ClientePremiumController {
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
 			@RequestParam String tipoPedido, @RequestParam double tarifaPremium) {
 
-		ClientePremiumDTO nuevoClientePremium = new ClientePremiumDTO(nombre, cedula, correo, telefono, metodoPago,
-				tipoPedido, tarifaPremium);
-		int status = clientePremiumService.create(nuevoClientePremium);
+		try {
+		ClientePremiumDTO nuevoClientePremium = new ClientePremiumDTO();
+		
+		nuevoClientePremium.setNombre(nombre);
+		nuevoClientePremium.setCedula(cedula);
+		nuevoClientePremium.setCorreo(correo);
+		nuevoClientePremium.setTelefono(telefono);
+		nuevoClientePremium.setMetodoPago(metodoPago);
+		nuevoClientePremium.setTipoPedido(tipoPedido);
+		nuevoClientePremium.setTarifaPremium(tarifaPremium);
 
-		if (status == 0) {
+		clientePremiumService.create(nuevoClientePremium);
+		
+		return new ResponseEntity<>("Cliente premium creado con éxito", HttpStatus.CREATED);
 
-			return new ResponseEntity<>("Cliente creado con Ã©xito.", HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>("Error al crear cliente.", HttpStatus.BAD_REQUEST);
+		} catch (NombreInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CedulaInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CorreoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (TelefonoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (MetodoDePagoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (TipoPedidoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -62,11 +91,16 @@ public class ClientePremiumController {
 	// http://localhost:8080/clientepremium/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> eliminarClientePremium(@RequestParam Long id) {
+		try {
 		int status = clientePremiumService.deleteById(id);
 		if (status == 0) {
 			return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
+		}
+		}catch(IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			
 		}
 	}
 
@@ -76,8 +110,15 @@ public class ClientePremiumController {
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
 			@RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaPremium) {
 
-		ClientePremiumDTO clientePremiumNuevo = new ClientePremiumDTO(nombre, cedula, correo, telefono, metodoPago,
-				tipoPedido, tarifaPremium);
+		ClientePremiumDTO clientePremiumNuevo = new ClientePremiumDTO();
+		
+		clientePremiumNuevo.setNombre(nombre);
+		clientePremiumNuevo.setCedula(cedula);
+		clientePremiumNuevo.setCorreo(correo);
+		clientePremiumNuevo.setTelefono(telefono);
+		clientePremiumNuevo.setMetodoPago(metodoPago);
+		clientePremiumNuevo.setTipoPedido(tipoPedido);
+		clientePremiumNuevo.setTarifaPremium(tarifaPremium);
 
 		int status = clientePremiumService.updateById(id, clientePremiumNuevo);
 
@@ -162,7 +203,7 @@ public class ClientePremiumController {
 	}
 	
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClientePremiumDTO>> findByNombreYCedula(
+	public ResponseEntity<List<ClientePremiumDTO>> findByNombreAndCedula(
 			@RequestParam String nombre,
 			@RequestParam String cedula) {
 
@@ -176,7 +217,7 @@ public class ClientePremiumController {
 	}
 	
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClientePremiumDTO>> findByTipoPedidoYMetodoPago(
+	public ResponseEntity<List<ClientePremiumDTO>> findByTipoPedidoAndMetodoPago(
 			@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 

@@ -15,6 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
+import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
+import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TipoPedidoInvalidoException;
 import co.edu.unbosque.mensajeria.service.ClienteNormalService;
 
 @RestController
@@ -28,22 +35,44 @@ public class ClienteNormalController {
 
 	public ClienteNormalController() {
 	}
-	
+
 	// http://localhost:8080/clientenormal/crear?nombre=Ana&cedula=789&correo=ana@mail.com&telefono=500&metodoPago=Efectivo&tipoPedido=Express&tarifaNormal=1.5
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearClienteNormal(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
 			@RequestParam String tipoPedido, @RequestParam double tarifaNormal) {
 
-		ClienteNormalDTO nuevoclienteNormal = new ClienteNormalDTO(nombre, cedula, correo, telefono, metodoPago,
-				tipoPedido, tarifaNormal);
-		int status = clienteNormalService.create(nuevoclienteNormal);
+		try {
+			ClienteNormalDTO nuevoclienteNormal = new ClienteNormalDTO();
 
-		if (status == 0) {
+			nuevoclienteNormal.setNombre(nombre);
+			nuevoclienteNormal.setCedula(cedula);
+			nuevoclienteNormal.setCorreo(correo);
+			nuevoclienteNormal.setTelefono(telefono);
+			nuevoclienteNormal.setMetodoPago(metodoPago);
+			nuevoclienteNormal.setTipoPedido(tipoPedido);
+			nuevoclienteNormal.setTarifaNormal(tarifaNormal);
 
-			return new ResponseEntity<>("Cliente creado con Ã©xito.", HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>("Error al crear cliente.", HttpStatus.BAD_REQUEST);
+			clienteNormalService.create(nuevoclienteNormal);
+
+			return new ResponseEntity<>("Cliente normal creado con éxito", HttpStatus.CREATED);
+
+		} catch (NombreInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CedulaInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CorreoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (TelefonoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (MetodoDePagoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (TipoPedidoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -62,11 +91,15 @@ public class ClienteNormalController {
 	// http://localhost:8080/clientenormal/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> eliminarClienteNormal(@RequestParam Long id) {
-		int status = clienteNormalService.deleteById(id);
-		if (status == 0) {
-			return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
+		try {
+			int status = clienteNormalService.deleteById(id);
+			if (status == 0) {
+				return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
+			}
+		}catch(IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -76,8 +109,15 @@ public class ClienteNormalController {
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
 			@RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaNormal) {
 
-		ClienteNormalDTO clienteNormalNuevo = new ClienteNormalDTO(nombre, cedula, correo, telefono, metodoPago,
-				tipoPedido, tarifaNormal);
+		ClienteNormalDTO clienteNormalNuevo = new ClienteNormalDTO();
+
+		clienteNormalNuevo.setNombre(nombre);
+		clienteNormalNuevo.setCedula(cedula);
+		clienteNormalNuevo.setCorreo(correo);
+		clienteNormalNuevo.setTelefono(telefono);
+		clienteNormalNuevo.setMetodoPago(metodoPago);
+		clienteNormalNuevo.setTipoPedido(tipoPedido);
+		clienteNormalNuevo.setTarifaNormal(tarifaNormal);
 
 		int status = clienteNormalService.updateById(id, clienteNormalNuevo);
 
@@ -88,7 +128,7 @@ public class ClienteNormalController {
 		}
 
 	}
-	
+
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ClienteNormalDTO>> findByNombre(@RequestParam String nombre) {
 
@@ -100,7 +140,7 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ClienteNormalDTO>> findByCedula(@RequestParam String cedula) {
 
@@ -112,7 +152,7 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<ClienteNormalDTO>> findByCorreo(@RequestParam String correo) {
 
@@ -124,7 +164,7 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarpormetodopago")
 	public ResponseEntity<List<ClienteNormalDTO>> findByMetodoPago(@RequestParam String metodoPago) {
 
@@ -136,7 +176,7 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarportipopedido")
 	public ResponseEntity<List<ClienteNormalDTO>> findByTipoPedido(@RequestParam String tipoPedido) {
 
@@ -148,9 +188,9 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClienteNormalDTO>> findByNombreYCedula(
+	public ResponseEntity<List<ClienteNormalDTO>> findByNombreAndCedula(
 			@RequestParam String nombre,
 			@RequestParam String cedula) {
 
@@ -162,9 +202,9 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClienteNormalDTO>> findByTipoPedidoYMetodoPago(
+	public ResponseEntity<List<ClienteNormalDTO>> findByTipoPedidoAndMetodoPago(
 			@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 

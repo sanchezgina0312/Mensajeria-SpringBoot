@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
+import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TipoDeAlimentoInvalidoException;
 import co.edu.unbosque.mensajeria.service.PaqueteNoAlimenticioService;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -33,19 +37,29 @@ public class PaqueteNoAlimenticioController {
 			@RequestParam int precioEnvio, @RequestParam String direccionDestino, @RequestParam String tamanio,
 			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega) {
 
-		PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO(precioEnvio, direccionDestino, tamanio,
-				fechaCreacionPedido, fechaEstimadaEntrega, esFragil);
+		try {
+		PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO();
 
+		 nuevo.setPrecioEnvio(precioEnvio);
+         nuevo.setTamanio(tamanio);
+         nuevo.setDireccionDestino(direccionDestino);
+         nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+         nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+         nuevo.setEsFragil(esFragil);
+         
 		int statusA = paqueteNoAlimenticioSer.registrarPlazo24Horas(nuevo);
-		int status = paqueteNoAlimenticioSer.create(nuevo);
+		paqueteNoAlimenticioSer.create(nuevo);
+		
+	       return new ResponseEntity<>("Paquete no alimenticio creado con éxito", HttpStatus.CREATED);
+	         
+			 } catch (DireccionDestinoInvalidaException e) {
+		            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
-		if (status == 0 && statusA == 0) {
-			return new ResponseEntity<>("Paquete No Alimenticio creado con éxito (Entrega en 24h)", HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>("Error al crear el paquete", HttpStatus.BAD_REQUEST);
+		        } catch (TamanioInvalidoException e) {
+		            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		        } 
 		}
-
-	}
+	
 
 	// http://localhost:8080/paquetenoalimenticio/mostrartodo
 	@GetMapping("/mostrartodo")
@@ -63,8 +77,15 @@ public class PaqueteNoAlimenticioController {
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam boolean esFragil,
 			@RequestParam int precioEnvio, @RequestParam String direccionDestino, @RequestParam String tamanio,
 			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega) {
-		PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO(precioEnvio, direccionDestino, tamanio,
-				fechaCreacionPedido, fechaEstimadaEntrega, esFragil);
+		PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO();
+		
+		nuevo.setEsFragil(esFragil);
+		nuevo.setTamanio(tamanio);
+		nuevo.setDireccionDestino(direccionDestino);
+		nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+		nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+		nuevo.setPrecioEnvio(precioEnvio);
+		
 		int status = paqueteNoAlimenticioSer.updateById(id, nuevo);
 		if (status == 0) {
 			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
@@ -77,12 +98,17 @@ public class PaqueteNoAlimenticioController {
 	// http://localhost:8080/paquetenoalimenticio/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> delete(@RequestParam Long id) {
+		try {
 		int status = paqueteNoAlimenticioSer.deleteById(id);
 		if (status == 0) {
 			return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
 		}
+		}catch (IdInvalidoException e) {
+			   return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			    
+		} 
 	}
 
 }
