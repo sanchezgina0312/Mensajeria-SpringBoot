@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.entity.PaqueteCarta;
 import co.edu.unbosque.mensajeria.repository.PaqueteCartaRepository;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 @Service
 public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
@@ -28,8 +29,13 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 
 	@Override
 	public int create(PaqueteCartaDTO data) {
+		
+		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
+		LanzadorDeException.verificarTipoCarta(data.getTipoCarta());
+
 		PaqueteCarta entity = mapper.map(data, PaqueteCarta.class);
 		paqueteCartaRep.save(entity);
+		
 		return 0;
 	}
 
