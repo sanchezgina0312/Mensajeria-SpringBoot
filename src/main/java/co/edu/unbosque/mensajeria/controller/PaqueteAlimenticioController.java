@@ -14,6 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.mensajeria.dto.PaqueteAlimenticioDTO;
+import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
+import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TipoDeAlimentoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.service.PaqueteAlimenticioService;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -35,20 +43,33 @@ public class PaqueteAlimenticioController {
 			@RequestParam String tamanio, @RequestParam LocalDateTime fechaCreacionPedido,
 			@RequestParam LocalDateTime fechaEstimadaEntrega) {
 
-		PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO(precioEnvio, direccionDestino, tamanio,
-				fechaCreacionPedido, fechaEstimadaEntrega, seEnviaHoy, tipoDeAlimento);
+		
+		try {
+			
+		PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
+		
+		 nuevo.setPrecioEnvio(precioEnvio);
+         nuevo.setTamanio(tamanio);
+         nuevo.setTipoDeAlimento(tipoDeAlimento);
+         nuevo.setSeEnviaHoy(seEnviaHoy);
+         nuevo.setDireccionDestino(direccionDestino);
+         nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+         nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+         
+         paqueteAlimenticioSer.create(nuevo);
+		
+         return new ResponseEntity<>("Paquete alimenticio creado con éxito", HttpStatus.CREATED);
+         
+		 } catch (DireccionDestinoInvalidaException e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
-		int statusA = paqueteAlimenticioSer.registrarYValidarHorasEntrega(nuevo);
-		int status = paqueteAlimenticioSer.create(nuevo);
+	        } catch (TamanioInvalidoException e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
-		if (status == 0 && statusA == 0) {
-			return new ResponseEntity<>("Dato creado con éxito. Se entrega hoy mismo.", HttpStatus.CREATED);
-		} else if (status == 0 && statusA == 2) {
-			return new ResponseEntity<>("Dato creado con éxito. AVISO: Debido a la hora de pedido, se entregará mañana.", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error al crear el paquete alimenticio", HttpStatus.BAD_REQUEST);
-		}
+	        } catch (TipoDeAlimentoInvalidoException e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
+	        } 
 	}
 	
 	// http://localhost:8080/paquetealimenticio/mostrartodo
@@ -68,8 +89,16 @@ public class PaqueteAlimenticioController {
 			@RequestParam String tipoDeAlimento, @RequestParam int precioEnvio, @RequestParam String direccionDestino,
 			@RequestParam String tamanio, @RequestParam LocalDateTime fechaCreacionPedido,
 			@RequestParam LocalDateTime fechaEstimadaEntrega) {
-		PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO(precioEnvio, direccionDestino, tamanio,
-				fechaCreacionPedido, fechaEstimadaEntrega, seEnviaHoy, tipoDeAlimento);
+		PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
+		
+		nuevo.setSeEnviaHoy(seEnviaHoy);
+		nuevo.setTipoDeAlimento(tipoDeAlimento);
+		nuevo.setTamanio(tamanio);
+		nuevo.setDireccionDestino(direccionDestino);
+		nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+		nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+		nuevo.setPrecioEnvio(precioEnvio);
+		
 		int status = paqueteAlimenticioSer.updateById(id, nuevo);
 		if (status == 0) {
 			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
