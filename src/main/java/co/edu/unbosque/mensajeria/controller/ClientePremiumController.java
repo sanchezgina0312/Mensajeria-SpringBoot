@@ -15,6 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.mensajeria.dto.ClientePremiumDTO;
+import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
+import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TipoPedidoInvalidoException;
 import co.edu.unbosque.mensajeria.service.ClientePremiumService;
 
 @RestController
@@ -35,15 +42,40 @@ public class ClientePremiumController {
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
 			@RequestParam String tipoPedido, @RequestParam double tarifaPremium) {
 
-		ClientePremiumDTO nuevoClientePremium = new ClientePremiumDTO(nombre, cedula, correo, telefono, metodoPago,
-				tipoPedido, tarifaPremium);
-		int status = clientePremiumService.create(nuevoClientePremium);
+		try {
+			ClientePremiumDTO nuevoClientePremium = new ClientePremiumDTO();
 
-		if (status == 0) {
+			nuevoClientePremium.setNombre(nombre);
+			nuevoClientePremium.setCedula(cedula);
+			nuevoClientePremium.setCorreo(correo);
+			nuevoClientePremium.setTelefono(telefono);
+			nuevoClientePremium.setMetodoPago(metodoPago);
+			nuevoClientePremium.setTipoPedido(tipoPedido);
+			nuevoClientePremium.setTarifaPremium(tarifaPremium);
 
-			return new ResponseEntity<>("Cliente creado con Ã©xito.", HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>("Error al crear cliente.", HttpStatus.BAD_REQUEST);
+			int status =clientePremiumService.create(nuevoClientePremium);
+
+			if(status==0) {
+				return new ResponseEntity<>("Dato creado con exito",HttpStatus.CREATED);
+			}else {
+				return new ResponseEntity<>("Error al crear cliente", HttpStatus.BAD_REQUEST);
+			}
+		} catch (NombreInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CedulaInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CorreoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (TelefonoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (MetodoDePagoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (TipoPedidoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -62,11 +94,16 @@ public class ClientePremiumController {
 	// http://localhost:8080/clientepremium/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> eliminarClientePremium(@RequestParam Long id) {
-		int status = clientePremiumService.deleteById(id);
-		if (status == 0) {
-			return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
+		try {
+			int status = clientePremiumService.deleteById(id);
+			if (status == 0) {
+				return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
+			}
+		}catch(IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+
 		}
 	}
 
@@ -76,19 +113,46 @@ public class ClientePremiumController {
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
 			@RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaPremium) {
 
-		ClientePremiumDTO clientePremiumNuevo = new ClientePremiumDTO(nombre, cedula, correo, telefono, metodoPago,
-				tipoPedido, tarifaPremium);
+		try {
+			ClientePremiumDTO clientePremiumNuevo = new ClientePremiumDTO();
 
-		int status = clientePremiumService.updateById(id, clientePremiumNuevo);
+			clientePremiumNuevo.setNombre(nombre);
+			clientePremiumNuevo.setCedula(cedula);
+			clientePremiumNuevo.setCorreo(correo);
+			clientePremiumNuevo.setTelefono(telefono);
+			clientePremiumNuevo.setMetodoPago(metodoPago);
+			clientePremiumNuevo.setTipoPedido(tipoPedido);
+			clientePremiumNuevo.setTarifaPremium(tarifaPremium);
 
-		if (status == 0) {
-			return new ResponseEntity<>("Cliente actualizado correctamente. ", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Error al actualizar dcliente. ", HttpStatus.BAD_REQUEST);
+			int status = clientePremiumService.updateById(id, clientePremiumNuevo);
+
+			if (status == 0) {
+				return new ResponseEntity<>("Cliente actualizado correctamente. ", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("Error al actualizar cliente. ", HttpStatus.BAD_REQUEST);
+			}
+		} catch (NombreInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CedulaInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CorreoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (TelefonoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (MetodoDePagoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (TipoPedidoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch(IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);			   
 		}
 
 	}
-	
+
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ClientePremiumDTO>> findByNombre(@RequestParam String nombre) {
 
@@ -100,7 +164,7 @@ public class ClientePremiumController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ClientePremiumDTO>> findByCedula(@RequestParam String cedula) {
 
@@ -112,7 +176,7 @@ public class ClientePremiumController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<ClientePremiumDTO>> findByCorreo(@RequestParam String correo) {
 
@@ -124,7 +188,7 @@ public class ClientePremiumController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<ClientePremiumDTO>> findByTelefono(@RequestParam String telefono) {
 
@@ -136,7 +200,7 @@ public class ClientePremiumController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarpormetodopago")
 	public ResponseEntity<List<ClientePremiumDTO>> findByMetodoPago(@RequestParam String metodoPago) {
 
@@ -148,7 +212,7 @@ public class ClientePremiumController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarportipopedido")
 	public ResponseEntity<List<ClientePremiumDTO>> findByTipoPedido(@RequestParam String tipoPedido) {
 
@@ -160,9 +224,9 @@ public class ClientePremiumController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClientePremiumDTO>> findByNombreYCedula(
+	public ResponseEntity<List<ClientePremiumDTO>> findByNombreAndCedula(
 			@RequestParam String nombre,
 			@RequestParam String cedula) {
 
@@ -174,9 +238,9 @@ public class ClientePremiumController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-	
+
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClientePremiumDTO>> findByTipoPedidoYMetodoPago(
+	public ResponseEntity<List<ClientePremiumDTO>> findByTipoPedidoAndMetodoPago(
 			@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 

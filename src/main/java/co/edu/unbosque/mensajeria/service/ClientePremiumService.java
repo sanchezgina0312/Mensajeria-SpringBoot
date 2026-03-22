@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.ClientePremiumDTO;
 import co.edu.unbosque.mensajeria.entity.ClientePremium;
 import co.edu.unbosque.mensajeria.repository.ClientePremiumRepository;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 @Service
 public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
@@ -23,6 +24,14 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 
 	@Override
 	public int create(ClientePremiumDTO data) {
+		
+		LanzadorDeException.verificarNombre(data.getNombre());
+		LanzadorDeException.verificarCedula(data.getCedula());
+		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+		LanzadorDeException.verificarTelefono(data.getTelefono());
+		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
+		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
+		
 		ClientePremium entity = mapper.map(data, ClientePremium.class);
 		clientepremiumRep.save(entity);
 		return 0;
@@ -43,7 +52,7 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 
 	@Override
 	public int deleteById(Long id) {
-
+		LanzadorDeException.verificarId(id);
 		Optional<ClientePremium> encontrado = clientepremiumRep.findById(id);
 
 		if (encontrado.isPresent()) {
@@ -58,6 +67,13 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 	@Override
 	public int updateById(Long id, ClientePremiumDTO data) {
 
+		LanzadorDeException.verificarNombre(data.getNombre());
+		LanzadorDeException.verificarCedula(data.getCedula());
+		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+		LanzadorDeException.verificarTelefono(data.getTelefono());
+		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
+		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
+		LanzadorDeException.verificarId(id);
 		Optional<ClientePremium> encontrado = clientepremiumRep.findById(id);
 
 		if (encontrado.isPresent()) {
