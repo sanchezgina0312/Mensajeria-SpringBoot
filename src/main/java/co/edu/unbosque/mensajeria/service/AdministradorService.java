@@ -8,7 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.AdministradorDTO;
 import co.edu.unbosque.mensajeria.entity.Administrador;
+import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.repository.AdministradorRepository;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 @Service
 public class AdministradorService implements CRUDOperation<AdministradorDTO> {
@@ -24,11 +30,19 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	}
 
 	@Override
-	public int create(AdministradorDTO data) {
-		Administrador entity = mapper.map(data, Administrador.class);
-		administradorRep.save(entity);
-		return 0;
-	}
+    public int create(AdministradorDTO data) {
+
+        LanzadorDeException.verificarNombre(data.getNombre());
+        LanzadorDeException.verificarCedula(data.getCedula());
+        LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+        LanzadorDeException.verificarTelefono(data.getTelefono());
+        LanzadorDeException.verificarTurno(data.getTurno());
+
+        Administrador entity = mapper.map(data, Administrador.class);
+        administradorRep.save(entity);
+
+        return 0;
+    }
 
 	@Override
 	public List<AdministradorDTO> getAll() {

@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import co.edu.unbosque.mensajeria.dto.AdministradorDTO;
+import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.service.AdministradorService;
 
 @RestController
@@ -27,24 +32,38 @@ public class AdministradorController {
 		
 	}
 	
-	// http://localhost:8080/administrador/crear?nombre=Admin1&cedula=999&correo=a@mail.com&telefono=000&turno=N&usuario=admin&contrasenia=1234
+	// http://localhost:8080/administrador/crear?nombre=Admin1&cedula=999&correo=a@mail.com&telefono=000&turno=N
 	@PostMapping("/crear")
-	public ResponseEntity<String> crearAdministrador(@RequestParam String nombre, @RequestParam String cedula,
-			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno) {
+    public ResponseEntity<String> crearAdministrador(@RequestParam String nombre, @RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono, @RequestParam char turno) {
 
-		AdministradorDTO nuevo = new AdministradorDTO();
-		nuevo.setNombre(nombre);
-		nuevo.setCedula(cedula);
-		nuevo.setCorreo(correo);
-		nuevo.setTelefono(telefono);
-		nuevo.setTurno(turno);
+        try {
+            AdministradorDTO nuevo = new AdministradorDTO();
+            nuevo.setNombre(nombre);
+            nuevo.setCedula(cedula);
+            nuevo.setCorreo(correo);
+            nuevo.setTelefono(telefono);
+            nuevo.setTurno(turno);
 
-		int status = administradorSer.create(nuevo);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>("Error al crear el administrador", HttpStatus.BAD_REQUEST);
-		}
+            administradorSer.create(nuevo);
+
+            return new ResponseEntity<>("Administrador creado con éxito", HttpStatus.CREATED);
+
+        } catch (NombreInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (CedulaInvalidaException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (CorreoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (TelefonoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (TurnoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
 	}
 
 	// http://localhost:8080/administrador/mostrartodo
