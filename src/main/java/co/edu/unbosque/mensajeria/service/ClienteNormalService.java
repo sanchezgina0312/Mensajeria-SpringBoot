@@ -215,9 +215,9 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 		}
 	}
 	
-	public List<ClienteNormalDTO> findByNombreYCedula(String nombre, String cedula) {
+	public List<ClienteNormalDTO> findByNombreAndCedula(String nombre, String cedula) {
 
-		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByNombreYCedula(nombre, cedula);
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByNombreAndCedula(nombre, cedula);
 
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 
@@ -236,9 +236,9 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 		}
 	}
 	
-	public List<ClienteNormalDTO> findByTipoPedidoYMetodoPago(String tipoPedido, String metodoPago) {
+	public List<ClienteNormalDTO> findByTipoPedidoAndMetodoPago(String tipoPedido, String metodoPago) {
 
-		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByTipoPedidoYMetodoPago(tipoPedido, metodoPago);
+		Optional<List<ClienteNormal>> encontrados = clienteNormalRep.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
 
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 

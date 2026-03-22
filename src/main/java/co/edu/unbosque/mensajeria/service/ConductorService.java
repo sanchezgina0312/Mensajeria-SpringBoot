@@ -166,8 +166,8 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		}
 	}
 
-	public List<ConductorDTO> findByNombreYCedula(String nombre, String cedula) {
-		Optional<List<Conductor>> encontrados = conductorRep.findByNombreYCedula(nombre, cedula);
+	public List<ConductorDTO> findByNombreAndCedula(String nombre, String cedula) {
+		Optional<List<Conductor>> encontrados = conductorRep.findByNombreAndCedula(nombre, cedula);
 		List<Conductor> entityList = encontrados.get();
 		List<ConductorDTO> dtoList = new ArrayList<>();
 		
@@ -182,8 +182,8 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		}
 	}
 
-	public List<ConductorDTO> findByPlacaVehiculoYNombre(String placaVehiculo, String nombre) {
-		Optional<List<Conductor>> encontrados = conductorRep.findByPlacaVehiculoYNombre(placaVehiculo, nombre);
+	public List<ConductorDTO> findByPlacaVehiculoAndNombre(String placaVehiculo, String nombre) {
+		Optional<List<Conductor>> encontrados = conductorRep.findByPlacaVehiculoAndNombre(placaVehiculo, nombre);
 		List<Conductor> entityList = encontrados.get();
 		List<ConductorDTO> dtoList = new ArrayList<>();
 		

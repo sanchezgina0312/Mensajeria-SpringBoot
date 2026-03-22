@@ -15,7 +15,7 @@ public interface ConductorRepository extends CrudRepository<Conductor, Long> {
 	public Optional<List<Conductor>> findByTelefono(String telefono);		
 	public Optional<List<Conductor>> findByPlacaVehiculo(String placaVehiculo);
 	
-	public Optional<List<Conductor>> findByNombreYCedula(String nombre, String cedula);	
-	public Optional<List<Conductor>> findByPlacaVehiculoYNombre(String placaVehiculo, String nombre);
+	public Optional<List<Conductor>> findByNombreAndCedula(String nombre, String cedula);	
+	public Optional<List<Conductor>> findByPlacaVehiculoAndNombre(String placaVehiculo, String nombre);
 	
 }

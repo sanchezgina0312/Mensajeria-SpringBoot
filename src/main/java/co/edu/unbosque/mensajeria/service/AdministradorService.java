@@ -8,11 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.AdministradorDTO;
 import co.edu.unbosque.mensajeria.entity.Administrador;
-import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
-import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.repository.AdministradorRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
@@ -189,6 +184,7 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 			return new ArrayList<AdministradorDTO>(); 
 		}
 	}
+
 
 
 	public List<AdministradorDTO> findByNombreAndCedula(String nombre, String cedula) {

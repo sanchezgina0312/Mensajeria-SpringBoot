@@ -154,7 +154,7 @@ public class ClienteNormalController {
 			@RequestParam String nombre,
 			@RequestParam String cedula) {
 
-		List<ClienteNormalDTO> lista = clienteNormalService.findByNombreYCedula(nombre, cedula);
+		List<ClienteNormalDTO> lista = clienteNormalService.findByNombreAndCedula(nombre, cedula);
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
@@ -168,7 +168,7 @@ public class ClienteNormalController {
 			@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 
-		List<ClienteNormalDTO> lista = clienteNormalService.findByTipoPedidoYMetodoPago(tipoPedido, metodoPago);
+		List<ClienteNormalDTO> lista = clienteNormalService.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
