@@ -180,7 +180,7 @@ public class ClienteConcurrenteController {
 			@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 
-		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTipoPedidoYMetodoPago(tipoPedido, metodoPago);
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);

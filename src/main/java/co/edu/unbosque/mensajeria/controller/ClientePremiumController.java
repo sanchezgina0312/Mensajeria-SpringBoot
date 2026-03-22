@@ -166,7 +166,7 @@ public class ClientePremiumController {
 			@RequestParam String nombre,
 			@RequestParam String cedula) {
 
-		List<ClientePremiumDTO> lista = clientePremiumService.findByNombreYCedula(nombre, cedula);
+		List<ClientePremiumDTO> lista = clientePremiumService.findByNombreAndCedula(nombre, cedula);
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
@@ -180,7 +180,7 @@ public class ClientePremiumController {
 			@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 
-		List<ClientePremiumDTO> lista = clientePremiumService.findByTipoPedidoYMetodoPago(tipoPedido, metodoPago);
+		List<ClientePremiumDTO> lista = clientePremiumService.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
