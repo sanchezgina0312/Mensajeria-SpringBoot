@@ -56,7 +56,7 @@ public class ClienteConcurrenteController {
 
 		clienteConcurrenteService.create(nuevoClienteConcurrente);
 
-          return new ResponseEntity<>("Administrador creado con éxito", HttpStatus.CREATED);
+          return new ResponseEntity<>("Cliente concurrente creado con éxito", HttpStatus.CREATED);
 
       } catch (NombreInvalidoException e) {
           return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
