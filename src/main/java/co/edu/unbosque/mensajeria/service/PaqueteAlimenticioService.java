@@ -53,6 +53,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 	@Override
 	public int deleteById(Long id) {
+		LanzadorDeException.verificarId(id);
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
 			paqueteAlimenticioRep.delete(encontrado.get());

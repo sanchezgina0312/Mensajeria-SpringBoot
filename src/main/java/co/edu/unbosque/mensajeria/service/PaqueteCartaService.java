@@ -54,6 +54,8 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 
 	@Override
 	public int deleteById(Long id) {
+		
+		LanzadorDeException.verificarId(id);
 		Optional<PaqueteCarta> encontrado = paqueteCartaRep.findById(id);
 		if (encontrado.isPresent()) {
 			paqueteCartaRep.delete(encontrado.get());

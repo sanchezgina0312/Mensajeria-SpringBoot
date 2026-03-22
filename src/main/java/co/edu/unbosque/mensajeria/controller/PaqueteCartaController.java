@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
+import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
+import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TipoDeCartaInvalidaException;
 import co.edu.unbosque.mensajeria.service.PaqueteCartaService;
 
 @RestController
@@ -36,18 +42,32 @@ public class PaqueteCartaController {
 			@RequestParam String direccionDestino, @RequestParam String tamanio,
 			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega,
 			@RequestParam String tipoCarta) {
-
-		PaqueteCartaDTO nuevo = new PaqueteCartaDTO(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido,
-				fechaEstimadaEntrega, tipoCarta);
+		try {
+		PaqueteCartaDTO nuevo = new PaqueteCartaDTO();
+		
+		nuevo.setTipoCarta(tipoCarta);
+		nuevo.setTamanio(tamanio);
+		nuevo.setPrecioEnvio(precioEnvio);
+		nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+		nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+		nuevo.setDireccionDestino(direccionDestino);
 
 		int statusA = paqueteCartaSer.registrarPlazo72Horas(nuevo);
-		int status = paqueteCartaSer.create(nuevo);
+		paqueteCartaSer.create(nuevo);
+		
 
-		if (status == 0 && statusA == 0) {
-			return new ResponseEntity<>("Correspondencia registrada con éxito (Entrega en 72h)", HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>("Error al registrar la carta", HttpStatus.BAD_REQUEST);
-		}
+		 return new ResponseEntity<>("Paquete carta creado con éxito", HttpStatus.CREATED);
+		 
+	} catch (DireccionDestinoInvalidaException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+    } catch (TipoDeCartaInvalidaException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+    } catch (TamanioInvalidoException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    } 
+
 	}
 
 	// http://localhost:8080/paquetecarta/mostrartodo
@@ -65,10 +85,18 @@ public class PaqueteCartaController {
 	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam int precioEnvio,
 			@RequestParam String direccionDestino, @RequestParam String tamanio,
-			@RequestParam String fechaCreacionPedido, @RequestParam String fechaEstimadaEntrega,
+			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega,
 			@RequestParam String tipoCarta) {
-		PaqueteCartaDTO nuevo = new PaqueteCartaDTO(precioEnvio, direccionDestino, tamanio,
-				LocalDateTime.parse(fechaCreacionPedido), LocalDateTime.parse(fechaEstimadaEntrega), tipoCarta);
+		PaqueteCartaDTO nuevo = new PaqueteCartaDTO();
+		
+		nuevo.setDireccionDestino(direccionDestino);
+		nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+		nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+		nuevo.setPrecioEnvio(precioEnvio);
+		nuevo.setTamanio(tamanio);
+		nuevo.setTipoCarta(tipoCarta);
+		
+		
 		int status = paqueteCartaSer.updateById(id, nuevo);
 		if (status == 0) {
 			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
@@ -81,11 +109,15 @@ public class PaqueteCartaController {
 	// http://localhost:8080/paquetecarta/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> delete(@RequestParam Long id) {
+		try {
 		int status = paqueteCartaSer.deleteById(id);
 		if (status == 0) {
 			return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+		}
+		}catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
 	}
 }
