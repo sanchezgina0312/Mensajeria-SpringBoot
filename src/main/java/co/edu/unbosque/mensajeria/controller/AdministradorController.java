@@ -30,8 +30,7 @@ public class AdministradorController {
 	// http://localhost:8080/administrador/crear?nombre=Admin1&cedula=999&correo=a@mail.com&telefono=000&turno=N&usuario=admin&contrasenia=1234
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearAdministrador(@RequestParam String nombre, @RequestParam String cedula,
-			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno,
-			@RequestParam String usuario, @RequestParam String contrasenia) {
+			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno) {
 
 		AdministradorDTO nuevo = new AdministradorDTO();
 		nuevo.setNombre(nombre);
@@ -39,8 +38,6 @@ public class AdministradorController {
 		nuevo.setCorreo(correo);
 		nuevo.setTelefono(telefono);
 		nuevo.setTurno(turno);
-		nuevo.setUsuario(usuario);
-		nuevo.setContrasenia(contrasenia);
 
 		int status = administradorSer.create(nuevo);
 		if (status == 0) {
