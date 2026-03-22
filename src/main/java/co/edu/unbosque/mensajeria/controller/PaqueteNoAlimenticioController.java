@@ -16,7 +16,6 @@ import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
 import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TipoDeAlimentoInvalidoException;
 import co.edu.unbosque.mensajeria.service.PaqueteNoAlimenticioService;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -38,28 +37,30 @@ public class PaqueteNoAlimenticioController {
 			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega) {
 
 		try {
-		PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO();
+			PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO();
 
-		 nuevo.setPrecioEnvio(precioEnvio);
-         nuevo.setTamanio(tamanio);
-         nuevo.setDireccionDestino(direccionDestino);
-         nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-         nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
-         nuevo.setEsFragil(esFragil);
-         
-		int statusA = paqueteNoAlimenticioSer.registrarPlazo24Horas(nuevo);
-		paqueteNoAlimenticioSer.create(nuevo);
-		
-	       return new ResponseEntity<>("Paquete no alimenticio creado con éxito", HttpStatus.CREATED);
-	         
-			 } catch (DireccionDestinoInvalidaException e) {
-		            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			nuevo.setPrecioEnvio(precioEnvio);
+			nuevo.setTamanio(tamanio);
+			nuevo.setDireccionDestino(direccionDestino);
+			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+			nuevo.setEsFragil(esFragil);
 
-		        } catch (TamanioInvalidoException e) {
-		            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		        } 
+			int status = paqueteNoAlimenticioSer.registrarPlazo24Horas(nuevo);
+
+			if (status == 0) {
+				paqueteNoAlimenticioSer.create(nuevo);
+				return new ResponseEntity<>("Paquete no alimenticio creado con éxito", HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<>("Error al crear paquete no alimenticio", HttpStatus.BAD_REQUEST);
+			}
+
+		} catch (DireccionDestinoInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-	
+	}
 
 	// http://localhost:8080/paquetenoalimenticio/mostrartodo
 	@GetMapping("/mostrartodo")
@@ -78,14 +79,14 @@ public class PaqueteNoAlimenticioController {
 			@RequestParam int precioEnvio, @RequestParam String direccionDestino, @RequestParam String tamanio,
 			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega) {
 		PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO();
-		
+
 		nuevo.setEsFragil(esFragil);
 		nuevo.setTamanio(tamanio);
 		nuevo.setDireccionDestino(direccionDestino);
 		nuevo.setFechaCreacionPedido(fechaCreacionPedido);
 		nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
 		nuevo.setPrecioEnvio(precioEnvio);
-		
+
 		int status = paqueteNoAlimenticioSer.updateById(id, nuevo);
 		if (status == 0) {
 			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
@@ -94,21 +95,52 @@ public class PaqueteNoAlimenticioController {
 					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	// http://localhost:8080/paquetenoalimenticio/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> delete(@RequestParam Long id) {
 		try {
-		int status = paqueteNoAlimenticioSer.deleteById(id);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+			int status = paqueteNoAlimenticioSer.deleteById(id);
+			if (status == 0) {
+				return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+			}
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		}
-		}catch (IdInvalidoException e) {
-			   return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-			    
-		} 
+	}
+
+	@GetMapping("/buscartamanio")
+	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarPorTamanio(@RequestParam String tamanio) {
+		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByTamanio(tamanio);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
+	}
+
+	@GetMapping("/buscaresfragil")
+	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarPorEsFragil(@RequestParam boolean esFragil) {
+		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByEsFragil(esFragil);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
+	}
+
+	@GetMapping("/buscarportamanioyfragil")
+	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarPorTamanioYFragil(@RequestParam String tamanio,
+			@RequestParam boolean esFragil) {
+		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByTamanioAndEsFragil(tamanio, esFragil);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
 	}
 
 }
