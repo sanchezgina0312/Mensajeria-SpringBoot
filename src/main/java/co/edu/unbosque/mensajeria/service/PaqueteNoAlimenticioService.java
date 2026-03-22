@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
 import co.edu.unbosque.mensajeria.entity.PaqueteNoAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteNoAlimenticioRepository;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 @Service
 public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlimenticioDTO> {
@@ -28,8 +29,13 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 
 	@Override
 	public int create(PaqueteNoAlimenticioDTO data) {
+		
+		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
+		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+
 		PaqueteNoAlimenticio entity = mapper.map(data, PaqueteNoAlimenticio.class);
 		paqueteNoAlimenticioRep.save(entity);
+		
 		return 0;
 	}
 

@@ -65,12 +65,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	@Override
 	public int updateById(Long id, PaqueteAlimenticioDTO data) {
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
-
 		if (encontrado.isPresent()) {
-			LanzadorDeException.verificarDireccion(data.getDireccionDestino());
-			LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
-			LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
-
 			PaqueteAlimenticio temp = encontrado.get();
 			temp.setPrecioEnvio(data.getPrecioEnvio());
 			temp.setDireccionDestino(data.getDireccionDestino());
@@ -79,12 +74,11 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 			temp.setFechaEstimadaEntrega(data.getFechaEstimadaEntrega());
 			temp.setSeEnviaHoy(data.isSeEnviaHoy());
 			temp.setTipoDeAlimento(data.getTipoDeAlimento());
-			
 			paqueteAlimenticioRep.save(temp);
 			return 0;
 		}
 
-		return 1; 
+		return 1;
 	}
 
 	@Override
