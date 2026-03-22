@@ -65,6 +65,13 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 	@Override
 	public int updateById(Long id, PaqueteAlimenticioDTO data) {
+		
+		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
+		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+		LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
+		LanzadorDeException.verificarId(id);
+
+		
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
 			PaqueteAlimenticio temp = encontrado.get();

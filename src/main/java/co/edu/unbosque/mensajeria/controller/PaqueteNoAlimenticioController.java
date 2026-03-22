@@ -78,21 +78,29 @@ public class PaqueteNoAlimenticioController {
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam boolean esFragil,
 			@RequestParam int precioEnvio, @RequestParam String direccionDestino, @RequestParam String tamanio,
 			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega) {
-		PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO();
+		try {
+			PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO();
 
-		nuevo.setEsFragil(esFragil);
-		nuevo.setTamanio(tamanio);
-		nuevo.setDireccionDestino(direccionDestino);
-		nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-		nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
-		nuevo.setPrecioEnvio(precioEnvio);
+			nuevo.setEsFragil(esFragil);
+			nuevo.setTamanio(tamanio);
+			nuevo.setDireccionDestino(direccionDestino);
+			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+			nuevo.setPrecioEnvio(precioEnvio);
 
-		int status = paqueteNoAlimenticioSer.updateById(id, nuevo);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
-					HttpStatus.BAD_REQUEST);
+			int status = paqueteNoAlimenticioSer.updateById(id, nuevo);
+			if (status == 0) {
+				return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
+						HttpStatus.BAD_REQUEST);
+			}
+		} catch (DireccionDestinoInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -108,7 +116,6 @@ public class PaqueteNoAlimenticioController {
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		}
 	}
 

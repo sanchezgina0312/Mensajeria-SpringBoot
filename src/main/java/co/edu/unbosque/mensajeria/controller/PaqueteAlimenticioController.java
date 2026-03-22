@@ -85,6 +85,7 @@ public class PaqueteAlimenticioController {
 			@RequestParam String tipoDeAlimento, @RequestParam int precioEnvio, @RequestParam String direccionDestino,
 			@RequestParam String tamanio, @RequestParam LocalDateTime fechaCreacionPedido,
 			@RequestParam LocalDateTime fechaEstimadaEntrega) {
+		try {
 		PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
 
 		nuevo.setSeEnviaHoy(seEnviaHoy);
@@ -101,6 +102,16 @@ public class PaqueteAlimenticioController {
 		} else {
 			return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
 					HttpStatus.BAD_REQUEST);
+		}
+		}catch (DireccionDestinoInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TipoDeAlimentoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		}
 	}
 

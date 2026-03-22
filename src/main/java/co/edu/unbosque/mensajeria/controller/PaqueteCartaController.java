@@ -19,6 +19,7 @@ import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TipoDeAlimentoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TipoDeCartaInvalidaException;
 import co.edu.unbosque.mensajeria.service.PaqueteCartaService;
 
@@ -85,21 +86,32 @@ public class PaqueteCartaController {
 			@RequestParam String direccionDestino, @RequestParam String tamanio,
 			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega,
 			@RequestParam String tipoCarta) {
-		PaqueteCartaDTO nuevo = new PaqueteCartaDTO();
+		try {
+			PaqueteCartaDTO nuevo = new PaqueteCartaDTO();
 
-		nuevo.setDireccionDestino(direccionDestino);
-		nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-		nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
-		nuevo.setPrecioEnvio(precioEnvio);
-		nuevo.setTamanio(tamanio);
-		nuevo.setTipoCarta(tipoCarta);
+			nuevo.setDireccionDestino(direccionDestino);
+			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+			nuevo.setPrecioEnvio(precioEnvio);
+			nuevo.setTamanio(tamanio);
+			nuevo.setTipoCarta(tipoCarta);
 
-		int status = paqueteCartaSer.updateById(id, nuevo);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
-					HttpStatus.BAD_REQUEST);
+			int status = paqueteCartaSer.updateById(id, nuevo);
+			if (status == 0) {
+				return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
+						HttpStatus.BAD_REQUEST);
+			}		
+		}catch (DireccionDestinoInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TipoDeCartaInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		}
 	}
 
