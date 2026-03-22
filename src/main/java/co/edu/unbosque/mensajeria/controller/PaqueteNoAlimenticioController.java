@@ -140,7 +140,7 @@ public class PaqueteNoAlimenticioController {
 	}
 
 	@GetMapping("/buscarportamanioyfragil")
-	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarPorTamanioYFragil(@RequestParam String tamanio,
+	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarPorTamanioAndFragil(@RequestParam String tamanio,
 			@RequestParam boolean esFragil) {
 		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByTamanioAndEsFragil(tamanio, esFragil);
 		if (!lista.isEmpty()) {

@@ -136,4 +136,98 @@ public class AdministradorController {
 	        return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 	    }
 	}
+	
+	// http://localhost:8080/administrador/buscarpornombre?nombre=Juan Perez
+		@GetMapping("/buscarpornombre")
+		public ResponseEntity<List<AdministradorDTO>> buscarPorNombre(@RequestParam String nombre) {
+		
+				List<AdministradorDTO> lista = administradorSer.findByNombre(nombre);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
+
+		// http://localhost:8080/administrador/buscarporcedula?cedula=123456789
+		@GetMapping("/buscarporcedula")
+		public ResponseEntity<List<AdministradorDTO>> buscarPorCedula(@RequestParam String cedula) {
+			
+				List<AdministradorDTO> lista = administradorSer.findByCedula(cedula);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
+
+		// http://localhost:8080/administrador/buscarporcorreo?correo=admin@mail.com
+		@GetMapping("/buscarporcorreo")
+		public ResponseEntity<List<AdministradorDTO>> buscarPorCorreo(@RequestParam String correo) {
+		
+				List<AdministradorDTO> lista = administradorSer.findByCorreo(correo);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
+
+		// http://localhost:8080/administrador/buscarportelefono?telefono=3001234567
+		@GetMapping("/buscarportelefono")
+		public ResponseEntity<List<AdministradorDTO>> buscarPorTelefono(@RequestParam String telefono) {
+			
+				List<AdministradorDTO> lista = administradorSer.findByTelefono(telefono);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+			} 
+		
+
+		// http://localhost:8080/administrador/buscarporusuario?usuario=admin1
+		@GetMapping("/buscarporusuario")
+		public ResponseEntity<List<AdministradorDTO>> buscarPorUsuario(@RequestParam String usuario) {
+			List<AdministradorDTO> lista = administradorSer.findByUsuario(usuario);
+			if (!lista.isEmpty()) {
+				return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+			}
+		}
+
+		// http://localhost:8080/administrador/buscarporcontrasenia?contrasenia=1234
+		@GetMapping("/buscarporcontrasenia")
+		public ResponseEntity<List<AdministradorDTO>> buscarPorContrasenia(@RequestParam String contrasenia) {
+			List<AdministradorDTO> lista = administradorSer.findByContrasenia(contrasenia);
+			if (!lista.isEmpty()) {
+				return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+			}
+		}
+
+		// http://localhost:8080/administrador/buscarpornombreycedula?nombre=Juan Perez&cedula=123456789
+		@GetMapping("/buscarpornombreycedula")
+		public ResponseEntity<List<AdministradorDTO>> buscarPorNombreAndCedula(@RequestParam String nombre, @RequestParam String cedula) {
+				List<AdministradorDTO> lista = administradorSer.findByNombreAndCedula(nombre, cedula);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+			
+		}
+
+		// http://localhost:8080/administrador/buscarporusuarioycontrasenia?usuario=admin&contrasenia=1234
+		@GetMapping("/buscarporusuarioycontrasenia")
+		public ResponseEntity<List<AdministradorDTO>> buscarPorUsuarioAndContrasenia(@RequestParam String usuario, @RequestParam String contrasenia) {
+			List<AdministradorDTO> lista = administradorSer.findByUsuarioAndContrasenia(usuario, contrasenia);
+			if (!lista.isEmpty()) {
+				return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+			}
+		}
 }

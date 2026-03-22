@@ -109,4 +109,88 @@ public class ConductorController {
 		}
 	}
 
+	
+	// http://localhost:8080/conductor/buscarpornombre?nombre=Juan Perez
+		@GetMapping("/buscarpornombre")
+		public ResponseEntity<List<ConductorDTO>> buscarPorNombre(@RequestParam String nombre) {
+			
+				List<ConductorDTO> lista = conductorSer.findByNombre(nombre);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
+
+		// http://localhost:8080/conductor/buscarporcedula?cedula=123456789
+		@GetMapping("/buscarporcedula")
+		public ResponseEntity<List<ConductorDTO>> buscarPorCedula(@RequestParam String cedula) {
+			
+				List<ConductorDTO> lista = conductorSer.findByCedula(cedula);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
+
+		// http://localhost:8080/conductor/buscarporcorreo?correo=juan@mail.com
+		@GetMapping("/buscarporcorreo")
+		public ResponseEntity<List<ConductorDTO>> buscarPorCorreo(@RequestParam String correo) {
+		
+				List<ConductorDTO> lista = conductorSer.findByCorreo(correo);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
+
+		// http://localhost:8080/conductor/buscarportelefono?telefono=3001234567
+		@GetMapping("/buscarportelefono")
+		public ResponseEntity<List<ConductorDTO>> buscarPorTelefono(@RequestParam String telefono) {
+	
+				List<ConductorDTO> lista = conductorSer.findByTelefono(telefono);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
+
+		// http://localhost:8080/conductor/buscarporplacavehiculo?placaVehiculo=ABC123
+		@GetMapping("/buscarporplacavehiculo")
+		public ResponseEntity<List<ConductorDTO>> buscarPorPlacaVehiculo(@RequestParam String placaVehiculo) {
+	
+				List<ConductorDTO> lista = conductorSer.findByPlacaVehiculo(placaVehiculo);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
+
+		// http://localhost:8080/conductor/buscarpornombreycedula?nombre=Juan Perez&cedula=123456789
+		@GetMapping("/buscarpornombreycedula")
+		public ResponseEntity<List<ConductorDTO>> buscarPorNombreAndCedula(@RequestParam String nombre, @RequestParam String cedula) {
+
+				List<ConductorDTO> lista = conductorSer.findByNombreAndCedula(nombre, cedula);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
+
+		// http://localhost:8080/conductor/buscarporplacavehiculoynombre?placaVehiculo=ABC123&nombre=Juan Perez
+		@GetMapping("/buscarporplacavehiculoynombre")
+		public ResponseEntity<List<ConductorDTO>> buscarPorPlacaVehiculoAndNombre(@RequestParam String placaVehiculo, @RequestParam String nombre) {
+			
+				List<ConductorDTO> lista = conductorSer.findByPlacaVehiculoAndNombre(placaVehiculo, nombre);
+				if (!lista.isEmpty()) {
+					return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+				} else {
+					return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+				}
+		}
 }

@@ -151,7 +151,7 @@ public class PaqueteCartaController {
 	}
 
 	@GetMapping("/buscarportamanioytipocarta")
-	public ResponseEntity<List<PaqueteCartaDTO>> buscarPorTamanioYTipoCarta(@RequestParam String tamanio,
+	public ResponseEntity<List<PaqueteCartaDTO>> buscarPorTamanioAndTipoCarta(@RequestParam String tamanio,
 			@RequestParam String tipoCarta) {
 		List<PaqueteCartaDTO> lista = paqueteCartaSer.findByTamanioAndTipoCarta(tamanio, tipoCarta);
 		if (!lista.isEmpty()) {

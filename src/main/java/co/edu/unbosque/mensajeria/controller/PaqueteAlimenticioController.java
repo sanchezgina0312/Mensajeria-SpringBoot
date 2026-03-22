@@ -163,7 +163,7 @@ public class PaqueteAlimenticioController {
 	}
 
 	@GetMapping("/buscarportamanioytipo")
-	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarPorTamanioYTipo(@RequestParam String tamanio,
+	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarPorTamanioAndTipo(@RequestParam String tamanio,
 			@RequestParam String tipoDeAlimento) {
 		List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByTamanioAndTipoDeAlimento(tamanio,
 				tipoDeAlimento);
