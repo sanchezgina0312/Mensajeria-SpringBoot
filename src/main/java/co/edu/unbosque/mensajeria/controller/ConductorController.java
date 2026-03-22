@@ -18,6 +18,7 @@ import co.edu.unbosque.mensajeria.dto.AdministradorDTO;
 import co.edu.unbosque.mensajeria.dto.ConductorDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
 import co.edu.unbosque.mensajeria.exception.PlacaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
@@ -38,7 +39,7 @@ public class ConductorController {
 	
 	// http://localhost:8080/conductor/crear?nombre=Juan&cedula=123&correo=juan@mail.com&telefono=3001&turno=M&placaVehiculo=ABC123
 	@PostMapping("/crear")
-	public ResponseEntity<String> crearPaqueteAlimenticio(@RequestParam String nombre, @RequestParam String cedula,
+	public ResponseEntity<String> crearConductor(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno,
 			@RequestParam String placaVehiculo) {
 		
@@ -48,7 +49,7 @@ public class ConductorController {
 				if (status == 0) {
 					return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
 				} else {
-					return new ResponseEntity<>("Error al crear el paquete no alimenticio", HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<>("Error al crear el conductor", HttpStatus.BAD_REQUEST);
 				}
 
 	        } catch (NombreInvalidoException e) {
@@ -88,14 +89,37 @@ public class ConductorController {
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam String nombre,
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
 			@RequestParam char turno, @RequestParam String placaVehiculo) {
-		ConductorDTO nuevo = new ConductorDTO(nombre, cedula, correo, telefono, turno, placaVehiculo);
-		int status = conductorSer.updateById(id, nuevo);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
-					HttpStatus.BAD_REQUEST);
-		}
+		
+		try {
+			ConductorDTO nuevo = new ConductorDTO(nombre, cedula, correo, telefono, turno, placaVehiculo);
+			int status = conductorSer.updateById(id, nuevo);
+			if (status == 0) {
+				return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos", HttpStatus.BAD_REQUEST);
+			}
+
+        } catch (NombreInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (CedulaInvalidaException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (CorreoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (TelefonoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (TurnoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (IdInvalidoException e) {
+	        return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+	        
+	    } catch (PlacaInvalidaException e) {
+        	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 	}
 	
 	// http://localhost:8080/conductor/eliminar?id=1

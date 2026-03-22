@@ -15,14 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.mensajeria.dto.ClienteConcurrenteDTO;
-import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
-import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
-import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TipoPedidoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.service.ClienteConcurrenteService;
 
 @RestController
@@ -42,40 +35,17 @@ public class ClienteConcurrenteController {
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
 			@RequestParam String tipoPedido, @RequestParam double tarifaConcurrente) {
 
-		try {
-			 
-		ClienteConcurrenteDTO nuevoClienteConcurrente = new ClienteConcurrenteDTO();
+		ClienteConcurrenteDTO nuevoClienteConcurrente = new ClienteConcurrenteDTO(nombre, cedula, correo, telefono,
+				metodoPago, tipoPedido, tarifaConcurrente);
 
-		nuevoClienteConcurrente.setNombre(nombre);
-		nuevoClienteConcurrente.setCedula(cedula);
-		nuevoClienteConcurrente.setCorreo(correo);
-		nuevoClienteConcurrente.setTelefono(telefono);
-		nuevoClienteConcurrente.setMetodoPago(metodoPago);
-		nuevoClienteConcurrente.setTipoPedido(tipoPedido);
-		nuevoClienteConcurrente.setTarifaConcurrente(tarifaConcurrente);
+		int status = clienteConcurrenteService.create(nuevoClienteConcurrente);
 
-		clienteConcurrenteService.create(nuevoClienteConcurrente);
+		if (status == 0) {
 
-          return new ResponseEntity<>("Cliente concurrente creado con éxito", HttpStatus.CREATED);
-
-      } catch (NombreInvalidoException e) {
-          return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-      } catch (CedulaInvalidaException e) {
-          return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-      } catch (CorreoInvalidoException e) {
-          return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-      } catch (TelefonoInvalidoException e) {
-          return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-      } catch (MetodoDePagoInvalidoException e) {
-          return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-      }catch (TipoPedidoInvalidoException e) {
-          return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-      }
-
+			return new ResponseEntity<>("Cliente creado con Ã©xito.", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>("Error al crear cliente.", HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	// http://localhost:8080/clienteconcurrente/mostrartodo
@@ -93,16 +63,17 @@ public class ClienteConcurrenteController {
 	// http://localhost:8080/clienteconcurrente/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> eliminarClienteConcurrente(@RequestParam Long id) {
+		
 		try {
-		int status = clienteConcurrenteService.deleteById(id);
-		if (status == 0) {
-			return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
-		}
-		}catch(IdInvalidoException e) {
-			 return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);			   
-		}
+			int status = clienteConcurrenteService.deleteById(id);
+			if (status == 0) {
+				return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
+			}
+	    } catch (IdInvalidoException e) {
+	        return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+	    }
 	}
 
 	// http://localhost:8080/clienteconcurrente/actualizarclienteconcurrente?id=1&nombre=Maria&cedula=789&correo=m@mail.com&telefono=500&metodoPago=Transferencia&tipoPedido=Recurrente&tarifaConcurrente=2000.0
@@ -111,15 +82,8 @@ public class ClienteConcurrenteController {
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
 			@RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaConcurrente) {
 
-		ClienteConcurrenteDTO clienteConcurrenteNuevo = new ClienteConcurrenteDTO();
-		
-		clienteConcurrenteNuevo.setNombre(nombre);
-		clienteConcurrenteNuevo.setCedula(cedula);
-		clienteConcurrenteNuevo.setCorreo(correo);
-		clienteConcurrenteNuevo.setTelefono(telefono);
-		clienteConcurrenteNuevo.setMetodoPago(metodoPago);
-		clienteConcurrenteNuevo.setTipoPedido(tipoPedido);
-		clienteConcurrenteNuevo.setTarifaConcurrente(tarifaConcurrente);
+		ClienteConcurrenteDTO clienteConcurrenteNuevo = new ClienteConcurrenteDTO(nombre, cedula, correo, telefono,
+				metodoPago, tipoPedido, tarifaConcurrente);
 
 		int status = clienteConcurrenteService.updateById(id, clienteConcurrenteNuevo);
 
@@ -204,11 +168,11 @@ public class ClienteConcurrenteController {
 	}
 	
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByNombreAndCedula(
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByNombreYCedula(
 			@RequestParam String nombre,
 			@RequestParam String cedula) {
 
-		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByNombreAndCedula(nombre, cedula);
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByNombreYCedula(nombre, cedula);
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
@@ -218,7 +182,7 @@ public class ClienteConcurrenteController {
 	}
 	
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTipoPedidoAndMetodoPago(
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTipoPedidoYMetodoPago(
 			@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 

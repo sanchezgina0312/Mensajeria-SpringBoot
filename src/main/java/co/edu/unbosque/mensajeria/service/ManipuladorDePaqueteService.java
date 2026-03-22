@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.ManipuladorDePaqueteDTO;
 import co.edu.unbosque.mensajeria.entity.ManipuladorDePaquete;
 import co.edu.unbosque.mensajeria.repository.ManipuladorDePaqueteRepository;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 @Service
 public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDePaqueteDTO> {
@@ -23,6 +24,14 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 
     @Override
     public int create(ManipuladorDePaqueteDTO data) {
+    	
+    	LanzadorDeException.verificarNombre(data.getNombre());
+        LanzadorDeException.verificarCedula(data.getCedula());
+        LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+        LanzadorDeException.verificarTelefono(data.getTelefono());
+        LanzadorDeException.verificarTurno(data.getTurno());
+        LanzadorDeException.verificarTipoManipulador(data.getTipoManipulador());
+        
         ManipuladorDePaquete entity = mapper.map(data, ManipuladorDePaquete.class);
         manipuladorRep.save(entity);
         return 0;
@@ -41,6 +50,8 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 
     @Override
     public int deleteById(Long id) {
+    	
+    	LanzadorDeException.verificarId(id);
         Optional<ManipuladorDePaquete> encontrado = manipuladorRep.findById(id);
         if (encontrado.isPresent()) {
             manipuladorRep.delete(encontrado.get());
@@ -51,6 +62,14 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 
     @Override
     public int updateById(Long id, ManipuladorDePaqueteDTO data) {
+    	
+    	LanzadorDeException.verificarId(id);
+		LanzadorDeException.verificarNombre(data.getNombre());
+        LanzadorDeException.verificarCedula(data.getCedula());
+        LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+        LanzadorDeException.verificarTelefono(data.getTelefono());
+        LanzadorDeException.verificarTipoAlimento(data.getTipoManipulador());
+        
         Optional<ManipuladorDePaquete> encontrado = manipuladorRep.findById(id);
         if (encontrado.isPresent()) {
             ManipuladorDePaquete temp = encontrado.get();
@@ -73,12 +92,14 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 
     @Override
     public boolean exist(Long id) {
+    	LanzadorDeException.verificarId(id);
         return manipuladorRep.existsById(id) ? true : false;
     }
     
     
     
     public List<ManipuladorDePaqueteDTO> findByNombre(String nombre) {
+    	LanzadorDeException.verificarNombre(nombre);
         Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByNombre(nombre);
         List<ManipuladorDePaquete> entityList = encontrados.get();
         List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
@@ -95,6 +116,7 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
     }
 
     public List<ManipuladorDePaqueteDTO> findByCedula(String cedula) {
+    	LanzadorDeException.verificarCedula(cedula);
         Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByCedula(cedula);
         List<ManipuladorDePaquete> entityList = encontrados.get();
         List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
@@ -111,6 +133,7 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
     }
 
     public List<ManipuladorDePaqueteDTO> findByCorreo(String correo) {
+    	LanzadorDeException.verificarCorreoElectronico(correo);
         Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByCorreo(correo);
         List<ManipuladorDePaquete> entityList = encontrados.get();
         List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
@@ -127,6 +150,7 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
     }
 
     public List<ManipuladorDePaqueteDTO> findByTelefono(String telefono) {
+    	LanzadorDeException.verificarTelefono(telefono);
         Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByTelefono(telefono);
         List<ManipuladorDePaquete> entityList = encontrados.get();
         List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
@@ -143,6 +167,7 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
     }
 
     public List<ManipuladorDePaqueteDTO> findByTipoManipulador(String tipoManipulador) {
+    	LanzadorDeException.verificarTipoManipulador(tipoManipulador);
         Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByTipoManipulador(tipoManipulador);
         List<ManipuladorDePaquete> entityList = encontrados.get();
         List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
@@ -159,6 +184,8 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
     }
 
     public List<ManipuladorDePaqueteDTO> findByNombreAndCedula(String nombre, String cedula) {
+    	LanzadorDeException.verificarNombre(nombre);
+    	LanzadorDeException.verificarCedula(cedula);
         Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByNombreAndCedula(nombre, cedula);
         List<ManipuladorDePaquete> entityList = encontrados.get();
         List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();

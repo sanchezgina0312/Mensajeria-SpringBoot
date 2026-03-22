@@ -45,10 +45,14 @@ public class AdministradorController {
             nuevo.setTelefono(telefono);
             nuevo.setTurno(turno);
 
-            administradorSer.create(nuevo);
+            int status = administradorSer.create(nuevo);
 
-            return new ResponseEntity<>("Administrador creado con éxito", HttpStatus.CREATED);
-
+            if (status == 0) {
+                return new ResponseEntity<>("Administrador creado con éxito", HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>("No se pudo crear el administrador", HttpStatus.INTERNAL_SERVER_ERROR);
+            } 
+            
         } catch (NombreInvalidoException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
