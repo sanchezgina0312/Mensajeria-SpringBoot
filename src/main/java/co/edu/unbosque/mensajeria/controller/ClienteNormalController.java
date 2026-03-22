@@ -190,7 +190,7 @@ public class ClienteNormalController {
 	}
 
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClienteNormalDTO>> findByNombreYCedula(
+	public ResponseEntity<List<ClienteNormalDTO>> findByNombreAndCedula(
 			@RequestParam String nombre,
 			@RequestParam String cedula) {
 
@@ -204,7 +204,7 @@ public class ClienteNormalController {
 	}
 
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClienteNormalDTO>> findByTipoPedidoYMetodoPago(
+	public ResponseEntity<List<ClienteNormalDTO>> findByTipoPedidoAndMetodoPago(
 			@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 
