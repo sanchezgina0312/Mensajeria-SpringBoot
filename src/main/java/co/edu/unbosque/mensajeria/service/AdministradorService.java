@@ -52,6 +52,8 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 
 	@Override
 	public int deleteById(Long id) {
+		
+		LanzadorDeException.verificarId(id);
 		Optional<Administrador> encontrado = administradorRep.findById(id);
 		if (encontrado.isPresent()) {
 			administradorRep.delete(encontrado.get());
