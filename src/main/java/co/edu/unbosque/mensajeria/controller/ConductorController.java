@@ -14,7 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.edu.unbosque.mensajeria.dto.AdministradorDTO;
 import co.edu.unbosque.mensajeria.dto.ConductorDTO;
+import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
+import co.edu.unbosque.mensajeria.exception.PlacaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.service.ConductorService;
 
 @RestController
@@ -34,13 +41,34 @@ public class ConductorController {
 	public ResponseEntity<String> crearPaqueteAlimenticio(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno,
 			@RequestParam String placaVehiculo) {
-		ConductorDTO nuevo = new ConductorDTO(nombre, cedula, correo, telefono, turno, placaVehiculo);
-		int status = conductorSer.create(nuevo);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>("Error al crear el paquete no alimenticio", HttpStatus.BAD_REQUEST);
-		}
+		
+		 try {
+			 ConductorDTO nuevo = new ConductorDTO(nombre, cedula, correo, telefono, turno, placaVehiculo);
+				int status = conductorSer.create(nuevo);
+				if (status == 0) {
+					return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
+				} else {
+					return new ResponseEntity<>("Error al crear el paquete no alimenticio", HttpStatus.BAD_REQUEST);
+				}
+
+	        } catch (NombreInvalidoException e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+	        } catch (CedulaInvalidaException e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+	        } catch (CorreoInvalidoException e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+	        } catch (TelefonoInvalidoException e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+	        } catch (TurnoInvalidoException e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+	        } catch (PlacaInvalidaException e) {
+	        	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	        }
 
 	}
 	
