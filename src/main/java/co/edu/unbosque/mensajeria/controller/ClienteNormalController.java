@@ -109,22 +109,42 @@ public class ClienteNormalController {
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
 			@RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaNormal) {
 
-		ClienteNormalDTO clienteNormalNuevo = new ClienteNormalDTO();
+		try {
+			ClienteNormalDTO clienteNormalNuevo = new ClienteNormalDTO();
 
-		clienteNormalNuevo.setNombre(nombre);
-		clienteNormalNuevo.setCedula(cedula);
-		clienteNormalNuevo.setCorreo(correo);
-		clienteNormalNuevo.setTelefono(telefono);
-		clienteNormalNuevo.setMetodoPago(metodoPago);
-		clienteNormalNuevo.setTipoPedido(tipoPedido);
-		clienteNormalNuevo.setTarifaNormal(tarifaNormal);
+			clienteNormalNuevo.setNombre(nombre);
+			clienteNormalNuevo.setCedula(cedula);
+			clienteNormalNuevo.setCorreo(correo);
+			clienteNormalNuevo.setTelefono(telefono);
+			clienteNormalNuevo.setMetodoPago(metodoPago);
+			clienteNormalNuevo.setTipoPedido(tipoPedido);
+			clienteNormalNuevo.setTarifaNormal(tarifaNormal);
 
-		int status = clienteNormalService.updateById(id, clienteNormalNuevo);
+			int status = clienteNormalService.updateById(id, clienteNormalNuevo);
 
-		if (status == 0) {
-			return new ResponseEntity<>("Cliente actualizado correctamente. ", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Error al actualizar cliente. ", HttpStatus.BAD_REQUEST);
+			if (status == 0) {
+				return new ResponseEntity<>("Cliente actualizado correctamente. ", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("Error al actualizar cliente. ", HttpStatus.BAD_REQUEST);
+			}
+		} catch (NombreInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CedulaInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (CorreoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (TelefonoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (MetodoDePagoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (TipoPedidoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch(IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);			   
 		}
 
 	}

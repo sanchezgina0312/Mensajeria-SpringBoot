@@ -70,6 +70,14 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 	@Override
 	public int updateById(Long id, ClienteConcurrenteDTO data) {
 
+		LanzadorDeException.verificarNombre(data.getNombre());
+		LanzadorDeException.verificarCedula(data.getCedula());
+		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+		LanzadorDeException.verificarTelefono(data.getTelefono());
+		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
+		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
+		LanzadorDeException.verificarId(id);
+		
 		Optional<ClienteConcurrente> encontrado = clienteConcurrenteRep.findById(id);
 
 		if (encontrado.isPresent()) {
