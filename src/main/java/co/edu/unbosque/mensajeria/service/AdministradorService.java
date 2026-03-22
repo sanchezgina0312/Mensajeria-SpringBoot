@@ -64,6 +64,14 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 
 	@Override
 	public int updateById(Long id, AdministradorDTO data) {
+		
+		LanzadorDeException.verificarId(id);
+		LanzadorDeException.verificarNombre(data.getNombre());
+        LanzadorDeException.verificarCedula(data.getCedula());
+        LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+        LanzadorDeException.verificarTelefono(data.getTelefono());
+        LanzadorDeException.verificarTurno(data.getTurno());
+        
 		Optional<Administrador> encontrado = administradorRep.findById(id);
 		if (encontrado.isPresent()) {
 			Administrador temp = encontrado.get();
@@ -87,6 +95,7 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 
 	@Override
 	public boolean exist(Long id) {
+		LanzadorDeException.verificarId(id);
 		return administradorRep.existsById(id) ? true : false;
 	}
 	
