@@ -29,14 +29,14 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 
 	@Override
 	public int create(PaqueteCartaDTO data) {
-		
+
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTipoCarta(data.getTipoCarta());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 
 		PaqueteCarta entity = mapper.map(data, PaqueteCarta.class);
 		paqueteCartaRep.save(entity);
-		
+
 		return 0;
 	}
 
@@ -54,7 +54,7 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 
 	@Override
 	public int deleteById(Long id) {
-		
+
 		LanzadorDeException.verificarId(id);
 		Optional<PaqueteCarta> encontrado = paqueteCartaRep.findById(id);
 		if (encontrado.isPresent()) {
@@ -111,6 +111,55 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		}
 		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(72));
 		return 0;
+	}
+
+	public List<PaqueteCartaDTO> findByTamanio(String tamanio) {
+		LanzadorDeException.verificarTamanoPaquete(tamanio);
+		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByTamanio(tamanio);
+		List<PaqueteCartaDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteCartaDTO dto = mapper.map(entity, PaqueteCartaDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteCartaDTO>();
+		}
+	}
+
+	public List<PaqueteCartaDTO> findByTipoCarta(String tipoCarta) {
+		LanzadorDeException.verificarTipoCarta(tipoCarta);
+		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByTipoCarta(tipoCarta);
+		List<PaqueteCartaDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteCartaDTO dto = mapper.map(entity, PaqueteCartaDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteCartaDTO>();
+		}
+	}
+
+	public List<PaqueteCartaDTO> findByTamanioAndTipoCarta(String tamanio, String tipoCarta) {
+		LanzadorDeException.verificarTamanoPaquete(tamanio);
+		LanzadorDeException.verificarTipoCarta(tipoCarta);
+		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByTamanioAndTipoCarta(tamanio, tipoCarta);
+		List<PaqueteCartaDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			encontrados.get().forEach((entity) -> {
+				PaqueteCartaDTO dto = mapper.map(entity, PaqueteCartaDTO.class);
+				dtoList.add(dto);
+			});
+			return dtoList;
+		} else {
+			return new ArrayList<PaqueteCartaDTO>();
+		}
 	}
 
 }
