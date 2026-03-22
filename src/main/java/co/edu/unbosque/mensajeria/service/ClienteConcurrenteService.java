@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.ClienteConcurrenteDTO;
 import co.edu.unbosque.mensajeria.entity.ClienteConcurrente;
 import co.edu.unbosque.mensajeria.repository.ClienteConcurrenteRepository;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 @Service
 public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurrenteDTO> {
@@ -27,6 +28,13 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 
 	@Override
 	public int create(ClienteConcurrenteDTO data) {
+		LanzadorDeException.verificarNombre(data.getNombre());
+		LanzadorDeException.verificarCedula(data.getCedula());
+		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+		LanzadorDeException.verificarTelefono(data.getTelefono());
+		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
+		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
+		
 		ClienteConcurrente entity = mapper.map(data, ClienteConcurrente.class);
 		clienteConcurrenteRep.save(entity);
 		return 0;
@@ -47,7 +55,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 
 	@Override
 	public int deleteById(Long id) {
-
+		LanzadorDeException.verificarId(id);
 		Optional<ClienteConcurrente> encontrado = clienteConcurrenteRep.findById(id);
 
 		if (encontrado.isPresent()) {
@@ -214,7 +222,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 		}
 	}
 
-	public List<ClienteConcurrenteDTO> findByNombreYCedula(String nombre, String cedula) {
+	public List<ClienteConcurrenteDTO> findByNombreAndCedula(String nombre, String cedula) {
 
 		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByNombreAndCedula(nombre, cedula);
 
