@@ -84,22 +84,42 @@ public class AdministradorController {
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
 			@RequestParam char turno, @RequestParam String usuario, @RequestParam String contrasenia) {
 
-		AdministradorDTO nuevo = new AdministradorDTO();
-		nuevo.setNombre(nombre);
-		nuevo.setCedula(cedula);
-		nuevo.setCorreo(correo);
-		nuevo.setTelefono(telefono);
-		nuevo.setTurno(turno);
-		nuevo.setUsuario(usuario);
-		nuevo.setContrasenia(contrasenia);
+		try {
+			AdministradorDTO nuevo = new AdministradorDTO();
+			nuevo.setNombre(nombre);
+			nuevo.setCedula(cedula);
+			nuevo.setCorreo(correo);
+			nuevo.setTelefono(telefono);
+			nuevo.setTurno(turno);
+			nuevo.setUsuario(usuario);
+			nuevo.setContrasenia(contrasenia);
 
-		int status = administradorSer.updateById(id, nuevo);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
-					HttpStatus.BAD_REQUEST);
-		}
+			int status = administradorSer.updateById(id, nuevo);
+			if (status == 0) {
+				return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
+						HttpStatus.BAD_REQUEST);
+			}
+
+        } catch (NombreInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (CedulaInvalidaException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (CorreoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (TelefonoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (TurnoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (IdInvalidoException e) {
+	        return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+	    }
 	}
 	
 	// http://localhost:8080/administrador/eliminar?id=1
