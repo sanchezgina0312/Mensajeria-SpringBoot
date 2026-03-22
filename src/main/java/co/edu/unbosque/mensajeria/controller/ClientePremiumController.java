@@ -229,4 +229,4 @@ public class ClientePremiumController {
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
-}8
+}
