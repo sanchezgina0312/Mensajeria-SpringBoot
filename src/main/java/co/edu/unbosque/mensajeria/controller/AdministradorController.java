@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import co.edu.unbosque.mensajeria.dto.AdministradorDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
@@ -104,11 +105,15 @@ public class AdministradorController {
 	// http://localhost:8080/administrador/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> delete(@RequestParam Long id) {
-		int status = administradorSer.deleteById(id);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
-		}
+	    try {
+	        int status = administradorSer.deleteById(id);
+	        if (status == 0) {
+	            return new ResponseEntity<>("Administrador eliminado con éxito",HttpStatus.OK);
+	        } else {
+	            return new ResponseEntity<>("No se encontró ningún administrador con el ID ingresado", HttpStatus.NOT_FOUND);
+	        }
+	    } catch (IdInvalidoException e) {
+	        return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+	    }
 	}
 }
