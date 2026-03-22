@@ -158,8 +158,8 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
         }
     }
 
-    public List<ManipuladorDePaqueteDTO> findByNombreYCedula(String nombre, String cedula) {
-        Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByNombreYCedula(nombre, cedula);
+    public List<ManipuladorDePaqueteDTO> findByNombreAndCedula(String nombre, String cedula) {
+        Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByNombreAndCedula(nombre, cedula);
         List<ManipuladorDePaquete> entityList = encontrados.get();
         List<ManipuladorDePaqueteDTO> dtoList = new ArrayList<>();
         

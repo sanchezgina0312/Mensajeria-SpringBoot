@@ -216,7 +216,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 
 	public List<ClienteConcurrenteDTO> findByNombreYCedula(String nombre, String cedula) {
 
-		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByNombreYCedula(nombre, cedula);
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByNombreAndCedula(nombre, cedula);
 
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 
@@ -235,9 +235,9 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 
 	}
 
-	public List<ClienteConcurrenteDTO> findByTipoPedidoYMetodoPago(String tipoPedido, String metodoPago) {
+	public List<ClienteConcurrenteDTO> findByTipoPedidoAndMetodoPago(String tipoPedido, String metodoPago) {
 
-		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByTipoPedidoYMetodoPago(tipoPedido,
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByTipoPedidoAndMetodoPago(tipoPedido,
 				metodoPago);
 
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {

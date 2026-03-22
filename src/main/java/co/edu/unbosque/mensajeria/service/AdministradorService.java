@@ -192,7 +192,7 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 
 
 	public List<AdministradorDTO> findByNombreYCedula(String nombre, String cedula) {
-		Optional<List<Administrador>> encontrados = administradorRep.findByNombreYCedula(nombre, cedula);
+		Optional<List<Administrador>> encontrados = administradorRep.findByNombreAndCedula(nombre, cedula);
 		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
 		

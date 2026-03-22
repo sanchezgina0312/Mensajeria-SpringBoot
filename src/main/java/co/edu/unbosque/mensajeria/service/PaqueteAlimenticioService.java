@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import co.edu.unbosque.mensajeria.dto.PaqueteAlimenticioDTO;
 import co.edu.unbosque.mensajeria.entity.PaqueteAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteAlimenticioRepository;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 @Service
 public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimenticioDTO> {
@@ -28,8 +29,13 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 	@Override
 	public int create(PaqueteAlimenticioDTO data) {
+		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
+		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+		LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
+
 		PaqueteAlimenticio entity = mapper.map(data, PaqueteAlimenticio.class);
 		paqueteAlimenticioRep.save(entity);
+
 		return 0;
 	}
 
@@ -59,7 +65,12 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	@Override
 	public int updateById(Long id, PaqueteAlimenticioDTO data) {
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
+
 		if (encontrado.isPresent()) {
+			LanzadorDeException.verificarDireccion(data.getDireccionDestino());
+			LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+			LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
+
 			PaqueteAlimenticio temp = encontrado.get();
 			temp.setPrecioEnvio(data.getPrecioEnvio());
 			temp.setDireccionDestino(data.getDireccionDestino());
@@ -68,11 +79,12 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 			temp.setFechaEstimadaEntrega(data.getFechaEstimadaEntrega());
 			temp.setSeEnviaHoy(data.isSeEnviaHoy());
 			temp.setTipoDeAlimento(data.getTipoDeAlimento());
+			
 			paqueteAlimenticioRep.save(temp);
 			return 0;
 		}
 
-		return 1;
+		return 1; 
 	}
 
 	@Override
