@@ -53,11 +53,11 @@ public class ClientePremiumController {
 			nuevoClientePremium.setTipoPedido(tipoPedido);
 			nuevoClientePremium.setTarifaPremium(tarifaPremium);
 
-			int status =clientePremiumService.create(nuevoClientePremium);
+			int status = clientePremiumService.create(nuevoClientePremium);
 
-			if(status==0) {
-				return new ResponseEntity<>("Dato creado con exito",HttpStatus.CREATED);
-			}else {
+			if (status == 0) {
+				return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
+			} else {
 				return new ResponseEntity<>("Error al crear cliente", HttpStatus.BAD_REQUEST);
 			}
 		} catch (NombreInvalidoException e) {
@@ -74,7 +74,7 @@ public class ClientePremiumController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch (TipoPedidoInvalidoException e) {
+		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -84,10 +84,10 @@ public class ClientePremiumController {
 	public ResponseEntity<List<ClientePremiumDTO>> mostrarTodo() {
 		List<ClientePremiumDTO> clientes = clientePremiumService.getAll();
 
-		if (clientes.isEmpty()) {
-			return new ResponseEntity<List<ClientePremiumDTO>>(clientes, HttpStatus.NO_CONTENT);
-		} else {
+		if (!clientes.isEmpty()) {
 			return new ResponseEntity<List<ClientePremiumDTO>>(clientes, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<List<ClientePremiumDTO>>(clientes, HttpStatus.NO_CONTENT);
 		}
 	}
 
@@ -101,8 +101,8 @@ public class ClientePremiumController {
 			} else {
 				return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
 			}
-		}catch(IdInvalidoException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
 		}
 	}
@@ -145,10 +145,10 @@ public class ClientePremiumController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch (TipoPedidoInvalidoException e) {
+		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch(IdInvalidoException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);			   
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
 	}
@@ -158,10 +158,10 @@ public class ClientePremiumController {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByNombre(nombre);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -170,10 +170,10 @@ public class ClientePremiumController {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByCedula(cedula);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -182,10 +182,10 @@ public class ClientePremiumController {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByCorreo(correo);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -194,10 +194,10 @@ public class ClientePremiumController {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByTelefono(telefono);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -206,10 +206,10 @@ public class ClientePremiumController {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByMetodoPago(metodoPago);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -218,38 +218,37 @@ public class ClientePremiumController {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByTipoPedido(tipoPedido);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClientePremiumDTO>> findByNombreAndCedula(
-			@RequestParam String nombre,
+	public ResponseEntity<List<ClientePremiumDTO>> findByNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByNombreAndCedula(nombre, cedula);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClientePremiumDTO>> findByTipoPedidoAndMetodoPago(
-			@RequestParam String tipoPedido,
+	public ResponseEntity<List<ClientePremiumDTO>> findByTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 }

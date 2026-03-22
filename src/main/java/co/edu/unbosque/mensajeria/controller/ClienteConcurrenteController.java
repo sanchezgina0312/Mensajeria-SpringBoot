@@ -1,4 +1,5 @@
 package co.edu.unbosque.mensajeria.controller;
+
 //:)))) jijiji
 import java.util.List;
 
@@ -54,11 +55,11 @@ public class ClienteConcurrenteController {
 			nuevoClienteConcurrente.setTipoPedido(tipoPedido);
 			nuevoClienteConcurrente.setTarifaConcurrente(tarifaConcurrente);
 
-			int status =clienteConcurrenteService.create(nuevoClienteConcurrente);
+			int status = clienteConcurrenteService.create(nuevoClienteConcurrente);
 
-			if(status==0) {
-				return new ResponseEntity<>("Dato creado con exito",HttpStatus.CREATED);
-			}else {
+			if (status == 0) {
+				return new ResponseEntity<>("Dato creado con éxito", HttpStatus.CREATED);
+			} else {
 				return new ResponseEntity<>("Error al crear Cliente", HttpStatus.BAD_REQUEST);
 			}
 		} catch (NombreInvalidoException e) {
@@ -75,7 +76,7 @@ public class ClienteConcurrenteController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch (TipoPedidoInvalidoException e) {
+		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
@@ -86,10 +87,10 @@ public class ClienteConcurrenteController {
 	public ResponseEntity<List<ClienteConcurrenteDTO>> mostrarTodo() {
 		List<ClienteConcurrenteDTO> clientes = clienteConcurrenteService.getAll();
 
-		if (clientes.isEmpty()) {
-			return new ResponseEntity<List<ClienteConcurrenteDTO>>(clientes, HttpStatus.NO_CONTENT);
-		} else {
+		if (!clientes.isEmpty()) {
 			return new ResponseEntity<List<ClienteConcurrenteDTO>>(clientes, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<List<ClienteConcurrenteDTO>>(clientes, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -99,12 +100,12 @@ public class ClienteConcurrenteController {
 		try {
 			int status = clienteConcurrenteService.deleteById(id);
 			if (status == 0) {
-				return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.OK);
+				return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.ACCEPTED);
 			} else {
 				return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
 			}
-		}catch(IdInvalidoException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);			   
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -127,10 +128,10 @@ public class ClienteConcurrenteController {
 			int status = clienteConcurrenteService.updateById(id, clienteConcurrenteNuevo);
 
 			if (status == 0) {
-				return new ResponseEntity<>("Cliente actualizado correctamente. ", HttpStatus.OK);
+				return new ResponseEntity<>("Cliente actualizado correctamente. ", HttpStatus.ACCEPTED);
 			} else {
 				return new ResponseEntity<>("Error al actualizar cliente. ", HttpStatus.BAD_REQUEST);
-			}  
+			}
 		} catch (NombreInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
@@ -145,10 +146,10 @@ public class ClienteConcurrenteController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch (TipoPedidoInvalidoException e) {
+		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch(IdInvalidoException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);			   
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
 	}
@@ -158,10 +159,10 @@ public class ClienteConcurrenteController {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByNombre(nombre);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -170,10 +171,10 @@ public class ClienteConcurrenteController {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByCedula(cedula);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -182,10 +183,10 @@ public class ClienteConcurrenteController {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByCorreo(correo);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -194,10 +195,10 @@ public class ClienteConcurrenteController {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTelefono(telefono);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -206,10 +207,10 @@ public class ClienteConcurrenteController {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByMetodoPago(metodoPago);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -218,39 +219,37 @@ public class ClienteConcurrenteController {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTipoPedido(tipoPedido);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByNombreAndCedula(
-			@RequestParam String nombre,
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByNombreAndCedula(nombre, cedula);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTipoPedidoAndMetodoPago(
-			@RequestParam String tipoPedido,
+	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 
-		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
+		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTipoPedidoAndMetodoPago(tipoPedido,
+				metodoPago);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
-
 }

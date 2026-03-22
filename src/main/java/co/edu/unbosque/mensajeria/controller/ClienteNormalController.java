@@ -53,11 +53,11 @@ public class ClienteNormalController {
 			nuevoclienteNormal.setTipoPedido(tipoPedido);
 			nuevoclienteNormal.setTarifaNormal(tarifaNormal);
 
-			int status=clienteNormalService.create(nuevoclienteNormal);
+			int status = clienteNormalService.create(nuevoclienteNormal);
 
-			if(status==0) {
-				return new ResponseEntity<>("Dato creado con exito",HttpStatus.CREATED);
-			}else {
+			if (status == 0) {
+				return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
+			} else {
 				return new ResponseEntity<>("Error al crear cliente", HttpStatus.BAD_REQUEST);
 			}
 		} catch (NombreInvalidoException e) {
@@ -74,7 +74,7 @@ public class ClienteNormalController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch (TipoPedidoInvalidoException e) {
+		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -84,10 +84,10 @@ public class ClienteNormalController {
 	public ResponseEntity<List<ClienteNormalDTO>> mostrarTodo() {
 		List<ClienteNormalDTO> clientes = clienteNormalService.getAll();
 
-		if (clientes.isEmpty()) {
-			return new ResponseEntity<List<ClienteNormalDTO>>(clientes, HttpStatus.NO_CONTENT);
-		} else {
+		if (!clientes.isEmpty()) {
 			return new ResponseEntity<List<ClienteNormalDTO>>(clientes, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<List<ClienteNormalDTO>>(clientes, HttpStatus.NO_CONTENT);
 		}
 	}
 
@@ -101,8 +101,8 @@ public class ClienteNormalController {
 			} else {
 				return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
 			}
-		}catch(IdInvalidoException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -144,10 +144,10 @@ public class ClienteNormalController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch (TipoPedidoInvalidoException e) {
+		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch(IdInvalidoException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);			   
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
 	}
@@ -157,10 +157,10 @@ public class ClienteNormalController {
 
 		List<ClienteNormalDTO> lista = clienteNormalService.findByNombre(nombre);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -169,10 +169,10 @@ public class ClienteNormalController {
 
 		List<ClienteNormalDTO> lista = clienteNormalService.findByCedula(cedula);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -181,10 +181,10 @@ public class ClienteNormalController {
 
 		List<ClienteNormalDTO> lista = clienteNormalService.findByCorreo(correo);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -193,10 +193,10 @@ public class ClienteNormalController {
 
 		List<ClienteNormalDTO> lista = clienteNormalService.findByMetodoPago(metodoPago);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -205,38 +205,36 @@ public class ClienteNormalController {
 
 		List<ClienteNormalDTO> lista = clienteNormalService.findByTipoPedido(tipoPedido);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClienteNormalDTO>> findByNombreAndCedula(
-			@RequestParam String nombre,
+	public ResponseEntity<List<ClienteNormalDTO>> findByNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
 
 		List<ClienteNormalDTO> lista = clienteNormalService.findByNombreAndCedula(nombre, cedula);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClienteNormalDTO>> findByTipoPedidoAndMetodoPago(
-			@RequestParam String tipoPedido,
+	public ResponseEntity<List<ClienteNormalDTO>> findByTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 
 		List<ClienteNormalDTO> lista = clienteNormalService.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
+			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
 		}
 	}
 
