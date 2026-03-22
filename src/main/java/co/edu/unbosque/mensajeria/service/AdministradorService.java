@@ -101,6 +101,7 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	
 	
 	public List<AdministradorDTO> findByNombre(String nombre) {
+		LanzadorDeException.verificarNombre(nombre);
 		Optional<List<Administrador>> encontrados = administradorRep.findByNombre(nombre);
 		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
@@ -117,6 +118,7 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	}
 
 	public List<AdministradorDTO> findByCedula(String cedula) {
+		LanzadorDeException.verificarCedula(cedula);
 		Optional<List<Administrador>> encontrados = administradorRep.findByCedula(cedula);
 		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
@@ -133,6 +135,7 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	}
 
 	public List<AdministradorDTO> findByCorreo(String correo) {
+		LanzadorDeException.verificarCorreoElectronico(correo);
 		Optional<List<Administrador>> encontrados = administradorRep.findByCorreo(correo);
 		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
@@ -149,6 +152,7 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	}
 
 	public List<AdministradorDTO> findByTelefono(String telefono) {
+		LanzadorDeException.verificarTelefono(telefono);
 		Optional<List<Administrador>> encontrados = administradorRep.findByTelefono(telefono);
 		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
@@ -199,6 +203,8 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 
 
 	public List<AdministradorDTO> findByNombreAndCedula(String nombre, String cedula) {
+		LanzadorDeException.verificarNombre(nombre);
+		LanzadorDeException.verificarCedula(cedula);
 		Optional<List<Administrador>> encontrados = administradorRep.findByNombreAndCedula(nombre, cedula);
 		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
