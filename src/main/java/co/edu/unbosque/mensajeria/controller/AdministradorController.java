@@ -34,12 +34,7 @@ public class AdministradorController {
 	
 	// http://localhost:8080/administrador/crear?nombre=Admin1&cedula=999&correo=a@mail.com&telefono=000&turno=N&usuario=admin&contrasenia=1234
 	@PostMapping("/crear")
-    public ResponseEntity<String> crearAdministrador(
-            @RequestParam String nombre,
-            @RequestParam String cedula,
-            @RequestParam String correo,
-            @RequestParam String telefono,
-            @RequestParam char turno) {
+    public ResponseEntity<String> crearAdministrador(@RequestParam String nombre, @RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono, @RequestParam char turno) {
 
         try {
             AdministradorDTO nuevo = new AdministradorDTO();
@@ -51,7 +46,7 @@ public class AdministradorController {
 
             administradorSer.create(nuevo);
 
-            return new ResponseEntity<>("Dato creado con éxito", HttpStatus.CREATED);
+            return new ResponseEntity<>("Administrador creado con éxito", HttpStatus.CREATED);
 
         } catch (NombreInvalidoException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
