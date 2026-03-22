@@ -20,7 +20,7 @@ import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 
 public class LanzadorDeException {
 	
-	public static void verificarNombre(String nombre) throws NombreInvalidoException {
+	public static void verificarNombre(String nombre) {
 		if (nombre.contains("  ")) {
 			throw new NombreInvalidoException("El nombre no puede contener espacios dobles");
 		}
@@ -33,7 +33,7 @@ public class LanzadorDeException {
 		}
 	}
 	
-	public static boolean verificarCorreoElectronico(String correo) throws CorreoInvalidoException {
+	public static boolean verificarCorreoElectronico(String correo) {
 	    Pattern pattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
 	    Matcher matcher = pattern.matcher(correo);
 
@@ -44,7 +44,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarCedula(String cedula) throws CedulaInvalidaException {
+	public static void verificarCedula(String cedula) {
 	    
 	    if (cedula == null || cedula.isEmpty()) {
 	        throw new CedulaInvalidaException("La cédula no puede estar vacía");
@@ -63,7 +63,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarDireccion(String direccion) throws DireccionDestinoInvalidaException {
+	public static void verificarDireccion(String direccion) {
 		
 		 /*
 	     * Ejemplos de direcciones válidas:
@@ -99,7 +99,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarMetodoPago(String metodoPago) throws MetodoDePagoInvalidoException {
+	public static void verificarMetodoPago(String metodoPago) {
 
 	    /*
 	     * Métodos de pago aceptados:
@@ -134,7 +134,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarPlaca(String placa) throws PlacaInvalidaException {
+	public static void verificarPlaca(String placa) {
 
 	    if (placa == null || placa.isEmpty()) {
 	        throw new PlacaInvalidaException("La placa no puede estar vacía");
@@ -151,7 +151,7 @@ public class LanzadorDeException {
 	    }
 	}
 
-	public static void verificarTamanoPaquete(String tamano) throws TamanioInvalidoException {
+	public static void verificarTamanoPaquete(String tamano) {
 
 	    /*
 	     * Tamaños de paquete aceptados:
@@ -180,7 +180,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarTelefono(String telefono) throws TelefonoInvalidoException {
+	public static void verificarTelefono(String telefono) {
 
 	    if (telefono == null || telefono.isEmpty()) {
 	        throw new TelefonoInvalidoException("El número de teléfono no puede estar vacío");
@@ -203,7 +203,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarTipoAlimento(String tipo) throws TipoDeAlimentoInvalidoException {
+	public static void verificarTipoAlimento(String tipo) {
 
 	    /*
 	     * Tipos de alimento aceptados:
@@ -238,7 +238,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarTipoCarta(String tipo) throws TipoDeCartaInvalidaException {
+	public static void verificarTipoCarta(String tipo) {
 
 	    /*
 	     * Tipos de carta aceptados:
@@ -270,7 +270,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarTipoManipulador(String tipo) throws TipoManipuladorInvalidoException {
+	public static void verificarTipoManipulador(String tipo) {
 
 	    /*
 	     * Tipos de manipulador aceptados:
@@ -300,7 +300,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarTipoPedido(String tipo) throws TipoPedidoInvalidoException {
+	public static void verificarTipoPedido(String tipo) {
 
 	    /*
 	     * Tipos de pedido aceptados:
@@ -329,7 +329,7 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarTurno(char turno) throws TurnoInvalidoException {
+	public static void verificarTurno(char turno) {
 
 	    /*
 	     * Turnos aceptados:
@@ -345,14 +345,13 @@ public class LanzadorDeException {
 	    }
 	}
 	
-	public static void verificarId(String id) throws IdInvalidoException {
+	public static void verificarId(Long id) {
+        if (id == null) {
+            throw new IdInvalidoException("El ID no puede ser nulo");
+        }
 
-	    if (id == null || id.isEmpty()) {
-	        throw new IdInvalidoException("El ID no puede estar vacío");
-	    }
-
-	    if (!id.matches("^[0-9]+$")) {
-	        throw new IdInvalidoException("El ID solo debe contener números sin espacios ni caracteres");
-	    }
-	}
+        if (id <= 0) {
+            throw new IdInvalidoException("El ID debe ser un número positivo");
+        }
+    }
 }
