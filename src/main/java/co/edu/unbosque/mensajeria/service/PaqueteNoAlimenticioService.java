@@ -9,7 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
+import co.edu.unbosque.mensajeria.entity.PaqueteCarta;
 import co.edu.unbosque.mensajeria.entity.PaqueteNoAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteNoAlimenticioRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
@@ -150,5 +152,27 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		} else {
 			return new ArrayList<PaqueteNoAlimenticioDTO>();
 		}
+	}
+
+	public PaqueteNoAlimenticioDTO findById(Long id) {
+		Optional<PaqueteNoAlimenticio> encontrado = paqueteNoAlimenticioRep.findById(id);
+		if (encontrado.isPresent()) {
+			return mapper.map(encontrado.get(), PaqueteNoAlimenticioDTO.class);
+		}
+		return null;
+	}
+
+	public List<PaqueteNoAlimenticioDTO> findByDireccionDestino(String direccion) {
+		LanzadorDeException.verificarDireccion(direccion);
+
+		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByDireccionDestino(direccion);
+		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent()) {
+			for (PaqueteNoAlimenticio p : encontrados.get()) {
+				dtoList.add(mapper.map(p, PaqueteNoAlimenticioDTO.class));
+			}
+		}
+		return dtoList;
 	}
 }

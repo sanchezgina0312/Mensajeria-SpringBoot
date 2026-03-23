@@ -9,7 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.edu.unbosque.mensajeria.dto.PaqueteAlimenticioDTO;
 import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
+import co.edu.unbosque.mensajeria.entity.PaqueteAlimenticio;
 import co.edu.unbosque.mensajeria.entity.PaqueteCarta;
 import co.edu.unbosque.mensajeria.repository.PaqueteCartaRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
@@ -160,6 +162,28 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		} else {
 			return new ArrayList<PaqueteCartaDTO>();
 		}
+	}
+
+	public PaqueteCartaDTO findById(Long id) {
+		Optional<PaqueteCarta> encontrado = paqueteCartaRep.findById(id);
+		if (encontrado.isPresent()) {
+			return mapper.map(encontrado.get(), PaqueteCartaDTO.class);
+		}
+		return null;
+	}
+
+	public List<PaqueteCartaDTO> findByDireccionDestino(String direccion) {
+		LanzadorDeException.verificarDireccion(direccion);
+
+		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByDireccionDestino(direccion);
+		List<PaqueteCartaDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent()) {
+			for (PaqueteCarta p : encontrados.get()) {
+				dtoList.add(mapper.map(p, PaqueteCartaDTO.class));
+			}
+		}
+		return dtoList;
 	}
 
 }

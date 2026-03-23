@@ -86,24 +86,24 @@ public class PaqueteAlimenticioController {
 			@RequestParam String tamanio, @RequestParam LocalDateTime fechaCreacionPedido,
 			@RequestParam LocalDateTime fechaEstimadaEntrega) {
 		try {
-		PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
+			PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
 
-		nuevo.setSeEnviaHoy(seEnviaHoy);
-		nuevo.setTipoDeAlimento(tipoDeAlimento);
-		nuevo.setTamanio(tamanio);
-		nuevo.setDireccionDestino(direccionDestino);
-		nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-		nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
-		nuevo.setPrecioEnvio(precioEnvio);
+			nuevo.setSeEnviaHoy(seEnviaHoy);
+			nuevo.setTipoDeAlimento(tipoDeAlimento);
+			nuevo.setTamanio(tamanio);
+			nuevo.setDireccionDestino(direccionDestino);
+			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+			nuevo.setPrecioEnvio(precioEnvio);
 
-		int status = paqueteAlimenticioSer.updateById(id, nuevo);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
-					HttpStatus.BAD_REQUEST);
-		}
-		}catch (DireccionDestinoInvalidaException e) {
+			int status = paqueteAlimenticioSer.updateById(id, nuevo);
+			if (status == 0) {
+				return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
+						HttpStatus.BAD_REQUEST);
+			}
+		} catch (DireccionDestinoInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -171,6 +171,28 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
+	}
+
+	@GetMapping("/seguimiento-id")
+	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
+		PaqueteAlimenticioDTO p = paqueteAlimenticioSer.findById(id);
+
+		if (p != null) {
+			return new ResponseEntity<>(p, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Guía no encontrada en el sistema", HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/buscar-direccion")
+	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarDireccion(@RequestParam String dir) {
+		List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByDireccionDestino(dir);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
 

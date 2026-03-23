@@ -99,7 +99,7 @@ public class PaqueteNoAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch (IdInvalidoException e) {
+		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -147,6 +147,28 @@ public class PaqueteNoAlimenticioController {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
+	}
+
+	@GetMapping("/seguimiento-id")
+	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
+		PaqueteNoAlimenticioDTO p = paqueteNoAlimenticioSer.findById(id);
+
+		if (p != null) {
+			return new ResponseEntity<>(p, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Guía de paquete no encontrada", HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/buscar-direccion")
+	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarDireccion(@RequestParam String dir) {
+		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByDireccionDestino(dir);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
 

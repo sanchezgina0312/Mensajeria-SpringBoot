@@ -19,7 +19,6 @@ import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TipoDeAlimentoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TipoDeCartaInvalidaException;
 import co.edu.unbosque.mensajeria.service.PaqueteCartaService;
 
@@ -102,8 +101,8 @@ public class PaqueteCartaController {
 			} else {
 				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
 						HttpStatus.BAD_REQUEST);
-			}		
-		}catch (DireccionDestinoInvalidaException e) {
+			}
+		} catch (DireccionDestinoInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -158,6 +157,28 @@ public class PaqueteCartaController {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
+	}
+
+	@GetMapping("/seguimiento-id")
+	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
+		PaqueteCartaDTO p = paqueteCartaSer.findById(id);
+
+		if (p != null) {
+			return new ResponseEntity<>(p, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Número de guía de carta no existe", HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/buscar-direccion")
+	public ResponseEntity<List<PaqueteCartaDTO>> buscarDireccion(@RequestParam String dir) {
+		List<PaqueteCartaDTO> lista = paqueteCartaSer.findByDireccionDestino(dir);
+
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.OK);
 		}
 	}
 }

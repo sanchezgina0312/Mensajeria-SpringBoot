@@ -179,4 +179,26 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 			return new ArrayList<PaqueteAlimenticioDTO>();
 		}
 	}
+	
+	public PaqueteAlimenticioDTO findById(Long id) {
+		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
+		if (encontrado.isPresent()) {
+			return mapper.map(encontrado.get(), PaqueteAlimenticioDTO.class);
+		}
+		return null;
+	}
+
+	public List<PaqueteAlimenticioDTO> findByDireccionDestino(String direccion) {
+		LanzadorDeException.verificarDireccion(direccion);
+
+		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByDireccionDestino(direccion);
+		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent()) {
+			for (PaqueteAlimenticio p : encontrados.get()) {
+				dtoList.add(mapper.map(p, PaqueteAlimenticioDTO.class));
+			}
+		}
+		return dtoList;
+	}
 }
