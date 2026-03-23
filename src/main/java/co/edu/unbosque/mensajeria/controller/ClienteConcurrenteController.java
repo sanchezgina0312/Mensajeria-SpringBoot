@@ -87,7 +87,7 @@ public class ClienteConcurrenteController {
 	}
 
 	// http://localhost:8080/clienteconcurrente/mostrartodo
-	@GetMapping("/mostrar")
+	@GetMapping("/mostrartodo")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> mostrarTodo() {
 		List<ClienteConcurrenteDTO> clientes = clienteConcurrenteService.getAll();
 
