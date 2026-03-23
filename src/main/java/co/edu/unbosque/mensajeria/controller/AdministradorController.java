@@ -207,17 +207,6 @@ public class AdministradorController {
 		}
 	}
 
-	// http://http://localhost:8080/administrador/buscarporcontrasenia?contrasenia=pass123
-	@GetMapping("/buscarporcontrasenia")
-	public ResponseEntity<List<AdministradorDTO>> buscarPorContrasenia(@RequestParam String contrasenia) {
-		List<AdministradorDTO> lista = administradorSer.findByContrasenia(contrasenia);
-		if (!lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
-		}
-	}
-
 	// http://localhost:8080/administrador/buscarpornombreycedula?nombre=Carlos&cedula=1010
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
@@ -230,15 +219,5 @@ public class AdministradorController {
 		}
 	}
 
-	// http://localhost:8080/administrador/buscarporusuarioycontrasenia?usuario=admin1&contrasenia=pass123
-	@GetMapping("/buscarporusuarioycontrasenia")
-	public ResponseEntity<List<AdministradorDTO>> buscarPorUsuarioAndContrasenia(@RequestParam String usuario,
-			@RequestParam String contrasenia) {
-		List<AdministradorDTO> lista = administradorSer.findByUsuarioAndContrasenia(usuario, contrasenia);
-		if (!lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
-		}
-	}
+
 }

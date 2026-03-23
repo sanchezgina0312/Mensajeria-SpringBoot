@@ -197,15 +197,4 @@ public class ConductorController {
 		}
 	}
 
-	// http://localhost:8080/conductor/buscarporplacavehiculoynombre?placaVehiculo=ABC123&nombre=Juan
-	@GetMapping("/buscarporplacavehiculoynombre")
-	public ResponseEntity<List<ConductorDTO>> buscarPorPlacaVehiculoAndNombre(@RequestParam String placaVehiculo,
-			@RequestParam String nombre) {
-		List<ConductorDTO> lista = conductorSer.findByPlacaVehiculoAndNombre(placaVehiculo, nombre);
-		if (!lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
-		}
-	}
 }
