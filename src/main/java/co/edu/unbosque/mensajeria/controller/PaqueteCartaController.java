@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.exception.CiudadInvalidaException;
@@ -50,9 +51,9 @@ public class PaqueteCartaController {
 			int resultado = paqueteCartaSer.create(dto);
 
 			if (resultado != 0) {
-				return new ResponseEntity<>("Paquete carta creada correctamente", HttpStatus.CREATED);
+				return new ResponseEntity<>("Carta creada correctamente", HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity<>("Error al generar el paquete carta", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Error al generar la carta", HttpStatus.BAD_REQUEST);
 			}
 
 		} catch (DireccionInvalidaException e) {
@@ -95,9 +96,9 @@ public class PaqueteCartaController {
 
 			int status = paqueteCartaSer.updateById(id, nuevo);
 			if (status == 0) {
-				return new ResponseEntity<>("Dato actualizado con éxito.", HttpStatus.ACCEPTED);
+				return new ResponseEntity<>("Carta actualizada con éxito.", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos.",
+				return new ResponseEntity<>("No se encontró la carta con el ID ingresado",
 						HttpStatus.BAD_REQUEST);
 			}
 		} catch (DireccionInvalidaException e) {
@@ -108,9 +109,11 @@ public class PaqueteCartaController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}   catch (CiudadInvalidaException e) {
+		}  catch (CiudadInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+		} catch (MethodArgumentTypeMismatchException e) {
+	        return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
+	    }
 	}
 
 	// http://localhost:8080/paquetecarta/eliminar?id=1
@@ -119,68 +122,96 @@ public class PaqueteCartaController {
 		try {
 			int status = paqueteCartaSer.deleteById(id);
 			if (status == 0) {
-				return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
+				return new ResponseEntity<>("Carta eliminada con éxito", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("No se encontró la carta con el ID ingresado" + id, HttpStatus.BAD_REQUEST);
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+		}  catch (MethodArgumentTypeMismatchException e) {
+	        return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
+	    }
 	}
 
 	@GetMapping("/buscartamanio")
-	public ResponseEntity<List<PaqueteCartaDTO>> buscarPorTamanio(@RequestParam String tamanio) {
-		List<PaqueteCartaDTO> lista = paqueteCartaSer.findByTamanio(tamanio);
-		if (!lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
-		}
+	public ResponseEntity<Object> buscarPorTamanio(@RequestParam String tamanio) {
+
+		try {
+			List<PaqueteCartaDTO> lista = paqueteCartaSer.findByTamanio(tamanio);
+			if (!lista.isEmpty()) {
+				return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+			}
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} 
 	}
 
 	@GetMapping("/buscartipocarta")
-	public ResponseEntity<List<PaqueteCartaDTO>> buscarPorTipoCarta(@RequestParam String tipoCarta) {
-		List<PaqueteCartaDTO> lista = paqueteCartaSer.findByTipoCarta(tipoCarta);
-		if (!lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
-		}
+	public ResponseEntity<Object> buscarPorTipoCarta(@RequestParam String tipoCarta) {
+		
+		try {
+			List<PaqueteCartaDTO> lista = paqueteCartaSer.findByTipoCarta(tipoCarta);
+			if (!lista.isEmpty()) {
+				return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+			}
+		} catch (TipoDeCartaInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} 
 	}
 
 	@GetMapping("/buscarportamanioytipocarta")
-	public ResponseEntity<List<PaqueteCartaDTO>> buscarPorTamanioAndTipoCarta(@RequestParam String tamanio,
+	public ResponseEntity<Object> buscarPorTamanioAndTipoCarta(@RequestParam String tamanio,
 			@RequestParam String tipoCarta) {
-		List<PaqueteCartaDTO> lista = paqueteCartaSer.findByTamanioAndTipoCarta(tamanio, tipoCarta);
-		if (!lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
-		}
+		
+		try {
+			List<PaqueteCartaDTO> lista = paqueteCartaSer.findByTamanioAndTipoCarta(tamanio, tipoCarta);
+			if (!lista.isEmpty()) {
+				return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+			}
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} 
+
 	}
 
 	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
-		PaqueteCartaDTO p = paqueteCartaSer.findById(id);
-
-		if (p != null) {
-			return new ResponseEntity<>(p, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Número de guía de carta no existe", HttpStatus.NOT_FOUND);
-		}
+		
+		try {
+			PaqueteCartaDTO p = paqueteCartaSer.findById(id);
+			if (p != null) {
+				return new ResponseEntity<>(p, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("No se encontró la carta con el ID ingresado", HttpStatus.NOT_FOUND);
+			}
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}  catch (MethodArgumentTypeMismatchException e) {
+	        return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
+	    }
 	}
 	
 	// http://localhost:8080/paquetecarta/buscar-direccion-ciudad?dir=Calle123&ciudad=Bogota
 	@GetMapping("/buscardireccionyciudad")
-	public ResponseEntity<List<PaqueteCartaDTO>> buscarDireccionYCiudad(@RequestParam String dir,
+	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir,
 			@RequestParam String ciudad) {
 
-		List<PaqueteCartaDTO> lista = paqueteCartaSer.findByDireccionDestinoAndCiudadDestino(dir, ciudad);
+		try {
+			List<PaqueteCartaDTO> lista = paqueteCartaSer.findByDireccionDestinoAndCiudadDestino(dir, ciudad);
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
-		}
+			if (lista.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.OK);
+			}
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} 
 	}
 }
