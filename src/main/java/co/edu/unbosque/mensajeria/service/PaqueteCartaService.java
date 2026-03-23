@@ -97,6 +97,9 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 			temp.setFechaCreacionPedido(data.getFechaCreacionPedido());
 			temp.setFechaEstimadaEntrega(data.getFechaEstimadaEntrega());
 			temp.setTipoCarta(data.getTipoCarta());
+			LanzadorDeException.verificarCiudad(data.getCiudadDestino());
+			LanzadorDeException.verificarId(id);
+			
 			paqueteCartaRep.save(temp);
 			return 0;
 		}
@@ -173,7 +176,7 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 
 	public List<PaqueteCartaDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 		LanzadorDeException.verificarDireccion(direccion);
-//		LanzadorDeException.verificarCiudad(ciudad);
+		LanzadorDeException.verificarCiudad(ciudad);
 
 		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByDireccionDestinoAndCiudadDestino(direccion,ciudad);
 		List<PaqueteCartaDTO> dtoList = new ArrayList<>();

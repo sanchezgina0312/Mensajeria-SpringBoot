@@ -93,6 +93,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 		LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
+		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 		LanzadorDeException.verificarId(id);
 
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
@@ -198,7 +199,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	public List<PaqueteAlimenticioDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 
 		LanzadorDeException.verificarDireccion(direccion);
-//	    LanzadorDeException.verificarCiudad(ciudad);
+	    LanzadorDeException.verificarCiudad(ciudad);
 
 		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByDireccionDestinoAndCiudadDestino(direccion, ciudad);
 		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
