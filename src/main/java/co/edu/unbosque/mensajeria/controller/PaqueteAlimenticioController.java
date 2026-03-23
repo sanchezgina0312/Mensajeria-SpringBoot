@@ -34,29 +34,23 @@ public class PaqueteAlimenticioController {
 
 	// http://localhost:8080/paquetealimenticio/crear?seEnviaHoy=true&tipoDeAlimento=Perecedero&precioEnvio=5000&direccionDestino=Calle10&tamanio=Mediano
 	@PostMapping("/crear")
-	public ResponseEntity<String> crearPaqueteAlimenticio(@RequestParam boolean seEnviaHoy,
-			@RequestParam String tipoDeAlimento, @RequestParam int precioEnvio, @RequestParam String direccionDestino,
-			@RequestParam String tamanio, @RequestParam LocalDateTime fechaCreacionPedido,
-			@RequestParam LocalDateTime fechaEstimadaEntrega) {
+	public ResponseEntity<String> crear(@RequestParam String direccionDestino, @RequestParam String tamanio,
+			@RequestParam String ciudadDestino, @RequestParam boolean seEnviaHoy, @RequestParam String tipoDeAlimento) {
 
 		try {
-			PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
+			PaqueteAlimenticioDTO dto = new PaqueteAlimenticioDTO();
+			dto.setDireccionDestino(direccionDestino);
+			dto.setTamanio(tamanio);
+			dto.setCiudadDestino(ciudadDestino);
+			dto.setSeEnviaHoy(seEnviaHoy);
+			dto.setTipoDeAlimento(tipoDeAlimento);
 
-			nuevo.setPrecioEnvio(precioEnvio);
-			nuevo.setTamanio(tamanio);
-			nuevo.setTipoDeAlimento(tipoDeAlimento);
-			nuevo.setSeEnviaHoy(seEnviaHoy);
-			nuevo.setDireccionDestino(direccionDestino);
-			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
+			int resultado = paqueteAlimenticioSer.create(dto);
 
-			int status = paqueteAlimenticioSer.registrarYValidarHorasEntrega(nuevo);
-
-			if (status == 0) {
-				paqueteAlimenticioSer.create(nuevo);
+			if (resultado != 0) {
 				return new ResponseEntity<>("Paquete alimenticio creado con éxito", HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity<>("Error al crear paquete alimenticio", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Error al guardar el paquete.", HttpStatus.BAD_REQUEST);
 			}
 
 		} catch (DireccionDestinoInvalidaException e) {
@@ -71,11 +65,11 @@ public class PaqueteAlimenticioController {
 	// http://localhost:8080/paquetealimenticio/mostrartodo
 	@GetMapping("/mostrartodo")
 	public ResponseEntity<List<PaqueteAlimenticioDTO>> mostrarTodo() {
-		List<PaqueteAlimenticioDTO> paquetesalimenticios = paqueteAlimenticioSer.getAll();
-		if (paquetesalimenticios.isEmpty()) {
-			return new ResponseEntity<List<PaqueteAlimenticioDTO>>(paquetesalimenticios, HttpStatus.NO_CONTENT);
+		List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.getAll();
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<List<PaqueteAlimenticioDTO>>(paquetesalimenticios, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 

@@ -36,34 +36,30 @@ public class PaqueteCartaController {
 
 	// http://localhost:8080/paquetecarta/crear?precioEnvio=2000&direccionDestino=AvSuba&tamanio=Sobre&fechaCreacionPedido=2024-03-20T08:00:00&fechaEstimadaEntrega=2024-03-23T08:00:00&tipoCarta=Documento
 	@PostMapping("/crear")
-	public ResponseEntity<String> crearPaqueteCarta(@RequestParam int precioEnvio,
-			@RequestParam String direccionDestino, @RequestParam String tamanio,
-			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega,
+	public ResponseEntity<String> crear(@RequestParam String direccionDestino,
+			@RequestParam String tamanio, @RequestParam String ciudadDestino, 
 			@RequestParam String tipoCarta) {
+
 		try {
-			PaqueteCartaDTO nuevo = new PaqueteCartaDTO();
+			PaqueteCartaDTO dto = new PaqueteCartaDTO();
+			dto.setDireccionDestino(direccionDestino);
+			dto.setTamanio(tamanio);
+			dto.setCiudadDestino(ciudadDestino);
+			dto.setTipoCarta(tipoCarta);
 
-			nuevo.setTipoCarta(tipoCarta);
-			nuevo.setTamanio(tamanio);
-			nuevo.setPrecioEnvio(precioEnvio);
-			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
-			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-			nuevo.setDireccionDestino(direccionDestino);
-
-			int status = paqueteCartaSer.registrarPlazo72Horas(nuevo);
-
-			if (status == 0) {
-				paqueteCartaSer.create(nuevo);
-				return new ResponseEntity<>("Paquete carta creado con éxito", HttpStatus.CREATED);
+			int resultado = paqueteCartaSer.create(dto);
+			
+			if (resultado != 0) {
+				return new ResponseEntity<>("Paquete carta creada correctamente", HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity<>("Error al crear paquete carta", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Error al generar el paquete carta", HttpStatus.BAD_REQUEST);
 			}
 
 		} catch (DireccionDestinoInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (TipoDeCartaInvalidaException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TipoDeCartaInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -71,11 +67,11 @@ public class PaqueteCartaController {
 	// http://localhost:8080/paquetecarta/mostrartodo
 	@GetMapping("/mostrartodo")
 	public ResponseEntity<List<PaqueteCartaDTO>> mostrarTodo() {
-		List<PaqueteCartaDTO> parejas = paqueteCartaSer.getAll();
-		if (parejas.isEmpty()) {
-			return new ResponseEntity<>(parejas, HttpStatus.NO_CONTENT);
+		List<PaqueteCartaDTO> lista = paqueteCartaSer.getAll();
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(parejas, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
@@ -97,9 +93,9 @@ public class PaqueteCartaController {
 
 			int status = paqueteCartaSer.updateById(id, nuevo);
 			if (status == 0) {
-				return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
+				return new ResponseEntity<>("Dato actualizado con éxito.", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
+				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos.",
 						HttpStatus.BAD_REQUEST);
 			}
 		} catch (DireccionDestinoInvalidaException e) {

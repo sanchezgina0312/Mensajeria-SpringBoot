@@ -9,7 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
 import co.edu.unbosque.mensajeria.entity.PaqueteNoAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteNoAlimenticioRepository;
@@ -30,25 +29,45 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 
 	@Override
 	public int create(PaqueteNoAlimenticioDTO data) {
-
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 
+		data.setEstadoPedido("RECIBIDO");
+		if (data.getFechaCreacionPedido() == null)
+			data.setFechaCreacionPedido(LocalDateTime.now());
+
+		registrarPlazo24Horas(data);
+
+		double precioBaseConRecargo = calcularPrecioPorTamaño(15000, data.getTamanio());
+		double precioConDescuento = aplicarDescuentoPorCliente(precioBaseConRecargo, "NORMAL");
+
+		data.setPrecioEnvio((int) precioBaseConRecargo);
+		data.setPrecioFinal(precioConDescuento);
+
+		procesarEstadoYTiempoDTO(data);
+
 		PaqueteNoAlimenticio entity = mapper.map(data, PaqueteNoAlimenticio.class);
 		paqueteNoAlimenticioRep.save(entity);
-
 		return 0;
 	}
 
 	@Override
 	public List<PaqueteNoAlimenticioDTO> getAll() {
-		List<PaqueteNoAlimenticio> entityList = (List<PaqueteNoAlimenticio>) paqueteNoAlimenticioRep.findAll();
+		List<PaqueteNoAlimenticio> entities = (List<PaqueteNoAlimenticio>) paqueteNoAlimenticioRep.findAll();
 		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
-		entityList.forEach((entity) -> {
-			PaqueteNoAlimenticioDTO dto = mapper.map(entity, PaqueteNoAlimenticioDTO.class);
-			dtoList.add(dto);
-		});
 
+		for (PaqueteNoAlimenticio e : entities) {
+			PaqueteNoAlimenticioDTO dto = mapper.map(e, PaqueteNoAlimenticioDTO.class);
+			String estadoOriginal = dto.getEstadoPedido();
+
+			procesarEstadoYTiempoDTO(dto);
+
+			if (!estadoOriginal.equals(dto.getEstadoPedido())) {
+				PaqueteNoAlimenticio actualizado = mapper.map(dto, PaqueteNoAlimenticio.class);
+				paqueteNoAlimenticioRep.save(actualizado);
+			}
+			dtoList.add(dto);
+		}
 		return dtoList;
 	}
 
@@ -166,39 +185,41 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		}
 		return dtoList;
 	}
-	
-	public int registrarPlazo24Horas(PaqueteNoAlimenticioDTO data) {
-		if (data.getFechaCreacionPedido() == null) {
-			data.setFechaCreacionPedido(LocalDateTime.now());
-		}
-		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(24));
-		return 0;
+
+	public double calcularPrecioPorTamaño(double base, String tamaño) {
+		if (tamaño.equalsIgnoreCase("MEDIANO"))
+			return base + 7000;
+		if (tamaño.equalsIgnoreCase("GRANDE"))
+			return base + 12000;
+		return base;
 	}
-	
-	public double calcularTarifa(double precioBase, String tipoCliente) {
-		if (tipoCliente.equalsIgnoreCase("CONCURRENTE")) {
-			return precioBase * 0.90;
-		} else if (tipoCliente.equalsIgnoreCase("PREMIUM")) {
-			return precioBase * 0.75;
-		}
-		return precioBase;
+
+	public double aplicarDescuentoPorCliente(double precioActual, String tipoCliente) {
+		if (tipoCliente.equalsIgnoreCase("CONCURRENTE"))
+			return precioActual * 0.90;
+		if (tipoCliente.equalsIgnoreCase("PREMIUM"))
+			return precioActual * 0.75;
+		return precioActual;
 	}
 
 	public void procesarEstadoYTiempoDTO(PaqueteNoAlimenticioDTO dto) {
 		LocalDateTime ahora = LocalDateTime.now();
-
+		if (dto.getFechaEstimadaEntrega() == null)
+			return;
+		long horas = java.time.Duration.between(ahora, dto.getFechaEstimadaEntrega()).toHours();
 		if (ahora.isAfter(dto.getFechaEstimadaEntrega())) {
 			dto.setEstadoPedido("ENTREGADO");
 			dto.setPrioridad(2);
+		} else if (horas <= 3 && horas >= 0) {
+			dto.setPrioridad(1);
 		} else {
-			long horasParaEntrega = java.time.Duration.between(ahora, dto.getFechaEstimadaEntrega()).toHours();
-
-			if (horasParaEntrega <= 3 && horasParaEntrega >= 0) {
-				dto.setPrioridad(1);
-			} else {
-				dto.setPrioridad(2);
-			}
+			dto.setPrioridad(2);
 		}
 	}
-	
+
+	public int registrarPlazo24Horas(PaqueteNoAlimenticioDTO data) {
+		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(24));
+		return 0;
+	}
+
 }

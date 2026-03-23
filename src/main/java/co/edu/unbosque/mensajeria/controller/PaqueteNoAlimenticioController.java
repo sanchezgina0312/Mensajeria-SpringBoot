@@ -32,27 +32,22 @@ public class PaqueteNoAlimenticioController {
 
 	// http://localhost:8080/paquetenoalimenticio/crear?esFragil=true&precioEnvio=15000&direccionDestino=BarrioNorte&tamanio=Grande
 	@PostMapping("/crear")
-	public ResponseEntity<String> crearPaqueteNoAlimenticio(@RequestParam boolean esFragil,
-			@RequestParam int precioEnvio, @RequestParam String direccionDestino, @RequestParam String tamanio,
-			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega) {
+	public ResponseEntity<String> crear(@RequestParam String direccionDestino, @RequestParam String tamanio,
+			@RequestParam String ciudadDestino, @RequestParam boolean esFragil) {
 
 		try {
-			PaqueteNoAlimenticioDTO nuevo = new PaqueteNoAlimenticioDTO();
+			PaqueteNoAlimenticioDTO dto = new PaqueteNoAlimenticioDTO();
+			dto.setDireccionDestino(direccionDestino);
+			dto.setTamanio(tamanio);
+			dto.setCiudadDestino(ciudadDestino);
+			dto.setEsFragil(esFragil);
 
-			nuevo.setPrecioEnvio(precioEnvio);
-			nuevo.setTamanio(tamanio);
-			nuevo.setDireccionDestino(direccionDestino);
-			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
-			nuevo.setEsFragil(esFragil);
+			int resultado = paqueteNoAlimenticioSer.create(dto);
 
-			int status = paqueteNoAlimenticioSer.registrarPlazo24Horas(nuevo);
-
-			if (status == 0) {
-				paqueteNoAlimenticioSer.create(nuevo);
-				return new ResponseEntity<>("Paquete no alimenticio creado con éxito", HttpStatus.CREATED);
+			if (resultado != 0) {
+				return new ResponseEntity<>("Paquete no alimenticio registrado con éxito.", HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity<>("Error al crear paquete no alimenticio", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("No se pudo registrar el paquete.", HttpStatus.BAD_REQUEST);
 			}
 
 		} catch (DireccionDestinoInvalidaException e) {
@@ -65,11 +60,11 @@ public class PaqueteNoAlimenticioController {
 	// http://localhost:8080/paquetenoalimenticio/mostrartodo
 	@GetMapping("/mostrartodo")
 	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> mostrarTodo() {
-		List<PaqueteNoAlimenticioDTO> paquetesnoalimenticios = paqueteNoAlimenticioSer.getAll();
-		if (paquetesnoalimenticios.isEmpty()) {
-			return new ResponseEntity<List<PaqueteNoAlimenticioDTO>>(paquetesnoalimenticios, HttpStatus.NO_CONTENT);
+		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.getAll();
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<List<PaqueteNoAlimenticioDTO>>(paquetesnoalimenticios, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
