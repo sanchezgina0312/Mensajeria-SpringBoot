@@ -155,7 +155,7 @@ public class PaqueteCartaController {
 		}
 	}
 
-	@GetMapping("/seguimiento-id")
+	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
 		PaqueteCartaDTO p = paqueteCartaSer.findById(id);
 
@@ -167,7 +167,7 @@ public class PaqueteCartaController {
 	}
 	
 	// http://localhost:8080/paquetecarta/buscar-direccion-ciudad?dir=Calle123&ciudad=Bogota
-	@GetMapping("/buscar-direccion-ciudad")
+	@GetMapping("/buscardireccionyciudad")
 	public ResponseEntity<List<PaqueteCartaDTO>> buscarDireccionYCiudad(@RequestParam String dir,
 			@RequestParam String ciudad) {
 

@@ -168,7 +168,7 @@ public class PaqueteAlimenticioController {
 		}
 	}
 
-	@GetMapping("/seguimiento-id")
+	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
 		PaqueteAlimenticioDTO p = paqueteAlimenticioSer.findById(id);
 
@@ -180,7 +180,7 @@ public class PaqueteAlimenticioController {
 	}
 	
 	// http://localhost:8080/paquetealimenticio/buscar-direccion-ciudad?dir=Calle123&ciudad=Bogota
-	@GetMapping("/buscar-direccion-ciudad")
+	@GetMapping("/buscardireccionyciudad")
 	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarDireccionYCiudad(@RequestParam String dir,
 			@RequestParam String ciudad) {
 
