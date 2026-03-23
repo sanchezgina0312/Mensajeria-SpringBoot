@@ -18,19 +18,19 @@ public class PaqueteNoAlimenticioDTO extends Paquete {
 		this.esFragil = esFragil;
 	}
 
-	public PaqueteNoAlimenticioDTO(int precioEnvio, String direccionDestino, String tamanio,
+	public PaqueteNoAlimenticioDTO(long id, int precioEnvio, String direccionDestino, String tamanio,
 			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
-			String estadoPedido, int prioridad, double precioFinal, boolean esFragil) {
-		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
-				estadoPedido, prioridad, precioFinal);
+			String estadoPedido, boolean esPrioritario, double precioFinal, boolean esFragil) {
+		super(id, precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, esPrioritario, precioFinal);
 		this.esFragil = esFragil;
 	}
-
-	public PaqueteNoAlimenticioDTO(int precioEnvio, String direccionDestino, String tamanio,
+	
+	public PaqueteNoAlimenticioDTO(long id, int precioEnvio, String direccionDestino, String tamanio,
 			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
-			String estadoPedido, int prioridad, double precioFinal) {
-		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
-				estadoPedido, prioridad, precioFinal);
+			String estadoPedido, boolean esPrioritario, double precioFinal) {
+		super(id, precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, esPrioritario, precioFinal);
 	}
 
 	public boolean isEsFragil() {

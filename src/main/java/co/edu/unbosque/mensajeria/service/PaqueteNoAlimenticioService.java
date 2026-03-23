@@ -211,11 +211,11 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		long horas = java.time.Duration.between(ahora, dto.getFechaEstimadaEntrega()).toHours();
 		if (ahora.isAfter(dto.getFechaEstimadaEntrega())) {
 			dto.setEstadoPedido("ENTREGADO");
-			dto.setPrioridad(2);
+			dto.setEsPrioritario(false);
 		} else if (horas <= 3 && horas >= 0) {
-			dto.setPrioridad(1);
+			dto.setEsPrioritario(true);
 		} else {
-			dto.setPrioridad(2);
+			dto.setEsPrioritario(false);
 		}
 	}
 

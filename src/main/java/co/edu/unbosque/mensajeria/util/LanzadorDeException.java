@@ -4,8 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CiudadDestinoInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
+import co.edu.unbosque.mensajeria.exception.EstadoPedidoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
@@ -352,6 +354,39 @@ public class LanzadorDeException {
 
         if (id <= 0) {
             throw new IdInvalidoException("El ID debe ser un número positivo");
+        }
+    }
+	
+	public static void verificarCiudadDestino(String ciudadDestino) {
+
+        if (ciudadDestino == null || ciudadDestino.trim().isEmpty()) {
+            throw new CiudadDestinoInvalidaException("La ciudad destino no puede estar vacía");
+        }
+
+        if (!ciudadDestino.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            throw new CiudadDestinoInvalidaException("La ciudad destino solo debe contener letras");
+        }
+    }
+	
+	public static void verificarEstadoPedido(String estadoPedido) {
+
+		/*
+		 * Estados de pedido aceptados:
+		 * PENDIENTE  
+		 * EN_PROCESO 
+		 * ENVIADO    
+		 * ENTREGADO  
+		 * CANCELADO  
+		 */
+		
+        if (estadoPedido == null || estadoPedido.trim().isEmpty()) {
+            throw new EstadoPedidoInvalidoException("El estado del pedido no puede estar vacío");
+        }
+
+        if (!estadoPedido.matches("PENDIENTE|EN_PROCESO|ENVIADO|ENTREGADO|CANCELADO")) {
+            throw new EstadoPedidoInvalidoException(
+                "Estado inválido. Valores permitidos: PENDIENTE, EN_PROCESO, ENVIADO, ENTREGADO, CANCELADO"
+            );
         }
     }
 }
