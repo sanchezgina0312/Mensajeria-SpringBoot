@@ -21,27 +21,26 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	private ModelMapper mapper;
 
 	public AdministradorService() {
-		
 	}
 
 	@Override
-    public int create(AdministradorDTO data) {
-		
+	public int create(AdministradorDTO data) {
 		LanzadorDeException.verificarCedula(data.getCedula());
-		if(administradorRep.existsByCedula(data.getCedula())) {
+		LanzadorDeException.verificarNombre(data.getNombre());
+		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+		LanzadorDeException.verificarTelefono(data.getTelefono());
+		LanzadorDeException.verificarTurno(data.getTurno());
+
+		LanzadorDeException.verificarDuplicado(administradorRep.existsByCedula(data.getCedula()), "La cédula " + data.getCedula() + " ya se encuentra registrada.");
+
+		if (administradorRep.existsByCedula(data.getCedula())) {
 			return 1;
+		} else {
+			Administrador entity = mapper.map(data, Administrador.class);
+			administradorRep.save(entity);
+			return 0;
 		}
-
-        LanzadorDeException.verificarNombre(data.getNombre());
-        LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
-        LanzadorDeException.verificarTelefono(data.getTelefono());
-        LanzadorDeException.verificarTurno(data.getTurno());
-
-        Administrador entity = mapper.map(data, Administrador.class);
-        administradorRep.save(entity);
-
-        return 0;
-    }
+	}
 
 	@Override
 	public List<AdministradorDTO> getAll() {
@@ -56,40 +55,50 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 
 	@Override
 	public int deleteById(Long id) {
-		
 		LanzadorDeException.verificarId(id);
 		Optional<Administrador> encontrado = administradorRep.findById(id);
+
 		if (encontrado.isPresent()) {
 			administradorRep.delete(encontrado.get());
 			return 0;
+		} else {
+			return 1;
 		}
-		return 1;
 	}
 
 	@Override
 	public int updateById(Long id, AdministradorDTO data) {
-		
 		LanzadorDeException.verificarId(id);
 		LanzadorDeException.verificarNombre(data.getNombre());
-        LanzadorDeException.verificarCedula(data.getCedula());
-        LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
-        LanzadorDeException.verificarTelefono(data.getTelefono());
-        LanzadorDeException.verificarTurno(data.getTurno());
-        
+		LanzadorDeException.verificarCedula(data.getCedula());
+		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+		LanzadorDeException.verificarTelefono(data.getTelefono());
+		LanzadorDeException.verificarTurno(data.getTurno());
+
 		Optional<Administrador> encontrado = administradorRep.findById(id);
+
 		if (encontrado.isPresent()) {
-			Administrador temp = encontrado.get();
-			temp.setNombre(data.getNombre());
-			temp.setCedula(data.getCedula());
-			temp.setCorreo(data.getCorreo());
-			temp.setTelefono(data.getTelefono());
-			temp.setTurno(data.getTurno());
-			temp.setUsuario(data.getUsuario());
-			temp.setContrasenia(data.getContrasenia());
-			administradorRep.save(temp);
+			Administrador adminActual = encontrado.get();
+			if (!adminActual.getCedula().equals(data.getCedula())) {
+				LanzadorDeException.verificarDuplicado(administradorRep.existsByCedula(data.getCedula()), "No se puede actualizar: la cédula " + data.getCedula() + " ya pertenece a otro administrador.");
+
+				if (administradorRep.existsByCedula(data.getCedula())) {
+					return 1;
+				}
+			}
+
+			adminActual.setNombre(data.getNombre());
+			adminActual.setCedula(data.getCedula());
+			adminActual.setCorreo(data.getCorreo());
+			adminActual.setTelefono(data.getTelefono());
+			adminActual.setTurno(data.getTurno());
+			adminActual.setUsuario(data.getUsuario());
+			adminActual.setContrasenia(data.getContrasenia());
+			administradorRep.save(adminActual);
 			return 0;
+		} else {
+			return 1;
 		}
-		return 1;
 	}
 
 	@Override
@@ -100,54 +109,51 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	@Override
 	public boolean exist(Long id) {
 		LanzadorDeException.verificarId(id);
-		return administradorRep.existsById(id) ? true : false;
+		if (administradorRep.existsById(id)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-	
-	
+
 	public List<AdministradorDTO> findByNombre(String nombre) {
 		LanzadorDeException.verificarNombre(nombre);
 		Optional<List<Administrador>> encontrados = administradorRep.findByNombre(nombre);
-		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
-		
+
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			entityList.forEach((entity) -> {
-				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
-				dtoList.add(dto);
+			encontrados.get().forEach((entity) -> {
+				dtoList.add(mapper.map(entity, AdministradorDTO.class));
 			});
 			return dtoList;
 		} else {
-			return new ArrayList<AdministradorDTO>(); 
+			return new ArrayList<AdministradorDTO>();
 		}
 	}
 
 	public List<AdministradorDTO> findByCedula(String cedula) {
 		LanzadorDeException.verificarCedula(cedula);
 		Optional<List<Administrador>> encontrados = administradorRep.findByCedula(cedula);
-		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
-		
+
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			entityList.forEach((entity) -> {
-				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
-				dtoList.add(dto);
+			encontrados.get().forEach((entity) -> {
+				dtoList.add(mapper.map(entity, AdministradorDTO.class));
 			});
 			return dtoList;
 		} else {
-			return new ArrayList<AdministradorDTO>(); 
+			return new ArrayList<AdministradorDTO>();
 		}
 	}
 
 	public List<AdministradorDTO> findByCorreo(String correo) {
 		LanzadorDeException.verificarCorreoElectronico(correo);
 		Optional<List<Administrador>> encontrados = administradorRep.findByCorreo(correo);
-		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
-		
+
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			entityList.forEach((entity) -> {
-				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
-				dtoList.add(dto);
+			encontrados.get().forEach((entity) -> {
+				dtoList.add(mapper.map(entity, AdministradorDTO.class));
 			});
 			return dtoList;
 		} else {
@@ -158,65 +164,55 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 	public List<AdministradorDTO> findByTelefono(String telefono) {
 		LanzadorDeException.verificarTelefono(telefono);
 		Optional<List<Administrador>> encontrados = administradorRep.findByTelefono(telefono);
-		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
-		
+
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			entityList.forEach((entity) -> {
-				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
-				dtoList.add(dto);
+			encontrados.get().forEach((entity) -> {
+				dtoList.add(mapper.map(entity, AdministradorDTO.class));
 			});
 			return dtoList;
 		} else {
-			return new ArrayList<AdministradorDTO>(); 
+			return new ArrayList<AdministradorDTO>();
 		}
 	}
 
 	public List<AdministradorDTO> findByUsuario(String usuario) {
 		Optional<List<Administrador>> encontrados = administradorRep.findByUsuario(usuario);
-		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
-		
+
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			entityList.forEach((entity) -> {
-				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
-				dtoList.add(dto);
+			encontrados.get().forEach((entity) -> {
+				dtoList.add(mapper.map(entity, AdministradorDTO.class));
 			});
 			return dtoList;
 		} else {
-			return new ArrayList<AdministradorDTO>(); 
+			return new ArrayList<AdministradorDTO>();
 		}
 	}
 
 	public List<AdministradorDTO> findByContrasenia(String contrasenia) {
 		Optional<List<Administrador>> encontrados = administradorRep.findByContrasenia(contrasenia);
-		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
-		
+
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			entityList.forEach((entity) -> {
-				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
-				dtoList.add(dto);
+			encontrados.get().forEach((entity) -> {
+				dtoList.add(mapper.map(entity, AdministradorDTO.class));
 			});
 			return dtoList;
 		} else {
-			return new ArrayList<AdministradorDTO>(); 
+			return new ArrayList<AdministradorDTO>();
 		}
 	}
-
-
 
 	public List<AdministradorDTO> findByNombreAndCedula(String nombre, String cedula) {
 		LanzadorDeException.verificarNombre(nombre);
 		LanzadorDeException.verificarCedula(cedula);
 		Optional<List<Administrador>> encontrados = administradorRep.findByNombreAndCedula(nombre, cedula);
-		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
-		
+
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			entityList.forEach((entity) -> {
-				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
-				dtoList.add(dto);
+			encontrados.get().forEach((entity) -> {
+				dtoList.add(mapper.map(entity, AdministradorDTO.class));
 			});
 			return dtoList;
 		} else {
@@ -226,18 +222,15 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 
 	public List<AdministradorDTO> findByUsuarioAndContrasenia(String usuario, String contrasenia) {
 		Optional<List<Administrador>> encontrados = administradorRep.findByUsuarioAndContrasenia(usuario, contrasenia);
-		List<Administrador> entityList = encontrados.get();
 		List<AdministradorDTO> dtoList = new ArrayList<>();
-		
+
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			entityList.forEach((entity) -> {
-				AdministradorDTO dto = mapper.map(entity, AdministradorDTO.class);
-				dtoList.add(dto);
+			encontrados.get().forEach((entity) -> {
+				dtoList.add(mapper.map(entity, AdministradorDTO.class));
 			});
 			return dtoList;
 		} else {
-			return new ArrayList<AdministradorDTO>(); 
+			return new ArrayList<AdministradorDTO>();
 		}
 	}
-
 }
