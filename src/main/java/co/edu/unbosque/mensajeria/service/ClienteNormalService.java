@@ -27,7 +27,7 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 	public int create(ClienteNormalDTO data) {
 		
 		LanzadorDeException.verificarCedula(data.getCedula());
-		if(clienteNormalRep.existByCedula(data.getCedula())) {
+		if(clienteNormalRep.existsByCedula(data.getCedula())) {
 			return 1;
 		}
 		
