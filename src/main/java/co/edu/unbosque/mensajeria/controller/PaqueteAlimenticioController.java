@@ -178,10 +178,13 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>("Guía no encontrada en el sistema", HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	// http://localhost:8080/paquetealimenticio/buscar-direccion-ciudad?dir=Calle123&ciudad=Bogota
+	@GetMapping("/buscar-direccion-ciudad")
+	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarDireccionYCiudad(@RequestParam String dir,
+			@RequestParam String ciudad) {
 
-	@GetMapping("/buscar-direccion")
-	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarDireccion(@RequestParam String dir) {
-		List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByDireccionDestino(dir);
+		List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByDireccionDestinoAndCiudadDestino(dir, ciudad);
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

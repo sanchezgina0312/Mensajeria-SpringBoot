@@ -170,10 +170,11 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return null;
 	}
 
-	public List<PaqueteCartaDTO> findByDireccionDestino(String direccion) {
+	public List<PaqueteCartaDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 		LanzadorDeException.verificarDireccion(direccion);
+//		LanzadorDeException.verificarCiudad(ciudad);
 
-		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByDireccionDestino(direccion);
+		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByDireccionDestinoAndCiudadDestino(direccion,ciudad);
 		List<PaqueteCartaDTO> dtoList = new ArrayList<>();
 
 		if (encontrados.isPresent()) {

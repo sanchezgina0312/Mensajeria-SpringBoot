@@ -12,6 +12,6 @@ public interface PaqueteNoAlimenticioRepository extends CrudRepository<PaqueteNo
 	public Optional<List<PaqueteNoAlimenticio>> findByTamanio(String tamanio);
 	public Optional<List<PaqueteNoAlimenticio>> findByEsFragil(boolean esFragil);
 	public Optional<List<PaqueteNoAlimenticio>> findByTamanioAndEsFragil(String tamanio, boolean esFragil);
-	public Optional<List<PaqueteNoAlimenticio>> findByDireccionDestino(String direccionDestino);
+	public Optional<List<PaqueteNoAlimenticio>> findByDireccionDestinoAndCiudadDestino(String direccionDestino, String ciudadDestino);
 
 }

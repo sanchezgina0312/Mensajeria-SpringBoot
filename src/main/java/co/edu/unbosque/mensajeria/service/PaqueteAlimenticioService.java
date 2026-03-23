@@ -193,10 +193,12 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		return null;
 	}
 
-	public List<PaqueteAlimenticioDTO> findByDireccionDestino(String direccion) {
-		LanzadorDeException.verificarDireccion(direccion);
+	public List<PaqueteAlimenticioDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 
-		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByDireccionDestino(direccion);
+		LanzadorDeException.verificarDireccion(direccion);
+//	    LanzadorDeException.verificarCiudad(ciudad);
+
+		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByDireccionDestinoAndCiudadDestino(direccion, ciudad);
 		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
 
 		if (encontrados.isPresent()) {
@@ -244,5 +246,5 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(6));
 		return 0;
 	}
-	
+
 }
