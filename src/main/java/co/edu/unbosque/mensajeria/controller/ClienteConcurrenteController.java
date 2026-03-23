@@ -39,7 +39,7 @@ public class ClienteConcurrenteController {
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearClienteConcurrente(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
-			@RequestParam String tipoPedido) {
+			@RequestParam String tipoPedido, @RequestParam double tarifaConcurrente) {
 
 		try {
 
@@ -51,6 +51,7 @@ public class ClienteConcurrenteController {
 			nuevoClienteConcurrente.setTelefono(telefono);
 			nuevoClienteConcurrente.setMetodoPago(metodoPago);
 			nuevoClienteConcurrente.setTipoPedido(tipoPedido);
+			nuevoClienteConcurrente.setTarifaConcurrente(tarifaConcurrente);
 
 			int status = clienteConcurrenteService.create(nuevoClienteConcurrente);
 
