@@ -47,10 +47,10 @@ public class AdministradorController {
 			nuevo.setTurno(turno);
 
 			int status = administradorSer.create(nuevo);
-			
+
 			if (status == 0) {
 				return new ResponseEntity<>("Administrador creado con éxito", HttpStatus.CREATED);
-			} else if(status == 1) {
+			} else if (status == 1) {
 				return new ResponseEntity<>("La cédula ya se encuentra registrada", HttpStatus.CONFLICT);
 			} else {
 				return new ResponseEntity<>("Error al crear el paquete no alimenticio", HttpStatus.BAD_REQUEST);
@@ -71,6 +71,8 @@ public class AdministradorController {
 		} catch (TurnoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error interno del servidor", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -126,6 +128,9 @@ public class AdministradorController {
 
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error inesperado", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -142,13 +147,14 @@ public class AdministradorController {
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error al procesar la solicitud", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	// http://localhost:8080/administrador/buscarpornombre?nombre=Juan Perez
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorNombre(@RequestParam String nombre) {
-
 		List<AdministradorDTO> lista = administradorSer.findByNombre(nombre);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -160,7 +166,6 @@ public class AdministradorController {
 	// http://localhost:8080/administrador/buscarporcedula?cedula=123456789
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorCedula(@RequestParam String cedula) {
-
 		List<AdministradorDTO> lista = administradorSer.findByCedula(cedula);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -172,7 +177,6 @@ public class AdministradorController {
 	// http://localhost:8080/administrador/buscarporcorreo?correo=admin@mail.com
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorCorreo(@RequestParam String correo) {
-
 		List<AdministradorDTO> lista = administradorSer.findByCorreo(correo);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -184,7 +188,6 @@ public class AdministradorController {
 	// http://localhost:8080/administrador/buscarportelefono?telefono=3001234567
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorTelefono(@RequestParam String telefono) {
-
 		List<AdministradorDTO> lista = administradorSer.findByTelefono(telefono);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -226,7 +229,6 @@ public class AdministradorController {
 		} else {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
-
 	}
 
 	// http://localhost:8080/administrador/buscarporusuarioycontrasenia?usuario=admin&contrasenia=1234

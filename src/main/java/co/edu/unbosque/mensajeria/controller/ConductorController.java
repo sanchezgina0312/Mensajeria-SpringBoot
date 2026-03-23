@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import co.edu.unbosque.mensajeria.dto.ConductorDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
+import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
 import co.edu.unbosque.mensajeria.exception.PlacaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
@@ -32,12 +33,11 @@ public class ConductorController {
 	private ConductorService conductorSer;
 
 	public ConductorController() {
-
 	}
 
 	// http://localhost:8080/conductor/crear?nombre=Juan&cedula=123&correo=juan@mail.com&telefono=3001&turno=M&placaVehiculo=ABC123
 	@PostMapping("/crear")
-	public ResponseEntity<String> crearPaqueteAlimenticio(@RequestParam String nombre, @RequestParam String cedula,
+	public ResponseEntity<String> crearConductor(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno,
 			@RequestParam String placaVehiculo) {
 
@@ -45,32 +45,28 @@ public class ConductorController {
 			ConductorDTO nuevo = new ConductorDTO(nombre, cedula, correo, telefono, turno, placaVehiculo);
 			int status = conductorSer.create(nuevo);
 			if (status == 0) {
-				return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
-			} else if(status == 1) {
+				return new ResponseEntity<>("Dato creado con éxito", HttpStatus.CREATED);
+			} else if (status == 1) {
 				return new ResponseEntity<>("La cédula ya se encuentra registrada", HttpStatus.CONFLICT);
 			} else {
-				return new ResponseEntity<>("Error al crear el paquete no alimenticio", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Error al crear conductor", HttpStatus.BAD_REQUEST);
 			}
 
 		} catch (NombreInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (CedulaInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (CorreoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (TelefonoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (TurnoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (PlacaInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	// http://localhost:8080/conductor/mostrartodo
@@ -78,9 +74,9 @@ public class ConductorController {
 	public ResponseEntity<List<ConductorDTO>> mostrarTodo() {
 		List<ConductorDTO> conductores = conductorSer.getAll();
 		if (conductores.isEmpty()) {
-			return new ResponseEntity<List<ConductorDTO>>(conductores, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(conductores, HttpStatus.NO_CONTENT);
 		} else {
-			return new ResponseEntity<List<ConductorDTO>>(conductores, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(conductores, HttpStatus.ACCEPTED);
 		}
 	}
 
@@ -89,31 +85,54 @@ public class ConductorController {
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam String nombre,
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
 			@RequestParam char turno, @RequestParam String placaVehiculo) {
-		ConductorDTO nuevo = new ConductorDTO(nombre, cedula, correo, telefono, turno, placaVehiculo);
-		int status = conductorSer.updateById(id, nuevo);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
-					HttpStatus.BAD_REQUEST);
+		try {
+			ConductorDTO nuevo = new ConductorDTO(nombre, cedula, correo, telefono, turno, placaVehiculo);
+			int status = conductorSer.updateById(id, nuevo);
+			if (status == 0) {
+				return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
+						HttpStatus.BAD_REQUEST);
+			}
+		} catch (NombreInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (CedulaInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (CorreoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TelefonoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TurnoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (PlacaInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	// http://localhost:8080/conductor/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> delete(@RequestParam Long id) {
-		int status = conductorSer.deleteById(id);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+		try {
+			int status = conductorSer.deleteById(id);
+			if (status == 0) {
+				return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+			}
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error al procesar la solicitud", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	// http://localhost:8080/conductor/buscarpornombre?nombre=Juan Perez
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ConductorDTO>> buscarPorNombre(@RequestParam String nombre) {
-
 		List<ConductorDTO> lista = conductorSer.findByNombre(nombre);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -125,7 +144,6 @@ public class ConductorController {
 	// http://localhost:8080/conductor/buscarporcedula?cedula=123456789
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ConductorDTO>> buscarPorCedula(@RequestParam String cedula) {
-
 		List<ConductorDTO> lista = conductorSer.findByCedula(cedula);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -137,7 +155,6 @@ public class ConductorController {
 	// http://localhost:8080/conductor/buscarporcorreo?correo=juan@mail.com
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<ConductorDTO>> buscarPorCorreo(@RequestParam String correo) {
-
 		List<ConductorDTO> lista = conductorSer.findByCorreo(correo);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -149,7 +166,6 @@ public class ConductorController {
 	// http://localhost:8080/conductor/buscarportelefono?telefono=3001234567
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<ConductorDTO>> buscarPorTelefono(@RequestParam String telefono) {
-
 		List<ConductorDTO> lista = conductorSer.findByTelefono(telefono);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -161,7 +177,6 @@ public class ConductorController {
 	// http://localhost:8080/conductor/buscarporplacavehiculo?placaVehiculo=ABC123
 	@GetMapping("/buscarporplacavehiculo")
 	public ResponseEntity<List<ConductorDTO>> buscarPorPlacaVehiculo(@RequestParam String placaVehiculo) {
-
 		List<ConductorDTO> lista = conductorSer.findByPlacaVehiculo(placaVehiculo);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -175,7 +190,6 @@ public class ConductorController {
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<ConductorDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
-
 		List<ConductorDTO> lista = conductorSer.findByNombreAndCedula(nombre, cedula);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
@@ -189,7 +203,6 @@ public class ConductorController {
 	@GetMapping("/buscarporplacavehiculoynombre")
 	public ResponseEntity<List<ConductorDTO>> buscarPorPlacaVehiculoAndNombre(@RequestParam String placaVehiculo,
 			@RequestParam String nombre) {
-
 		List<ConductorDTO> lista = conductorSer.findByPlacaVehiculoAndNombre(placaVehiculo, nombre);
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);

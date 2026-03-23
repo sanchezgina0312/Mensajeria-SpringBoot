@@ -57,7 +57,7 @@ public class ClienteConcurrenteController {
 
 			if (status == 0) {
 				return new ResponseEntity<>("Dato creado con éxito", HttpStatus.CREATED);
-			} else if(status == 1) {
+			} else if (status == 1) {
 				return new ResponseEntity<>("La cédula ya se encuentra registrada", HttpStatus.CONFLICT);
 			} else {
 				return new ResponseEntity<>("Error al crear Cliente", HttpStatus.BAD_REQUEST);
@@ -76,8 +76,12 @@ public class ClienteConcurrenteController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error interno del servidor", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
@@ -106,6 +110,8 @@ public class ClienteConcurrenteController {
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error al procesar la solicitud", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -146,10 +152,15 @@ public class ClienteConcurrenteController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error inesperado", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}

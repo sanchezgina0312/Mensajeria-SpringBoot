@@ -27,7 +27,6 @@ import co.edu.unbosque.mensajeria.service.ClienteNormalService;
 @RestController
 @RequestMapping("/clientenormal")
 @CrossOrigin(origins = { "http://localhost:8080", "*" })
-
 public class ClienteNormalController {
 
 	@Autowired
@@ -36,60 +35,55 @@ public class ClienteNormalController {
 	public ClienteNormalController() {
 	}
 
-	// http://localhost:8080/clientenormal/crear?nombre=Ana&cedula=789&correo=ana@mail.com&telefono=500&metodoPago=Efectivo&tipoPedido=Express&tarifaNormal=1.5
+	// http://localhost:8080/clientenormal/crear?nombre=Normal&cedula=111&correo=n@mail.com&telefono=700&metodoPago=Efectivo&tipoPedido=Unico
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearClienteNormal(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
-			@RequestParam String tipoPedido, @RequestParam double tarifaNormal) {
+			@RequestParam String tipoPedido) {
 
 		try {
-			ClienteNormalDTO nuevoclienteNormal = new ClienteNormalDTO();
+			ClienteNormalDTO nuevoClienteNormal = new ClienteNormalDTO();
+			nuevoClienteNormal.setNombre(nombre);
+			nuevoClienteNormal.setCedula(cedula);
+			nuevoClienteNormal.setCorreo(correo);
+			nuevoClienteNormal.setTelefono(telefono);
+			nuevoClienteNormal.setMetodoPago(metodoPago);
+			nuevoClienteNormal.setTipoPedido(tipoPedido);
 
-			nuevoclienteNormal.setNombre(nombre);
-			nuevoclienteNormal.setCedula(cedula);
-			nuevoclienteNormal.setCorreo(correo);
-			nuevoclienteNormal.setTelefono(telefono);
-			nuevoclienteNormal.setMetodoPago(metodoPago);
-			nuevoclienteNormal.setTipoPedido(tipoPedido);
-			nuevoclienteNormal.setTarifaNormal(tarifaNormal);
-
-			int status = clienteNormalService.create(nuevoclienteNormal);
+			int status = clienteNormalService.create(nuevoClienteNormal);
 
 			if (status == 0) {
-				return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
-			} else if(status == 1) {
+				return new ResponseEntity<>("Dato creado con éxito", HttpStatus.CREATED);
+			} else if (status == 1) {
 				return new ResponseEntity<>("La cédula ya se encuentra registrada", HttpStatus.CONFLICT);
 			} else {
-				return new ResponseEntity<>("Error al crear cliente", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Error al crear Cliente", HttpStatus.BAD_REQUEST);
 			}
 		} catch (NombreInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (CedulaInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (CorreoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (TelefonoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error interno del servidor", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	// http://localhost:8080/clientenormal/mostrartodo
-	@GetMapping("/mostrartodo")
+	@GetMapping("/mostrar")
 	public ResponseEntity<List<ClienteNormalDTO>> mostrarTodo() {
 		List<ClienteNormalDTO> clientes = clienteNormalService.getAll();
-
 		if (!clientes.isEmpty()) {
-			return new ResponseEntity<List<ClienteNormalDTO>>(clientes, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(clientes, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<List<ClienteNormalDTO>>(clientes, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(clientes, HttpStatus.NO_CONTENT);
 		}
 	}
 
@@ -99,66 +93,60 @@ public class ClienteNormalController {
 		try {
 			int status = clienteNormalService.deleteById(id);
 			if (status == 0) {
-				return new ResponseEntity<>("Cliente eliminado correctamente. ", HttpStatus.OK);
+				return new ResponseEntity<>("Cliente eliminado correctamente.", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("Error al eliminar cliente. ", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Error al eliminar cliente.", HttpStatus.BAD_REQUEST);
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error al procesar la solicitud", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	// http://localhost:8080/clientenormal/actualizar?id=1&nombre=Juan&cedula=123&correo=j@mail.com&telefono=300&metodoPago=Efectivo&tipoPedido=Estandar&tarifaNormal=1500.0
-	@PutMapping("/actualizar")
+	// http://localhost:8080/clientenormal/actualizarclientenormal?id=1&nombre=Pedro&cedula=456&correo=p@mail.com&telefono=600&metodoPago=Tarjeta&tipoPedido=Express
+	@PutMapping("/actualizarclientenormal")
 	public ResponseEntity<String> actualizarClienteNormal(@RequestParam Long id, @RequestParam String nombre,
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
-			@RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaNormal) {
-
+			@RequestParam String metodoPago, @RequestParam String tipoPedido) {
 		try {
 			ClienteNormalDTO clienteNormalNuevo = new ClienteNormalDTO();
-
 			clienteNormalNuevo.setNombre(nombre);
 			clienteNormalNuevo.setCedula(cedula);
 			clienteNormalNuevo.setCorreo(correo);
 			clienteNormalNuevo.setTelefono(telefono);
 			clienteNormalNuevo.setMetodoPago(metodoPago);
 			clienteNormalNuevo.setTipoPedido(tipoPedido);
-			clienteNormalNuevo.setTarifaNormal(tarifaNormal);
 
 			int status = clienteNormalService.updateById(id, clienteNormalNuevo);
 
 			if (status == 0) {
-				return new ResponseEntity<>("Cliente actualizado correctamente. ", HttpStatus.OK);
+				return new ResponseEntity<>("Cliente actualizado correctamente.", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("Error al actualizar cliente. ", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Error al actualizar cliente. ID no encontrado.", HttpStatus.BAD_REQUEST);
 			}
 		} catch (NombreInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (CedulaInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (CorreoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (TelefonoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error inesperado", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorNombre(@RequestParam String nombre) {
-
 		List<ClienteNormalDTO> lista = clienteNormalService.findByNombre(nombre);
-
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
@@ -168,9 +156,7 @@ public class ClienteNormalController {
 
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorCedula(@RequestParam String cedula) {
-
 		List<ClienteNormalDTO> lista = clienteNormalService.findByCedula(cedula);
-
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
@@ -180,9 +166,7 @@ public class ClienteNormalController {
 
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorCorreo(@RequestParam String correo) {
-
 		List<ClienteNormalDTO> lista = clienteNormalService.findByCorreo(correo);
-
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
@@ -192,9 +176,7 @@ public class ClienteNormalController {
 
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorTelefono(@RequestParam String telefono) {
-
 		List<ClienteNormalDTO> lista = clienteNormalService.findByTelefono(telefono);
-
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
@@ -204,9 +186,7 @@ public class ClienteNormalController {
 
 	@GetMapping("/buscarpormetodopago")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorMetodoPago(@RequestParam String metodoPago) {
-
 		List<ClienteNormalDTO> lista = clienteNormalService.findByMetodoPago(metodoPago);
-
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
@@ -216,9 +196,7 @@ public class ClienteNormalController {
 
 	@GetMapping("/buscarportipopedido")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorTipoPedido(@RequestParam String tipoPedido) {
-
 		List<ClienteNormalDTO> lista = clienteNormalService.findByTipoPedido(tipoPedido);
-
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
@@ -229,9 +207,7 @@ public class ClienteNormalController {
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
-
 		List<ClienteNormalDTO> lista = clienteNormalService.findByNombreAndCedula(nombre, cedula);
-
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
@@ -242,14 +218,11 @@ public class ClienteNormalController {
 	@GetMapping("/buscarportipopedidoymetodopago")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
-
 		List<ClienteNormalDTO> lista = clienteNormalService.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
-
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
 }
