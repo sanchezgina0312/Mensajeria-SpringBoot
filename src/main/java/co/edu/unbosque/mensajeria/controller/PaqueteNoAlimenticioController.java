@@ -1,6 +1,7 @@
 package co.edu.unbosque.mensajeria.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
 import co.edu.unbosque.mensajeria.exception.CiudadInvalidaException;
 import co.edu.unbosque.mensajeria.exception.DireccionInvalidaException;
@@ -55,9 +58,11 @@ public class PaqueteNoAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}   catch (CiudadInvalidaException e) {
+		} catch (CiudadInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+		}  catch (MethodArgumentTypeMismatchException e) {
+	        return new ResponseEntity<>("El valor de debe ser true o false", HttpStatus.BAD_REQUEST);
+	    }
 	}
 
 	// http://localhost:8080/paquetenoalimenticio/mostrartodo
@@ -88,9 +93,9 @@ public class PaqueteNoAlimenticioController {
 
 			int status = paqueteNoAlimenticioSer.updateById(id, nuevo);
 			if (status == 0) {
-				return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
+				return new ResponseEntity<>("Paquete no alimenticio actualizado con éxito", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
+				return new ResponseEntity<>("No se encontró el paquete no alimenticio con el ID ingresado",
 						HttpStatus.BAD_REQUEST);
 			}
 		} catch (DireccionInvalidaException e) {
@@ -99,9 +104,11 @@ public class PaqueteNoAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}   catch (CiudadInvalidaException e) {
+		} catch (CiudadInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+		}  catch (MethodArgumentTypeMismatchException e) {
+	        return new ResponseEntity<>("El formato no corresponde con el requerido", HttpStatus.BAD_REQUEST);
+	    }
 	}
 
 	// http://localhost:8080/paquetenoalimenticio/eliminar?id=1
@@ -110,69 +117,104 @@ public class PaqueteNoAlimenticioController {
 		try {
 			int status = paqueteNoAlimenticioSer.deleteById(id);
 			if (status == 0) {
-				return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
+				return new ResponseEntity<>("Paquete no alimenticio eliminado con éxito", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("No se encontró el paquete no alimenticio con el ID ingresado" + id, HttpStatus.BAD_REQUEST);
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+		}  catch (MethodArgumentTypeMismatchException e) {
+	        return new ResponseEntity<>("El valor de debe ser un número entero", HttpStatus.BAD_REQUEST);
+	    }
 	}
 
 	@GetMapping("/buscartamanio")
-	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarPorTamanio(@RequestParam String tamanio) {
-		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByTamanio(tamanio);
-		if (!lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+	public ResponseEntity<Object> buscarPorTamanio(@RequestParam String tamanio) {
+		
+		try {
+			List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByTamanio(tamanio);
+			if (!lista.isEmpty()) {
+				return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+			}
+
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
+		
 	}
 
 	@GetMapping("/buscaresfragil")
-	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarPorEsFragil(@RequestParam boolean esFragil) {
-		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByEsFragil(esFragil);
-		if (!lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
-		}
-	}
+	public ResponseEntity<Object> buscarPorEsFragil(@RequestParam boolean esFragil) {
+	    try {
+	        List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByEsFragil(esFragil);
+	        if (!lista.isEmpty()) {
+	            return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+	        } else {
+	            return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+	        }
 
+	    } catch (MethodArgumentTypeMismatchException e) {
+	        return new ResponseEntity<>("El valor debe ser true o false", HttpStatus.BAD_REQUEST);
+	    }
+	}
+	
 	@GetMapping("/buscarportamanioyfragil")
-	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarPorTamanioAndFragil(@RequestParam String tamanio,
+	public ResponseEntity<Object> buscarPorTamanioAndFragil(@RequestParam String tamanio,
 			@RequestParam boolean esFragil) {
-		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByTamanioAndEsFragil(tamanio, esFragil);
-		if (!lista.isEmpty()) {
-			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
-		}
+		
+		try {
+			List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByTamanioAndEsFragil(tamanio, esFragil);
+			if (!lista.isEmpty()) {
+				return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+			}
+
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (MethodArgumentTypeMismatchException e) {
+	        return new ResponseEntity<>("El valor de debe ser true o false", HttpStatus.BAD_REQUEST);
+	    }
 	}
 
 	@GetMapping("/seguimientoid")
-	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
-		PaqueteNoAlimenticioDTO p = paqueteNoAlimenticioSer.findById(id);
+	public ResponseEntity<Object> findById(@RequestParam Long id) {
+		try {
+			PaqueteNoAlimenticioDTO p = paqueteNoAlimenticioSer.findById(id);
 
-		if (p != null) {
-			return new ResponseEntity<>(p, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Guía de paquete no encontrada", HttpStatus.NOT_FOUND);
-		}
+			if (p != null) {
+				return new ResponseEntity<>(p, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("No se encontró el paquete no alimenticio con el ID ingresado", HttpStatus.NOT_FOUND);
+			}
+
+	    } catch (MethodArgumentTypeMismatchException e) {
+	        return new ResponseEntity<>("El valor de debe ser un número entero", HttpStatus.BAD_REQUEST);
+	    } catch (IdInvalidoException e) {
+	        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }
 	}
 	
 	// http://localhost:8080/paquetenoalimenticio/buscar-direccion-ciudad?dir=Calle123&ciudad=Bogota
 	@GetMapping("/buscardireccionyciudad")
-	public ResponseEntity<List<PaqueteNoAlimenticioDTO>> buscarDireccionYCiudad(@RequestParam String dir,
+	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir,
 			@RequestParam String ciudad) {
+		
+		try {
+			List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByDireccionDestinoAndCiudadDestino(dir, ciudad);
 
-		List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByDireccionDestinoAndCiudadDestino(dir, ciudad);
+			if (lista.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			} else {
+				return new ResponseEntity<>(lista, HttpStatus.OK);
+			}
 
-		if (lista.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} else {
-			return new ResponseEntity<>(lista, HttpStatus.OK);
-		}
+	    } catch (DireccionInvalidaException e) {
+	        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }
+
 	}
 
 }

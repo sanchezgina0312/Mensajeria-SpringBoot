@@ -339,9 +339,9 @@ public class LanzadorDeException {
 			throw new EstadoPedidoInvalidoException("El estado del pedido no puede estar vacío");
 		}
 
-		if (!estadoPedido.matches("PENDIENTE|EN_PROCESO|ENVIADO|ENTREGADO|CANCELADO")) {
+		if (!estadoPedido.matches("EN_PROCESO|ENTREGADO")) {
 			throw new EstadoPedidoInvalidoException(
-					"Estado inválido. Valores permitidos: PENDIENTE, EN_PROCESO, ENVIADO, ENTREGADO, CANCELADO");
+					"Estado inválido. Valores permitidos: EN_PROCESO, ENTREGADO");
 		}
 	}
 
