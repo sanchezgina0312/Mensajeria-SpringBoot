@@ -4,9 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
-import co.edu.unbosque.mensajeria.exception.CiudadDestinoInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CiudadInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
+import co.edu.unbosque.mensajeria.exception.DireccionInvalidaException;
 import co.edu.unbosque.mensajeria.exception.EstadoPedidoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
@@ -81,23 +81,23 @@ public class LanzadorDeException {
 	     */
 
 	    if (direccion == null || direccion.isEmpty()) {
-	        throw new DireccionDestinoInvalidaException("La dirección no puede estar vacía");
+	        throw new DireccionInvalidaException("La dirección no puede estar vacía");
 	    }
 
 	    if (direccion.contains("  ")) {
-	        throw new DireccionDestinoInvalidaException("La dirección no puede contener espacios dobles");
+	        throw new DireccionInvalidaException("La dirección no puede contener espacios dobles");
 	    }
 
 	    if (!direccion.matches("^[A-Za-z0-9#\\-\\.\\s]+$")) {
-	        throw new DireccionDestinoInvalidaException("La dirección contiene caracteres inválidos");
+	        throw new DireccionInvalidaException("La dirección contiene caracteres inválidos");
 	    }
 
 	    if (!direccion.matches("^(Calle|Carrera|Transversal|Diagonal|Avenida|Av|Cl|Cra|Tv|Dg)\\s+[0-9A-Za-z]+\\s+#\\s*[0-9A-Za-z]+-\\s*[0-9A-Za-z]+.*$")) {
-	        throw new DireccionDestinoInvalidaException("La dirección no cumple con un formato válido en Colombia");
+	        throw new DireccionInvalidaException("La dirección no cumple con un formato válido en Colombia");
 	    }
 
 	    if (direccion.length() < 5 || direccion.length() > 100) {
-	        throw new DireccionDestinoInvalidaException("La dirección debe tener entre 5 y 100 caracteres");
+	        throw new DireccionInvalidaException("La dirección debe tener entre 5 y 100 caracteres");
 	    }
 	}
 	
@@ -357,14 +357,14 @@ public class LanzadorDeException {
         }
     }
 	
-	public static void verificarCiudadDestino(String ciudadDestino) {
+	public static void verificarCiudad(String ciudadDestino) {
 
         if (ciudadDestino == null || ciudadDestino.trim().isEmpty()) {
-            throw new CiudadDestinoInvalidaException("La ciudad destino no puede estar vacía");
+            throw new CiudadInvalidaException("La ciudad destino no puede estar vacía");
         }
 
         if (!ciudadDestino.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
-            throw new CiudadDestinoInvalidaException("La ciudad destino solo debe contener letras");
+            throw new CiudadInvalidaException("La ciudad destino solo debe contener letras");
         }
     }
 	

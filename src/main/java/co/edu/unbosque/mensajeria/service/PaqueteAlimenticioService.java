@@ -29,9 +29,11 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 	@Override
 	public int create(PaqueteAlimenticioDTO data) {
+		
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 		LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
+		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
 		data.setEstadoPedido("RECIBIDO");
 		if (data.getFechaCreacionPedido() == null) {

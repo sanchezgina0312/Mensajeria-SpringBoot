@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
-import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
+import co.edu.unbosque.mensajeria.exception.CiudadInvalidaException;
+import co.edu.unbosque.mensajeria.exception.DireccionInvalidaException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
 import co.edu.unbosque.mensajeria.service.PaqueteNoAlimenticioService;
@@ -50,9 +51,11 @@ public class PaqueteNoAlimenticioController {
 				return new ResponseEntity<>("No se pudo registrar el paquete.", HttpStatus.BAD_REQUEST);
 			}
 
-		} catch (DireccionDestinoInvalidaException e) {
+		} catch (DireccionInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}   catch (CiudadInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -90,7 +93,7 @@ public class PaqueteNoAlimenticioController {
 				return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
 						HttpStatus.BAD_REQUEST);
 			}
-		} catch (DireccionDestinoInvalidaException e) {
+		} catch (DireccionInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

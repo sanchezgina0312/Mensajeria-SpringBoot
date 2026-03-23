@@ -32,6 +32,7 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTipoCarta(data.getTipoCarta());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
 		data.setEstadoPedido("RECIBIDO");
 		if (data.getFechaCreacionPedido() == null)

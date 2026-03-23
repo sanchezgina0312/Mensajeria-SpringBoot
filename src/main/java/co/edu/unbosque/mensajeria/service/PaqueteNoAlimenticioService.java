@@ -31,6 +31,7 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	public int create(PaqueteNoAlimenticioDTO data) {
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
 		data.setEstadoPedido("RECIBIDO");
 		if (data.getFechaCreacionPedido() == null)
