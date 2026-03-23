@@ -5,4 +5,5 @@ public class CiudadDestinoInvalidaException extends RuntimeException {
     public CiudadDestinoInvalidaException(String mensaje) {
         super(mensaje);
     }
+    
 }

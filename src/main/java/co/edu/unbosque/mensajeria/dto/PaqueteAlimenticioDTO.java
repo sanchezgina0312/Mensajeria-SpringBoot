@@ -34,7 +34,6 @@ public class PaqueteAlimenticioDTO extends Paquete {
 			String estadoPedido, boolean esPrioritario, double precioFinal) {
 		super(id, precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
 				estadoPedido, esPrioritario, precioFinal);
-		// TODO Auto-generated constructor stub
 	}
 
 	public boolean isSeEnviaHoy() {
