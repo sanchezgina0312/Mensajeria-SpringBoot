@@ -14,15 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.mensajeria.dto.PaqueteAlimenticioDTO;
-import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
-import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.DireccionDestinoInvalidaException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
-import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TamanioInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TipoDeAlimentoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.service.PaqueteAlimenticioService;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -44,36 +39,35 @@ public class PaqueteAlimenticioController {
 			@RequestParam String tamanio, @RequestParam LocalDateTime fechaCreacionPedido,
 			@RequestParam LocalDateTime fechaEstimadaEntrega) {
 
-		
 		try {
-			
-		PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
-		
-		 nuevo.setPrecioEnvio(precioEnvio);
-         nuevo.setTamanio(tamanio);
-         nuevo.setTipoDeAlimento(tipoDeAlimento);
-         nuevo.setSeEnviaHoy(seEnviaHoy);
-         nuevo.setDireccionDestino(direccionDestino);
-         nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-         nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
-         
-         int statusA = paqueteAlimenticioSer.registrarYValidarHorasEntrega(nuevo);
-         paqueteAlimenticioSer.create(nuevo);
-		
-         return new ResponseEntity<>("Paquete alimenticio creado con éxito", HttpStatus.CREATED);
-         
-		 } catch (DireccionDestinoInvalidaException e) {
-	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
 
-	        } catch (TamanioInvalidoException e) {
-	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			nuevo.setPrecioEnvio(precioEnvio);
+			nuevo.setTamanio(tamanio);
+			nuevo.setTipoDeAlimento(tipoDeAlimento);
+			nuevo.setSeEnviaHoy(seEnviaHoy);
+			nuevo.setDireccionDestino(direccionDestino);
+			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
+			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
 
-	        } catch (TipoDeAlimentoInvalidoException e) {
-	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			int status = paqueteAlimenticioSer.registrarYValidarHorasEntrega(nuevo);
 
-	        } 
+			if (status == 0) {
+				paqueteAlimenticioSer.create(nuevo);
+				return new ResponseEntity<>("Paquete alimenticio creado con éxito", HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<>("Error al crear paquete alimenticio", HttpStatus.BAD_REQUEST);
+			}
+
+		} catch (DireccionDestinoInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TipoDeAlimentoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
-	
+
 	// http://localhost:8080/paquetealimenticio/mostrartodo
 	@GetMapping("/mostrartodo")
 	public ResponseEntity<List<PaqueteAlimenticioDTO>> mostrarTodo() {
@@ -84,15 +78,16 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<List<PaqueteAlimenticioDTO>>(paquetesalimenticios, HttpStatus.ACCEPTED);
 		}
 	}
-	
+
 	// http://localhost:8080/paquetealimenticio/actualizar?id=1&seEnviaHoy=false&tipoDeAlimento=Seco&precioEnvio=4000&direccionDestino=Carrera5&tamanio=Pequeno&fechaCreacionPedido=2024-03-20T10:00:00&fechaEstimadaEntrega=2024-03-20T16:00:00
 	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam boolean seEnviaHoy,
 			@RequestParam String tipoDeAlimento, @RequestParam int precioEnvio, @RequestParam String direccionDestino,
 			@RequestParam String tamanio, @RequestParam LocalDateTime fechaCreacionPedido,
 			@RequestParam LocalDateTime fechaEstimadaEntrega) {
+		try {
 		PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
-		
+
 		nuevo.setSeEnviaHoy(seEnviaHoy);
 		nuevo.setTipoDeAlimento(tipoDeAlimento);
 		nuevo.setTamanio(tamanio);
@@ -100,7 +95,7 @@ public class PaqueteAlimenticioController {
 		nuevo.setFechaCreacionPedido(fechaCreacionPedido);
 		nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
 		nuevo.setPrecioEnvio(precioEnvio);
-		
+
 		int status = paqueteAlimenticioSer.updateById(id, nuevo);
 		if (status == 0) {
 			return new ResponseEntity<>("Dato actualizado con éxito", HttpStatus.ACCEPTED);
@@ -108,22 +103,75 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>("Error: El ID " + id + " no existe en la base de datos",
 					HttpStatus.BAD_REQUEST);
 		}
+		}catch (DireccionDestinoInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TamanioInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TipoDeAlimentoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (IdInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		}
 	}
-	
+
 	// http://localhost:8080/paquetealimenticio/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> delete(@RequestParam Long id) {
-		
+
 		try {
-		int status = paqueteAlimenticioSer.deleteById(id);
-		if (status == 0) {
-			return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
-		} else {
-			return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
-		}
+			int status = paqueteAlimenticioSer.deleteById(id);
+			if (status == 0) {
+				return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+			}
 		} catch (IdInvalidoException e) {
-			   return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-			    
-		}  
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		}
 	}
+
+	@GetMapping("/buscartamanio")
+	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarPorTamanio(@RequestParam String tamanio) {
+		List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByTamanio(tamanio);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
+	}
+
+	@GetMapping("/buscarenviahoy")
+	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarPorSeEnviaHoy(@RequestParam boolean seEnviaHoy) {
+		List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findBySeEnviaHoy(seEnviaHoy);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
+	}
+
+	@GetMapping("/buscartipoalimento")
+	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarPorTipoDeAlimento(@RequestParam String tipoDeAlimento) {
+		List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByTipoDeAlimento(tipoDeAlimento);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
+	}
+
+	@GetMapping("/buscarportamanioytipo")
+	public ResponseEntity<List<PaqueteAlimenticioDTO>> buscarPorTamanioYTipo(@RequestParam String tamanio,
+			@RequestParam String tipoDeAlimento) {
+		List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByTamanioAndTipoDeAlimento(tamanio,
+				tipoDeAlimento);
+		if (!lista.isEmpty()) {
+			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+		}
+	}
+
+}

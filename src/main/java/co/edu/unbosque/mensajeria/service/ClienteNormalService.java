@@ -64,6 +64,15 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 
 	@Override
 	public int updateById(Long id, ClienteNormalDTO data) {
+		
+		LanzadorDeException.verificarNombre(data.getNombre());
+		LanzadorDeException.verificarCedula(data.getCedula());
+		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
+		LanzadorDeException.verificarTelefono(data.getTelefono());
+		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
+		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
+		LanzadorDeException.verificarId(id);
+		
 		Optional<ClienteNormal> encontrado = clienteNormalRep.findById(id);
 
 		if (encontrado.isPresent()) {
