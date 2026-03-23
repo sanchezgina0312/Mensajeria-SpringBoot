@@ -25,8 +25,13 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 
 	@Override
 	public int create(ClienteNormalDTO data) {
-		LanzadorDeException.verificarNombre(data.getNombre());
+		
 		LanzadorDeException.verificarCedula(data.getCedula());
+		if(clienteNormalRep.existByCedula(data.getCedula())) {
+			return 1;
+		}
+		
+		LanzadorDeException.verificarNombre(data.getNombre());
 		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
 		LanzadorDeException.verificarTelefono(data.getTelefono());
 		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());

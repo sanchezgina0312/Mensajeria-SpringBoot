@@ -21,4 +21,5 @@ public interface ClientePremiumRepository extends CrudRepository<ClientePremium,
 	public Optional<List<ClientePremium>> findByNombreAndCedula(String nombre, String cedula);	
 	public Optional<List<ClientePremium>> findByTipoPedidoAndMetodoPago(String tipoPedido, String metodoPago);
 	
+	public boolean existByCedula(String cedula);
 }

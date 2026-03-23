@@ -25,6 +25,12 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 	@Override
 	public int create(ClientePremiumDTO data) {
 		
+		
+		LanzadorDeException.verificarCedula(data.getCedula());
+		if(clientepremiumRep.existByCedula(data.getCedula())) {
+			return 1;
+		}
+		
 		LanzadorDeException.verificarNombre(data.getNombre());
 		LanzadorDeException.verificarCedula(data.getCedula());
 		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());

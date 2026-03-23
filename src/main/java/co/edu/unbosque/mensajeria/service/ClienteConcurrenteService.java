@@ -28,8 +28,13 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 
 	@Override
 	public int create(ClienteConcurrenteDTO data) {
-		LanzadorDeException.verificarNombre(data.getNombre());
+		
 		LanzadorDeException.verificarCedula(data.getCedula());
+		if(clienteConcurrenteRep.existByCedula(data.getCedula())) {
+			return 1;
+		}
+		
+		LanzadorDeException.verificarNombre(data.getNombre());
 		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
 		LanzadorDeException.verificarTelefono(data.getTelefono());
 		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
