@@ -27,7 +27,7 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		
 		
 		LanzadorDeException.verificarCedula(data.getCedula());
-		if(clientepremiumRep.existByCedula(data.getCedula())) {
+		if(clientepremiumRep.existsByCedula(data.getCedula())) {
 			return 1;
 		}
 		

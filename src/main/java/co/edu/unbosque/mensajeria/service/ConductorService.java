@@ -29,8 +29,9 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 	@Override
 	public int create(ConductorDTO data) {
 		
+
+		
 		LanzadorDeException.verificarNombre(data.getNombre());
-        LanzadorDeException.verificarCedula(data.getCedula());
         LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
         LanzadorDeException.verificarTelefono(data.getTelefono());
         LanzadorDeException.verificarTurno(data.getTurno());

@@ -28,7 +28,6 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
     public int create(AdministradorDTO data) {
 
         LanzadorDeException.verificarNombre(data.getNombre());
-        LanzadorDeException.verificarCedula(data.getCedula());
         LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
         LanzadorDeException.verificarTelefono(data.getTelefono());
         LanzadorDeException.verificarTurno(data.getTurno());

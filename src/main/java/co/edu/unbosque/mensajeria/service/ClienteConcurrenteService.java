@@ -30,7 +30,7 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 	public int create(ClienteConcurrenteDTO data) {
 		
 		LanzadorDeException.verificarCedula(data.getCedula());
-		if(clienteConcurrenteRep.existByCedula(data.getCedula())) {
+		if(clienteConcurrenteRep.existsByCedula(data.getCedula())) {
 			return 1;
 		}
 		

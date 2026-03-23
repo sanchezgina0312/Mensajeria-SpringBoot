@@ -20,5 +20,5 @@ public interface ClienteConcurrenteRepository extends CrudRepository<ClienteConc
 	public Optional<List<ClienteConcurrente>> findByNombreAndCedula(String nombre, String cedula);	
 	public Optional<List<ClienteConcurrente>> findByTipoPedidoAndMetodoPago(String tipoPedido, String metodoPago);
 	
-	public boolean existByCedula(String cedula);
+	public boolean existsByCedula(String cedula);
 }

@@ -16,4 +16,6 @@ public interface ManipuladorDePaqueteRepository extends CrudRepository<Manipulad
 	public Optional<List<ManipuladorDePaquete>> findByTipoManipulador(String tipoManipulador);
 	
 	public Optional<List<ManipuladorDePaquete>> findByNombreAndCedula(String nombre, String cedula);	
+
+	public boolean existsByCedula(String cedula);
 }

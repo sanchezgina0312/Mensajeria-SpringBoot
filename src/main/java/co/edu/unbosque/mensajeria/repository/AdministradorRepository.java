@@ -19,4 +19,5 @@ public interface AdministradorRepository extends CrudRepository<Administrador, L
 	public Optional<List<Administrador>> findByNombreAndCedula(String nombre, String cedula);	
 	public Optional<List<Administrador>> findByUsuarioAndContrasenia(String usuario, String contrasenia);
 	
+	public boolean existsByCedula(String cedula);
 }
