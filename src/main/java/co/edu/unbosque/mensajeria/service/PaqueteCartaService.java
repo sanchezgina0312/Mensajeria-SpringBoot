@@ -93,26 +93,6 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return paqueteCartaRep.existsById(id) ? true : false;
 	}
 
-	public int registrarConPlazo72Horas(PaqueteCartaDTO data) {
-		if (data.getFechaCreacionPedido() == null) {
-			data.setFechaCreacionPedido(LocalDateTime.now());
-		}
-
-		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(72));
-
-		PaqueteCarta entity = mapper.map(data, PaqueteCarta.class);
-		paqueteCartaRep.save(entity);
-		return 0;
-	}
-
-	public int registrarPlazo72Horas(PaqueteCartaDTO data) {
-		if (data.getFechaCreacionPedido() == null) {
-			data.setFechaCreacionPedido(LocalDateTime.now());
-		}
-		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(72));
-		return 0;
-	}
-
 	public List<PaqueteCartaDTO> findByTamanio(String tamanio) {
 		LanzadorDeException.verificarTamanoPaquete(tamanio);
 		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByTamanio(tamanio);
@@ -182,6 +162,44 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 			}
 		}
 		return dtoList;
+	}
+
+	public int registrarPlazo72Horas(PaqueteCartaDTO data) {
+		if (data.getFechaCreacionPedido() == null) {
+			data.setFechaCreacionPedido(LocalDateTime.now());
+		}
+
+		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(72));
+
+		PaqueteCarta entity = mapper.map(data, PaqueteCarta.class);
+		paqueteCartaRep.save(entity);
+		return 0;
+	}
+
+	public double calcularTarifa(double precioBase, String tipoCliente) {
+		if (tipoCliente.equalsIgnoreCase("CONCURRENTE")) {
+			return precioBase * 0.90;
+		} else if (tipoCliente.equalsIgnoreCase("PREMIUM")) {
+			return precioBase * 0.75;
+		}
+		return precioBase;
+	}
+
+	public void procesarEstadoYTiempoDTO(PaqueteCartaDTO dto) {
+		LocalDateTime ahora = LocalDateTime.now();
+
+		if (ahora.isAfter(dto.getFechaEstimadaEntrega())) {
+			dto.setEstadoPedido("ENTREGADO");
+			dto.setPrioridad(2);
+		} else {
+			long horasParaEntrega = java.time.Duration.between(ahora, dto.getFechaEstimadaEntrega()).toHours();
+
+			if (horasParaEntrega <= 3 && horasParaEntrega >= 0) {
+				dto.setPrioridad(1);
+			} else {
+				dto.setPrioridad(2);
+			}
+		}
 	}
 
 }

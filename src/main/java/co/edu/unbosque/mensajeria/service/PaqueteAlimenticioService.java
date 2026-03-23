@@ -65,13 +65,12 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 	@Override
 	public int updateById(Long id, PaqueteAlimenticioDTO data) {
-		
+
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 		LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
 		LanzadorDeException.verificarId(id);
 
-		
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
 			PaqueteAlimenticio temp = encontrado.get();
@@ -97,22 +96,6 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	@Override
 	public boolean exist(Long id) {
 		return paqueteAlimenticioRep.existsById(id) ? true : false;
-	}
-
-	public int registrarYValidarHorasEntrega(PaqueteAlimenticioDTO data) {
-		if (data.getFechaCreacionPedido() == null) {
-			data.setFechaCreacionPedido(LocalDateTime.now());
-		}
-
-		LocalDateTime fechaCreacion = data.getFechaCreacionPedido();
-		LocalDateTime fechaEstimada = fechaCreacion.plusHours(6);
-		data.setFechaEstimadaEntrega(fechaEstimada);
-
-		if (fechaEstimada.toLocalDate().isAfter(fechaCreacion.toLocalDate())) {
-			return 2;
-		}
-
-		return 0;
 	}
 
 	public List<PaqueteAlimenticioDTO> findByTamanio(String tamanio) {
@@ -179,7 +162,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 			return new ArrayList<PaqueteAlimenticioDTO>();
 		}
 	}
-	
+
 	public PaqueteAlimenticioDTO findById(Long id) {
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
@@ -200,5 +183,47 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 			}
 		}
 		return dtoList;
+	}
+
+	public int registrarPlazo6Horas(PaqueteAlimenticioDTO data) {
+		if (data.getFechaCreacionPedido() == null) {
+			data.setFechaCreacionPedido(LocalDateTime.now());
+		}
+
+		LocalDateTime fechaCreacion = data.getFechaCreacionPedido();
+		LocalDateTime fechaEstimada = fechaCreacion.plusHours(6);
+		data.setFechaEstimadaEntrega(fechaEstimada);
+
+		if (fechaEstimada.toLocalDate().isAfter(fechaCreacion.toLocalDate())) {
+			return 2;
+		}
+
+		return 0;
+	}
+
+	public double calcularTarifa(double precioBase, String tipoCliente) {
+		if (tipoCliente.equalsIgnoreCase("CONCURRENTE")) {
+			return precioBase * 0.90;
+		} else if (tipoCliente.equalsIgnoreCase("PREMIUM")) {
+			return precioBase * 0.75;
+		}
+		return precioBase;
+	}
+
+	public void procesarEstadoYTiempoDTO(PaqueteAlimenticioDTO dto) {
+		LocalDateTime ahora = LocalDateTime.now();
+
+		if (ahora.isAfter(dto.getFechaEstimadaEntrega())) {
+			dto.setEstadoPedido("ENTREGADO");
+			dto.setPrioridad(2);
+		} else {
+			long horasParaEntrega = java.time.Duration.between(ahora, dto.getFechaEstimadaEntrega()).toHours();
+
+			if (horasParaEntrega <= 3 && horasParaEntrega >= 0) {
+				dto.setPrioridad(1);
+			} else {
+				dto.setPrioridad(2);
+			}
+		}
 	}
 }

@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
 import co.edu.unbosque.mensajeria.entity.PaqueteNoAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteNoAlimenticioRepository;
@@ -96,14 +97,6 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return paqueteNoAlimenticioRep.existsById(id) ? true : false;
 	}
 
-	public int registrarPlazo24Horas(PaqueteNoAlimenticioDTO data) {
-		if (data.getFechaCreacionPedido() == null) {
-			data.setFechaCreacionPedido(LocalDateTime.now());
-		}
-		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(24));
-		return 0;
-	}
-
 	public List<PaqueteNoAlimenticioDTO> findByTamanio(String tamanio) {
 		LanzadorDeException.verificarTamanoPaquete(tamanio);
 		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByTamanio(tamanio);
@@ -173,4 +166,39 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		}
 		return dtoList;
 	}
+	
+	public int registrarPlazo24Horas(PaqueteNoAlimenticioDTO data) {
+		if (data.getFechaCreacionPedido() == null) {
+			data.setFechaCreacionPedido(LocalDateTime.now());
+		}
+		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(24));
+		return 0;
+	}
+	
+	public double calcularTarifa(double precioBase, String tipoCliente) {
+		if (tipoCliente.equalsIgnoreCase("CONCURRENTE")) {
+			return precioBase * 0.90;
+		} else if (tipoCliente.equalsIgnoreCase("PREMIUM")) {
+			return precioBase * 0.75;
+		}
+		return precioBase;
+	}
+
+	public void procesarEstadoYTiempoDTO(PaqueteNoAlimenticioDTO dto) {
+		LocalDateTime ahora = LocalDateTime.now();
+
+		if (ahora.isAfter(dto.getFechaEstimadaEntrega())) {
+			dto.setEstadoPedido("ENTREGADO");
+			dto.setPrioridad(2);
+		} else {
+			long horasParaEntrega = java.time.Duration.between(ahora, dto.getFechaEstimadaEntrega()).toHours();
+
+			if (horasParaEntrega <= 3 && horasParaEntrega >= 0) {
+				dto.setPrioridad(1);
+			} else {
+				dto.setPrioridad(2);
+			}
+		}
+	}
+	
 }
