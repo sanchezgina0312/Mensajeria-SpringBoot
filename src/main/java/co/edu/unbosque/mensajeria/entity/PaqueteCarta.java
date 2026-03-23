@@ -22,9 +22,18 @@ public class PaqueteCarta extends Paquete {
 	}
 
 	public PaqueteCarta(int precioEnvio, String direccionDestino, String tamanio, LocalDateTime fechaCreacionPedido,
-			LocalDateTime fechaEstimadaEntrega, String tipoCarta) {
-		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega);
+			LocalDateTime fechaEstimadaEntrega, String ciudadDestino, String estadoPedido, int prioridad,
+			double precioFinal, String tipoCarta) {
+		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, prioridad, precioFinal);
 		this.tipoCarta = tipoCarta;
+	}
+
+	public PaqueteCarta(int precioEnvio, String direccionDestino, String tamanio, LocalDateTime fechaCreacionPedido,
+			LocalDateTime fechaEstimadaEntrega, String ciudadDestino, String estadoPedido, int prioridad,
+			double precioFinal) {
+		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, prioridad, precioFinal);
 	}
 
 	public String getTipoCarta() {

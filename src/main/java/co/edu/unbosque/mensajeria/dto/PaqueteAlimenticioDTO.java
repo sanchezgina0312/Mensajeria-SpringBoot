@@ -21,16 +21,19 @@ public class PaqueteAlimenticioDTO extends Paquete {
 	}
 
 	public PaqueteAlimenticioDTO(int precioEnvio, String direccionDestino, String tamanio,
-			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, boolean seEnviaHoy,
-			String tipoDeAlimento) {
-		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega);
+			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
+			String estadoPedido, int prioridad, double precioFinal, boolean seEnviaHoy, String tipoDeAlimento) {
+		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, prioridad, precioFinal);
 		this.seEnviaHoy = seEnviaHoy;
 		this.tipoDeAlimento = tipoDeAlimento;
 	}
 
 	public PaqueteAlimenticioDTO(int precioEnvio, String direccionDestino, String tamanio,
-			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega) {
-		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega);
+			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
+			String estadoPedido, int prioridad, double precioFinal) {
+		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, prioridad, precioFinal);
 	}
 
 	public boolean isSeEnviaHoy() {

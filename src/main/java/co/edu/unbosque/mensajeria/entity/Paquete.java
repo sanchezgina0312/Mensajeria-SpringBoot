@@ -22,19 +22,28 @@ public abstract class Paquete {
 	private String tamanio;
 	private LocalDateTime fechaCreacionPedido;
 	private LocalDateTime fechaEstimadaEntrega;
+	private String ciudadDestino;
+	private String estadoPedido;
+	private int prioridad;
+	private double precioFinal;
 
 	public Paquete() {
 
 	}
 
 	public Paquete(int precioEnvio, String direccionDestino, String tamanio, LocalDateTime fechaCreacionPedido,
-			LocalDateTime fechaEstimadaEntrega) {
+			LocalDateTime fechaEstimadaEntrega, String ciudadDestino, String estadoPedido, int prioridad,
+			double precioFinal) {
 		super();
 		this.precioEnvio = precioEnvio;
 		this.direccionDestino = direccionDestino;
 		this.tamanio = tamanio;
 		this.fechaCreacionPedido = fechaCreacionPedido;
 		this.fechaEstimadaEntrega = fechaEstimadaEntrega;
+		this.ciudadDestino = ciudadDestino;
+		this.estadoPedido = estadoPedido;
+		this.prioridad = prioridad;
+		this.precioFinal = precioFinal;
 	}
 
 	public long getId() {
@@ -85,16 +94,51 @@ public abstract class Paquete {
 		this.fechaEstimadaEntrega = fechaEstimadaEntrega;
 	}
 
+	public String getCiudadDestino() {
+		return ciudadDestino;
+	}
+
+	public void setCiudadDestino(String ciudadDestino) {
+		this.ciudadDestino = ciudadDestino;
+	}
+
+	public String getEstadoPedido() {
+		return estadoPedido;
+	}
+
+	public void setEstadoPedido(String estadoPedido) {
+		this.estadoPedido = estadoPedido;
+	}
+
+	public int getPrioridad() {
+		return prioridad;
+	}
+
+	public void setPrioridad(int prioridad) {
+		this.prioridad = prioridad;
+	}
+
+	public double getPrecioFinal() {
+		return precioFinal;
+	}
+
+	public void setPrecioFinal(double precioFinal) {
+		this.precioFinal = precioFinal;
+	}
+
 	@Override
 	public String toString() {
 		return "Paquete:\n Id:" + id + "\n Precio Envío:" + precioEnvio + "\n Dirección Destino:" + direccionDestino
-				+ "\n Tamaño:" + tamanio + "\n Fecha Creación Pedido:" + fechaCreacionPedido + "\n Fecha Estimada Entrega:"
-				+ fechaEstimadaEntrega + ".";
+				+ "\n Tamaño:" + tamanio + "\n Fecha Creación Pedido:" + fechaCreacionPedido
+				+ "\n Fecha Estimada Entrega:" + fechaEstimadaEntrega + "\n Ciudad Destino:" + ciudadDestino
+				+ "\n Estado Pedido:" + estadoPedido + "\n Prioridad:" + prioridad + "\n Precio Final:" + precioFinal
+				+ ".";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(direccionDestino, fechaCreacionPedido, fechaEstimadaEntrega, id, precioEnvio, tamanio);
+		return Objects.hash(ciudadDestino, direccionDestino, estadoPedido, fechaCreacionPedido, fechaEstimadaEntrega,
+				id, precioEnvio, precioFinal, prioridad, tamanio);
 	}
 
 	@Override
@@ -106,10 +150,14 @@ public abstract class Paquete {
 		if (getClass() != obj.getClass())
 			return false;
 		Paquete other = (Paquete) obj;
-		return Objects.equals(direccionDestino, other.direccionDestino)
+		return Objects.equals(ciudadDestino, other.ciudadDestino)
+				&& Objects.equals(direccionDestino, other.direccionDestino)
+				&& Objects.equals(estadoPedido, other.estadoPedido)
 				&& Objects.equals(fechaCreacionPedido, other.fechaCreacionPedido)
 				&& Objects.equals(fechaEstimadaEntrega, other.fechaEstimadaEntrega) && id == other.id
-				&& precioEnvio == other.precioEnvio && Objects.equals(tamanio, other.tamanio);
+				&& precioEnvio == other.precioEnvio
+				&& Double.doubleToLongBits(precioFinal) == Double.doubleToLongBits(other.precioFinal)
+				&& prioridad == other.prioridad && Objects.equals(tamanio, other.tamanio);
 	}
 
 }
