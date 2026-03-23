@@ -39,7 +39,7 @@ public class ClientePremiumController {
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearClientePremium(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
-			@RequestParam String tipoPedido, @RequestParam double tarifaPremium) {
+			@RequestParam String tipoPedido) {
 
 		try {
 			ClientePremiumDTO nuevoClientePremium = new ClientePremiumDTO();
@@ -49,7 +49,6 @@ public class ClientePremiumController {
 			nuevoClientePremium.setTelefono(telefono);
 			nuevoClientePremium.setMetodoPago(metodoPago);
 			nuevoClientePremium.setTipoPedido(tipoPedido);
-			nuevoClientePremium.setTarifaPremium(tarifaPremium);
 
 			int status = clientePremiumService.create(nuevoClientePremium);
 
