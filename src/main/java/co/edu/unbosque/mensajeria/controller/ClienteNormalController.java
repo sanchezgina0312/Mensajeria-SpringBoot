@@ -57,6 +57,8 @@ public class ClienteNormalController {
 
 			if (status == 0) {
 				return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
+			} else if(status == 1) {
+				return new ResponseEntity<>("La cédula ya se encuentra registrada", HttpStatus.CONFLICT);
 			} else {
 				return new ResponseEntity<>("Error al crear cliente", HttpStatus.BAD_REQUEST);
 			}

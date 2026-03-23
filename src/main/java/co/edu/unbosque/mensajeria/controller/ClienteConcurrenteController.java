@@ -57,6 +57,8 @@ public class ClienteConcurrenteController {
 
 			if (status == 0) {
 				return new ResponseEntity<>("Dato creado con éxito", HttpStatus.CREATED);
+			} else if(status == 1) {
+				return new ResponseEntity<>("La cédula ya se encuentra registrada", HttpStatus.CONFLICT);
 			} else {
 				return new ResponseEntity<>("Error al crear Cliente", HttpStatus.BAD_REQUEST);
 			}
