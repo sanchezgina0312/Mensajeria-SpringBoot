@@ -24,35 +24,31 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 
 	@Override
 	public int create(ClientePremiumDTO data) {
-		
-		
 		LanzadorDeException.verificarCedula(data.getCedula());
-		if(clientepremiumRep.existsByCedula(data.getCedula())) {
-			return 1;
-		}
-		
 		LanzadorDeException.verificarNombre(data.getNombre());
-		LanzadorDeException.verificarCedula(data.getCedula());
 		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
 		LanzadorDeException.verificarTelefono(data.getTelefono());
 		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
 		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
-		
-		ClientePremium entity = mapper.map(data, ClientePremium.class);
-		clientepremiumRep.save(entity);
-		return 0;
+
+		LanzadorDeException.verificarDuplicado(clientepremiumRep.existsByCedula(data.getCedula()), "La cédula " + data.getCedula() + " ya se encuentra registrada para un cliente premium.");
+
+		if (clientepremiumRep.existsByCedula(data.getCedula())) {
+			return 1;
+		} else {
+			ClientePremium entity = mapper.map(data, ClientePremium.class);
+			clientepremiumRep.save(entity);
+			return 0;
+		}
 	}
 
 	@Override
 	public List<ClientePremiumDTO> getAll() {
 		List<ClientePremium> entityList = (List<ClientePremium>) clientepremiumRep.findAll();
 		List<ClientePremiumDTO> dtoList = new ArrayList<>();
-
-		entityList.forEach((entity) -> {
-			ClientePremiumDTO dto = mapper.map(entity, ClientePremiumDTO.class);
-			dtoList.add(dto);
+		entityList.forEach(entity -> {
+			dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
 		});
-
 		return dtoList;
 	}
 
@@ -60,46 +56,48 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 	public int deleteById(Long id) {
 		LanzadorDeException.verificarId(id);
 		Optional<ClientePremium> encontrado = clientepremiumRep.findById(id);
-
 		if (encontrado.isPresent()) {
-
 			clientepremiumRep.delete(encontrado.get());
 			return 0;
+		} else {
+			return 1;
 		}
-		return 1;
-
 	}
 
 	@Override
 	public int updateById(Long id, ClientePremiumDTO data) {
-
-		LanzadorDeException.verificarNombre(data.getNombre());
+		LanzadorDeException.verificarId(id);
 		LanzadorDeException.verificarCedula(data.getCedula());
+		LanzadorDeException.verificarNombre(data.getNombre());
 		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
 		LanzadorDeException.verificarTelefono(data.getTelefono());
 		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
 		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
-		LanzadorDeException.verificarId(id);
+
 		Optional<ClientePremium> encontrado = clientepremiumRep.findById(id);
 
 		if (encontrado.isPresent()) {
-
 			ClientePremium temp = encontrado.get();
+
+			if (!temp.getCedula().equals(data.getCedula())) {
+				LanzadorDeException.verificarDuplicado(clientepremiumRep.existsByCedula(data.getCedula()), "No se puede actualizar: la cédula " + data.getCedula() + " ya pertenece a otro cliente premium.");
+				if (clientepremiumRep.existsByCedula(data.getCedula())) {
+					return 1;
+				}
+			}
 
 			temp.setNombre(data.getNombre());
 			temp.setCedula(data.getCedula());
 			temp.setCorreo(data.getCorreo());
 			temp.setTelefono(data.getTelefono());
-			temp.setTipoPedido(data.getTipoPedido());
 			temp.setMetodoPago(data.getMetodoPago());
-			temp.setTarifaPremium(data.getTarifaPremium());
+			temp.setTipoPedido(data.getTipoPedido());
 
 			clientepremiumRep.save(temp);
 			return 0;
-
+		} else {
+			return 1;
 		}
-
-		return 1;
 	}
 
 	@Override
@@ -109,168 +107,90 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 
 	@Override
 	public boolean exist(Long id) {
-		return clientepremiumRep.existsById(id) ? true : false;
+		LanzadorDeException.verificarId(id);
+		return clientepremiumRep.existsById(id);
 	}
 
 	public List<ClientePremiumDTO> findByNombre(String nombre) {
-
+		LanzadorDeException.verificarNombre(nombre);
 		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByNombre(nombre);
-
+		List<ClientePremiumDTO> dtoList = new ArrayList<>();
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-
-			List<ClientePremium> entitylist = encontrados.get();
-			List<ClientePremiumDTO> dtoList = new ArrayList<>();
-
-			entitylist.forEach(entity -> {
-				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
-			});
-
-			return dtoList;
-
-		} else {
-			return new ArrayList<ClientePremiumDTO>();
+			encontrados.get().forEach(e -> dtoList.add(mapper.map(e, ClientePremiumDTO.class)));
 		}
+		return dtoList;
 	}
-	
+
 	public List<ClientePremiumDTO> findByCedula(String cedula) {
-
+		LanzadorDeException.verificarCedula(cedula);
 		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByCedula(cedula);
-
+		List<ClientePremiumDTO> dtoList = new ArrayList<>();
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-
-			List<ClientePremium> entitylist = encontrados.get();
-			List<ClientePremiumDTO> dtoList = new ArrayList<>();
-
-			entitylist.forEach(entity -> {
-				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
-			});
-
-			return dtoList;
-
-		} else {
-			return new ArrayList<ClientePremiumDTO>();
+			encontrados.get().forEach(e -> dtoList.add(mapper.map(e, ClientePremiumDTO.class)));
 		}
+		return dtoList;
 	}
-	
+
 	public List<ClientePremiumDTO> findByCorreo(String correo) {
-
+		LanzadorDeException.verificarCorreoElectronico(correo);
 		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByCorreo(correo);
-
+		List<ClientePremiumDTO> dtoList = new ArrayList<>();
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-
-			List<ClientePremium> entitylist = encontrados.get();
-			List<ClientePremiumDTO> dtoList = new ArrayList<>();
-
-			entitylist.forEach(entity -> {
-				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
-			});
-
-			return dtoList;
-
-		} else {
-			return new ArrayList<ClientePremiumDTO>();
+			encontrados.get().forEach(e -> dtoList.add(mapper.map(e, ClientePremiumDTO.class)));
 		}
+		return dtoList;
 	}
-	
+
 	public List<ClientePremiumDTO> findByTelefono(String telefono) {
-
+		LanzadorDeException.verificarTelefono(telefono);
 		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByTelefono(telefono);
-
+		List<ClientePremiumDTO> dtoList = new ArrayList<>();
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-
-			List<ClientePremium> entitylist = encontrados.get();
-			List<ClientePremiumDTO> dtoList = new ArrayList<>();
-
-			entitylist.forEach(entity -> {
-				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
-			});
-
-			return dtoList;
-
-		} else {
-			return new ArrayList<ClientePremiumDTO>();
+			encontrados.get().forEach(e -> dtoList.add(mapper.map(e, ClientePremiumDTO.class)));
 		}
+		return dtoList;
 	}
-	
+
 	public List<ClientePremiumDTO> findByMetodoPago(String metodoPago) {
-
-		
+		LanzadorDeException.verificarMetodoPago(metodoPago);
 		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByMetodoPago(metodoPago);
-
+		List<ClientePremiumDTO> dtoList = new ArrayList<>();
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-
-			List<ClientePremium> entitylist = encontrados.get();
-			List<ClientePremiumDTO> dtoList = new ArrayList<>();
-
-			entitylist.forEach(entity -> {
-				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
-			});
-
-			return dtoList;
-
-		} else {
-			return new ArrayList<ClientePremiumDTO>();
+			encontrados.get().forEach(e -> dtoList.add(mapper.map(e, ClientePremiumDTO.class)));
 		}
+		return dtoList;
 	}
-	
+
 	public List<ClientePremiumDTO> findByTipoPedido(String tipoPedido) {
-
+		LanzadorDeException.verificarTipoPedido(tipoPedido);
 		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByTipoPedido(tipoPedido);
-
+		List<ClientePremiumDTO> dtoList = new ArrayList<>();
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-
-			List<ClientePremium> entitylist = encontrados.get();
-			List<ClientePremiumDTO> dtoList = new ArrayList<>();
-
-			entitylist.forEach(entity -> {
-				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
-			});
-
-			return dtoList;
-
-		} else {
-			return new ArrayList<ClientePremiumDTO>();
+			encontrados.get().forEach(e -> dtoList.add(mapper.map(e, ClientePremiumDTO.class)));
 		}
+		return dtoList;
 	}
-	
+
 	public List<ClientePremiumDTO> findByNombreAndCedula(String nombre, String cedula) {
-
+		LanzadorDeException.verificarNombre(nombre);
+		LanzadorDeException.verificarCedula(cedula);
 		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByNombreAndCedula(nombre, cedula);
-
+		List<ClientePremiumDTO> dtoList = new ArrayList<>();
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-
-			List<ClientePremium> entitylist = encontrados.get();
-			List<ClientePremiumDTO> dtoList = new ArrayList<>();
-
-			entitylist.forEach(entity -> {
-				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
-			});
-
-			return dtoList;
-
-		} else {
-			return new ArrayList<ClientePremiumDTO>();
+			encontrados.get().forEach(e -> dtoList.add(mapper.map(e, ClientePremiumDTO.class)));
 		}
+		return dtoList;
 	}
-	
+
 	public List<ClientePremiumDTO> findByTipoPedidoAndMetodoPago(String tipoPedido, String metodoPago) {
-
-		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
-
+		LanzadorDeException.verificarTipoPedido(tipoPedido);
+		LanzadorDeException.verificarMetodoPago(metodoPago);
+		Optional<List<ClientePremium>> encontrados = clientepremiumRep.findByTipoPedidoAndMetodoPago(tipoPedido,
+				metodoPago);
+		List<ClientePremiumDTO> dtoList = new ArrayList<>();
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-
-			List<ClientePremium> entitylist = encontrados.get();
-			List<ClientePremiumDTO> dtoList = new ArrayList<>();
-
-			entitylist.forEach(entity -> {
-				dtoList.add(mapper.map(entity, ClientePremiumDTO.class));
-			});
-
-			return dtoList;
-
-		} else {
-			return new ArrayList<ClientePremiumDTO>();
+			encontrados.get().forEach(e -> dtoList.add(mapper.map(e, ClientePremiumDTO.class)));
 		}
+		return dtoList;
 	}
-
 }

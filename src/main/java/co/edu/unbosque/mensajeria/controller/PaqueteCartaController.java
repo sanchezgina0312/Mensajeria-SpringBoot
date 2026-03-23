@@ -36,7 +36,7 @@ public class PaqueteCartaController {
 
 	}
 
-	// http://localhost:8080/paquetecarta/crear?precioEnvio=2000&direccionDestino=AvSuba&tamanio=Sobre&fechaCreacionPedido=2024-03-20T08:00:00&fechaEstimadaEntrega=2024-03-23T08:00:00&tipoCarta=Documento
+	// http://localhost:8080/paquetecarta/crear?remitente=Juan&destinatario=Maria&direccionDestino=Calle+10&ciudadDestino=Bogota&fechaEntrega=2024-12-31T23:59:59&tamanio=Pequeño&tipoCarta=Certificada
 	@PostMapping("/crear")
 	public ResponseEntity<String> crear(@RequestParam String direccionDestino, @RequestParam String tamanio,
 			@RequestParam String ciudadDestino, @RequestParam String tipoCarta) {
@@ -78,7 +78,7 @@ public class PaqueteCartaController {
 		}
 	}
 
-	// http://localhost:8080/paquetecarta/actualizar?id=1&precioEnvio=2500&direccionDestino=Calle80&tamanio=Sobre&fechaCreacionPedido=2024-03-20T08:00:00&fechaEstimadaEntrega=2024-03-23T08:00:00&tipoCarta=Certificada
+	// http://localhost:8080/paquetecarta/actualizar?id=1&remitente=Juan+Actualizado&destinatario=Maria+Lopez&direccionDestino=Carrera+15&ciudadDestino=Medellin&fechaEntrega=2025-01-01T10:00:00&tamanio=Pequeño&tipoCarta=Normal
 	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam int precioEnvio,
 			@RequestParam String direccionDestino, @RequestParam String tamanio,
@@ -132,8 +132,9 @@ public class PaqueteCartaController {
 	        return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
 	    }
 	}
-
-	@GetMapping("/buscartamanio")
+	
+	// http://localhost:8080/paquetecarta/buscarportamanio?tamanio=Pequeño
+	@GetMapping("/buscarportamanio")
 	public ResponseEntity<Object> buscarPorTamanio(@RequestParam String tamanio) {
 
 		try {
@@ -147,8 +148,9 @@ public class PaqueteCartaController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} 
 	}
-
-	@GetMapping("/buscartipocarta")
+	
+	// http://localhost:8080/paquetecarta/buscarportipocarta?tipoCarta=Certificada
+	@GetMapping("/buscarportipocarta")
 	public ResponseEntity<Object> buscarPorTipoCarta(@RequestParam String tipoCarta) {
 		
 		try {
@@ -162,7 +164,8 @@ public class PaqueteCartaController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} 
 	}
-
+	
+	// http://localhost:8080/paquetecarta/buscarportamanioytipocarta?tamanio=Pequeño&tipoCarta=Documento
 	@GetMapping("/buscarportamanioytipocarta")
 	public ResponseEntity<Object> buscarPorTamanioAndTipoCarta(@RequestParam String tamanio,
 			@RequestParam String tipoCarta) {
@@ -179,7 +182,8 @@ public class PaqueteCartaController {
 		} 
 
 	}
-
+	
+	// http://localhost:8080/paquetecarta/seguimientoid?id=1
 	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
 		
@@ -197,7 +201,7 @@ public class PaqueteCartaController {
 	    }
 	}
 	
-	// http://localhost:8080/paquetecarta/buscar-direccion-ciudad?dir=Calle123&ciudad=Bogota
+	// http://localhost:8080/paquetecarta/buscardireccionyciudad?dir=Calle+123&ciudad=Bogota
 	@GetMapping("/buscardireccionyciudad")
 	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir,
 			@RequestParam String ciudad) {

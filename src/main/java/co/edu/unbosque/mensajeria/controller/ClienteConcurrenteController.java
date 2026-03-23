@@ -35,7 +35,7 @@ public class ClienteConcurrenteController {
 	public ClienteConcurrenteController() {
 	}
 
-	// http://localhost:8080/clienteconcurrente/crear?nombre=Frecuente&cedula=222&correo=f@mail.com&telefono=800&metodoPago=Debito&tipoPedido=Diario&tarifaConcurrente=1.2
+	// http://localhost:8080/clienteconcurrente/crear?nombre=Mariana&cedula=7890&correo=mariana@mail.com&telefono=322000&tipoPedido=Alimenticio&metodoPago=Efectivo
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearClienteConcurrente(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
@@ -57,7 +57,7 @@ public class ClienteConcurrenteController {
 
 			if (status == 0) {
 				return new ResponseEntity<>("Dato creado con éxito", HttpStatus.CREATED);
-			} else if(status == 1) {
+			} else if (status == 1) {
 				return new ResponseEntity<>("La cédula ya se encuentra registrada", HttpStatus.CONFLICT);
 			} else {
 				return new ResponseEntity<>("Error al crear Cliente", HttpStatus.BAD_REQUEST);
@@ -76,8 +76,12 @@ public class ClienteConcurrenteController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error interno del servidor", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
@@ -106,10 +110,12 @@ public class ClienteConcurrenteController {
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error al procesar la solicitud", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	// http://localhost:8080/clienteconcurrente/actualizarclienteconcurrente?id=1&nombre=Maria&cedula=789&correo=m@mail.com&telefono=500&metodoPago=Transferencia&tipoPedido=Recurrente&tarifaConcurrente=2000.0
+	// http://localhost:8080/clienteconcurrente/actualizar?id=1&nombre=Mariana+Lopez&cedula=7890&correo=marianal@mail.com&telefono=322999&tipoPedido=No+Alimenticio&metodoPago=Tarjeta
 	@PutMapping("/actualizarclienteconcurrente")
 	public ResponseEntity<String> actualizarClienteConcurrente(@RequestParam Long id, @RequestParam String nombre,
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
@@ -146,14 +152,20 @@ public class ClienteConcurrenteController {
 
 		} catch (MetodoDePagoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		} catch (TipoPedidoInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error inesperado", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarpornombre?nombre=Mariana
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorNombre(@RequestParam String nombre) {
 
@@ -165,7 +177,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarporcedula?cedula=7890
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorCedula(@RequestParam String cedula) {
 
@@ -177,7 +190,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarporcorreo?correo=mariana@mail.com
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorCorreo(@RequestParam String correo) {
 
@@ -189,7 +203,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarportelefono?telefono=322000
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorTelefono(@RequestParam String telefono) {
 
@@ -201,7 +216,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarpormetodopago?metodoPago=Efectivo
 	@GetMapping("/buscarpormetodopago")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorMetodoPago(@RequestParam String metodoPago) {
 
@@ -213,7 +229,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarportipopedido?tipoPedido=Alimenticio
 	@GetMapping("/buscarportipopedido")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorTipoPedido(@RequestParam String tipoPedido) {
 
@@ -225,7 +242,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarpornombreycedula?nombre=Mariana&cedula=7890
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
@@ -238,7 +256,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarportipopedidoymetodopago?tipoPedido=Alimenticio&metodoPago=Efectivo
 	@GetMapping("/buscarportipopedidoymetodopago")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
