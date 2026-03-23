@@ -174,14 +174,5 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		return dtoList;
 	}
 
-	public List<ConductorDTO> findByPlacaVehiculoAndNombre(String placaVehiculo, String nombre) {
-		LanzadorDeException.verificarPlaca(placaVehiculo);
-		LanzadorDeException.verificarNombre(nombre);
-		Optional<List<Conductor>> encontrados = conductorRep.findByPlacaVehiculoAndNombre(placaVehiculo, nombre);
-		List<ConductorDTO> dtoList = new ArrayList<>();
-		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			encontrados.get().forEach((entity) -> dtoList.add(mapper.map(entity, ConductorDTO.class)));
-		}
-		return dtoList;
-	}
+
 }

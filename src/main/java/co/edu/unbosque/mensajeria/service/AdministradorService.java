@@ -190,20 +190,6 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 		}
 	}
 
-	public List<AdministradorDTO> findByContrasenia(String contrasenia) {
-		Optional<List<Administrador>> encontrados = administradorRep.findByContrasenia(contrasenia);
-		List<AdministradorDTO> dtoList = new ArrayList<>();
-
-		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			encontrados.get().forEach((entity) -> {
-				dtoList.add(mapper.map(entity, AdministradorDTO.class));
-			});
-			return dtoList;
-		} else {
-			return new ArrayList<AdministradorDTO>();
-		}
-	}
-
 	public List<AdministradorDTO> findByNombreAndCedula(String nombre, String cedula) {
 		LanzadorDeException.verificarNombre(nombre);
 		LanzadorDeException.verificarCedula(cedula);
@@ -220,17 +206,4 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 		}
 	}
 
-	public List<AdministradorDTO> findByUsuarioAndContrasenia(String usuario, String contrasenia) {
-		Optional<List<Administrador>> encontrados = administradorRep.findByUsuarioAndContrasenia(usuario, contrasenia);
-		List<AdministradorDTO> dtoList = new ArrayList<>();
-
-		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-			encontrados.get().forEach((entity) -> {
-				dtoList.add(mapper.map(entity, AdministradorDTO.class));
-			});
-			return dtoList;
-		} else {
-			return new ArrayList<AdministradorDTO>();
-		}
-	}
 }
