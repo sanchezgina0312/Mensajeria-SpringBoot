@@ -1,6 +1,5 @@
 package co.edu.unbosque.mensajeria.controller;
 
-//:)))) jijiji
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.NombreInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TipoPedidoInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.service.ClienteConcurrenteService;
 
 @RestController

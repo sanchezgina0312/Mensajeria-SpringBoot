@@ -9,9 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
-import co.edu.unbosque.mensajeria.entity.PaqueteCarta;
 import co.edu.unbosque.mensajeria.entity.PaqueteNoAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteNoAlimenticioRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
