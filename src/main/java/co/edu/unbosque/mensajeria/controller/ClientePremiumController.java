@@ -154,79 +154,79 @@ public class ClientePremiumController {
 	}
 
 	@GetMapping("/buscarpornombre")
-	public ResponseEntity<List<ClientePremiumDTO>> findByNombre(@RequestParam String nombre) {
+	public ResponseEntity<List<ClientePremiumDTO>> buscarPorNombre(@RequestParam String nombre) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByNombre(nombre);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarporcedula")
-	public ResponseEntity<List<ClientePremiumDTO>> findByCedula(@RequestParam String cedula) {
+	public ResponseEntity<List<ClientePremiumDTO>> buscarPorCedula(@RequestParam String cedula) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByCedula(cedula);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarporcorreo")
-	public ResponseEntity<List<ClientePremiumDTO>> findByCorreo(@RequestParam String correo) {
+	public ResponseEntity<List<ClientePremiumDTO>> buscarPorCorreo(@RequestParam String correo) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByCorreo(correo);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarportelefono")
-	public ResponseEntity<List<ClientePremiumDTO>> findByTelefono(@RequestParam String telefono) {
+	public ResponseEntity<List<ClientePremiumDTO>> buscarPorTelefono(@RequestParam String telefono) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByTelefono(telefono);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarpormetodopago")
-	public ResponseEntity<List<ClientePremiumDTO>> findByMetodoPago(@RequestParam String metodoPago) {
+	public ResponseEntity<List<ClientePremiumDTO>> buscarPorMetodoPago(@RequestParam String metodoPago) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByMetodoPago(metodoPago);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarportipopedido")
-	public ResponseEntity<List<ClientePremiumDTO>> findByTipoPedido(@RequestParam String tipoPedido) {
+	public ResponseEntity<List<ClientePremiumDTO>> buscarPorTipoPedido(@RequestParam String tipoPedido) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByTipoPedido(tipoPedido);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClientePremiumDTO>> findByNombreAndCedula(@RequestParam String nombre,
+	public ResponseEntity<List<ClientePremiumDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByNombreAndCedula(nombre, cedula);
@@ -234,12 +234,12 @@ public class ClientePremiumController {
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClientePremiumDTO>> findByTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
+	public ResponseEntity<List<ClientePremiumDTO>> buscarPorTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 
 		List<ClientePremiumDTO> lista = clientePremiumService.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
@@ -247,8 +247,8 @@ public class ClientePremiumController {
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-	
+
 }

@@ -153,79 +153,79 @@ public class ClienteConcurrenteController {
 	}
 
 	@GetMapping("/buscarpornombre")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByNombre(@RequestParam String nombre) {
+	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorNombre(@RequestParam String nombre) {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByNombre(nombre);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarporcedula")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByCedula(@RequestParam String cedula) {
+	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorCedula(@RequestParam String cedula) {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByCedula(cedula);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarporcorreo")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByCorreo(@RequestParam String correo) {
+	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorCorreo(@RequestParam String correo) {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByCorreo(correo);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarportelefono")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTelefono(@RequestParam String telefono) {
+	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorTelefono(@RequestParam String telefono) {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTelefono(telefono);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarpormetodopago")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByMetodoPago(@RequestParam String metodoPago) {
+	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorMetodoPago(@RequestParam String metodoPago) {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByMetodoPago(metodoPago);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarportipopedido")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTipoPedido(@RequestParam String tipoPedido) {
+	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorTipoPedido(@RequestParam String tipoPedido) {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTipoPedido(tipoPedido);
 
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarpornombreycedula")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByNombreAndCedula(@RequestParam String nombre,
+	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByNombreAndCedula(nombre, cedula);
@@ -233,12 +233,12 @@ public class ClienteConcurrenteController {
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/buscarportipopedidoymetodopago")
-	public ResponseEntity<List<ClienteConcurrenteDTO>> findByTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
+	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
 
 		List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByTipoPedidoAndMetodoPago(tipoPedido,
@@ -247,7 +247,7 @@ public class ClienteConcurrenteController {
 		if (!lista.isEmpty()) {
 			return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
 		} else {
-			return new ResponseEntity<>(lista, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
 }
