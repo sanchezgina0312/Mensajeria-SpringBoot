@@ -102,7 +102,11 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 			temp.setEsFragil(data.isEsFragil());
 			LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 			LanzadorDeException.verificarId(id);
-			paqueteNoAlimenticioRep.save(temp);
+
+			PaqueteNoAlimenticioDTO dtoTemp = mapper.map(temp, PaqueteNoAlimenticioDTO.class);
+			procesarEstadoYTiempoDTO(dtoTemp);
+
+			paqueteNoAlimenticioRep.save(mapper.map(dtoTemp, PaqueteNoAlimenticio.class));
 			return 0;
 		}
 
@@ -127,6 +131,7 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteNoAlimenticioDTO dto = mapper.map(entity, PaqueteNoAlimenticioDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -142,6 +147,7 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteNoAlimenticioDTO dto = mapper.map(entity, PaqueteNoAlimenticioDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -159,6 +165,7 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteNoAlimenticioDTO dto = mapper.map(entity, PaqueteNoAlimenticioDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -170,7 +177,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	public PaqueteNoAlimenticioDTO findById(Long id) {
 		Optional<PaqueteNoAlimenticio> encontrado = paqueteNoAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
-			return mapper.map(encontrado.get(), PaqueteNoAlimenticioDTO.class);
+			PaqueteNoAlimenticioDTO dto = mapper.map(encontrado.get(), PaqueteNoAlimenticioDTO.class);
+			procesarEstadoYTiempoDTO(dto);
+			return dto;
 		}
 		return null;
 	}
@@ -178,14 +187,17 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	public List<PaqueteNoAlimenticioDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 
 		LanzadorDeException.verificarDireccion(direccion);
-	    LanzadorDeException.verificarCiudad(ciudad);
+		LanzadorDeException.verificarCiudad(ciudad);
 
-		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByDireccionDestinoAndCiudadDestino(direccion, ciudad);
+		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep
+				.findByDireccionDestinoAndCiudadDestino(direccion, ciudad);
 		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
 
 		if (encontrados.isPresent()) {
 			for (PaqueteNoAlimenticio p : encontrados.get()) {
-				dtoList.add(mapper.map(p, PaqueteNoAlimenticioDTO.class));
+				PaqueteNoAlimenticioDTO dto = mapper.map(p, PaqueteNoAlimenticioDTO.class);
+				procesarEstadoYTiempoDTO(dto);
+				dtoList.add(dto);
 			}
 		}
 		return dtoList;

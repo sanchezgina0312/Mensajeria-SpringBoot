@@ -29,7 +29,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 	@Override
 	public int create(PaqueteAlimenticioDTO data) {
-		
+
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 		LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
@@ -57,19 +57,11 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 	@Override
 	public List<PaqueteAlimenticioDTO> getAll() {
-		List<PaqueteAlimenticio> entities = (List<PaqueteAlimenticio>) paqueteAlimenticioRep.findAll();
+		List<PaqueteAlimenticio> listaEntidad = (List<PaqueteAlimenticio>) paqueteAlimenticioRep.findAll();
 		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
-
-		for (PaqueteAlimenticio entity : entities) {
-			PaqueteAlimenticioDTO dto = mapper.map(entity, PaqueteAlimenticioDTO.class);
-			String estadoAntes = dto.getEstadoPedido();
-
+		for (PaqueteAlimenticio p : listaEntidad) { 
+			PaqueteAlimenticioDTO dto = mapper.map(p, PaqueteAlimenticioDTO.class);
 			procesarEstadoYTiempoDTO(dto);
-
-			if (!estadoAntes.equals(dto.getEstadoPedido())) {
-				PaqueteAlimenticio entidadActualizada = mapper.map(dto, PaqueteAlimenticio.class);
-				paqueteAlimenticioRep.save(entidadActualizada);
-			}
 			dtoList.add(dto);
 		}
 		return dtoList;
@@ -106,7 +98,11 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 			temp.setFechaEstimadaEntrega(data.getFechaEstimadaEntrega());
 			temp.setSeEnviaHoy(data.isSeEnviaHoy());
 			temp.setTipoDeAlimento(data.getTipoDeAlimento());
-			paqueteAlimenticioRep.save(temp);
+			
+			PaqueteAlimenticioDTO dtoParaActualizar = mapper.map(temp, PaqueteAlimenticioDTO.class);
+			procesarEstadoYTiempoDTO(dtoParaActualizar);
+			
+			paqueteAlimenticioRep.save(mapper.map(dtoParaActualizar, PaqueteAlimenticio.class));
 			return 0;
 		}
 
@@ -131,6 +127,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteAlimenticioDTO dto = mapper.map(entity, PaqueteAlimenticioDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -146,6 +143,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteAlimenticioDTO dto = mapper.map(entity, PaqueteAlimenticioDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -162,6 +160,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteAlimenticioDTO dto = mapper.map(entity, PaqueteAlimenticioDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -180,6 +179,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteAlimenticioDTO dto = mapper.map(entity, PaqueteAlimenticioDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -191,7 +191,9 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	public PaqueteAlimenticioDTO findById(Long id) {
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
-			return mapper.map(encontrado.get(), PaqueteAlimenticioDTO.class);
+			PaqueteAlimenticioDTO dto = mapper.map(encontrado.get(), PaqueteAlimenticioDTO.class);
+			procesarEstadoYTiempoDTO(dto);
+			return dto;
 		}
 		return null;
 	}
@@ -199,14 +201,17 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	public List<PaqueteAlimenticioDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 
 		LanzadorDeException.verificarDireccion(direccion);
-	    LanzadorDeException.verificarCiudad(ciudad);
+		LanzadorDeException.verificarCiudad(ciudad);
 
-		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByDireccionDestinoAndCiudadDestino(direccion, ciudad);
+		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep
+				.findByDireccionDestinoAndCiudadDestino(direccion, ciudad);
 		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
 
 		if (encontrados.isPresent()) {
 			for (PaqueteAlimenticio p : encontrados.get()) {
-				dtoList.add(mapper.map(p, PaqueteAlimenticioDTO.class));
+				PaqueteAlimenticioDTO dto = mapper.map(p, PaqueteAlimenticioDTO.class);
+				procesarEstadoYTiempoDTO(dto);
+				dtoList.add(dto);
 			}
 		}
 		return dtoList;

@@ -99,8 +99,11 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 			temp.setTipoCarta(data.getTipoCarta());
 			LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 			LanzadorDeException.verificarId(id);
-			
-			paqueteCartaRep.save(temp);
+
+			PaqueteCartaDTO dtoTemp = mapper.map(temp, PaqueteCartaDTO.class);
+			procesarEstadoYTiempoDTO(dtoTemp);
+
+			paqueteCartaRep.save(mapper.map(dtoTemp, PaqueteCarta.class));
 			return 0;
 		}
 
@@ -125,6 +128,7 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteCartaDTO dto = mapper.map(entity, PaqueteCartaDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -141,6 +145,7 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteCartaDTO dto = mapper.map(entity, PaqueteCartaDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -158,6 +163,7 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach((entity) -> {
 				PaqueteCartaDTO dto = mapper.map(entity, PaqueteCartaDTO.class);
+				procesarEstadoYTiempoDTO(dto);
 				dtoList.add(dto);
 			});
 			return dtoList;
@@ -169,7 +175,9 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 	public PaqueteCartaDTO findById(Long id) {
 		Optional<PaqueteCarta> encontrado = paqueteCartaRep.findById(id);
 		if (encontrado.isPresent()) {
-			return mapper.map(encontrado.get(), PaqueteCartaDTO.class);
+			PaqueteCartaDTO dto = mapper.map(encontrado.get(), PaqueteCartaDTO.class);
+			procesarEstadoYTiempoDTO(dto);
+			return dto;
 		}
 		return null;
 	}
@@ -178,12 +186,15 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		LanzadorDeException.verificarDireccion(direccion);
 		LanzadorDeException.verificarCiudad(ciudad);
 
-		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByDireccionDestinoAndCiudadDestino(direccion,ciudad);
+		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByDireccionDestinoAndCiudadDestino(direccion,
+				ciudad);
 		List<PaqueteCartaDTO> dtoList = new ArrayList<>();
 
 		if (encontrados.isPresent()) {
 			for (PaqueteCarta p : encontrados.get()) {
-				dtoList.add(mapper.map(p, PaqueteCartaDTO.class));
+				PaqueteCartaDTO dto = mapper.map(p, PaqueteCartaDTO.class);
+				procesarEstadoYTiempoDTO(dto);
+				dtoList.add(dto);
 			}
 		}
 		return dtoList;
