@@ -34,7 +34,7 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
-		data.setEstadoPedido("RECIBIDO");
+		data.setEstadoPedido("EN_PROCESO");
 		if (data.getFechaCreacionPedido() == null)
 			data.setFechaCreacionPedido(LocalDateTime.now());
 
