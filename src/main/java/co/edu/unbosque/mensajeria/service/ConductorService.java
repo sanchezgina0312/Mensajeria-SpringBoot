@@ -29,7 +29,10 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 	@Override
 	public int create(ConductorDTO data) {
 		
-
+		LanzadorDeException.verificarCedula(data.getCedula());
+		if(conductorRep.existsByCedula(data.getCedula())) {
+			return 1;
+		}
 		
 		LanzadorDeException.verificarNombre(data.getNombre());
         LanzadorDeException.verificarCorreoElectronico(data.getCorreo());

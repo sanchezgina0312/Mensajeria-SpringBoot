@@ -46,9 +46,15 @@ public class AdministradorController {
 			nuevo.setTelefono(telefono);
 			nuevo.setTurno(turno);
 
-			administradorSer.create(nuevo);
-
-			return new ResponseEntity<>("Administrador creado con éxito", HttpStatus.CREATED);
+			int status = administradorSer.create(nuevo);
+			
+			if (status == 0) {
+				return new ResponseEntity<>("Administrador creado con éxito", HttpStatus.CREATED);
+			} else if(status == 1) {
+				return new ResponseEntity<>("La cédula ya se encuentra registrada", HttpStatus.CONFLICT);
+			} else {
+				return new ResponseEntity<>("Error al crear el paquete no alimenticio", HttpStatus.BAD_REQUEST);
+			}
 
 		} catch (NombreInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

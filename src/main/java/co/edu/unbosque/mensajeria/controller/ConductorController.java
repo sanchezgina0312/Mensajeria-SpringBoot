@@ -46,6 +46,8 @@ public class ConductorController {
 			int status = conductorSer.create(nuevo);
 			if (status == 0) {
 				return new ResponseEntity<>("Dato creado con exito", HttpStatus.CREATED);
+			} else if(status == 1) {
+				return new ResponseEntity<>("La cédula ya se encuentra registrada", HttpStatus.CONFLICT);
 			} else {
 				return new ResponseEntity<>("Error al crear el paquete no alimenticio", HttpStatus.BAD_REQUEST);
 			}

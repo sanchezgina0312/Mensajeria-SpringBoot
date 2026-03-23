@@ -26,6 +26,11 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 
 	@Override
     public int create(AdministradorDTO data) {
+		
+		LanzadorDeException.verificarCedula(data.getCedula());
+		if(administradorRep.existsByCedula(data.getCedula())) {
+			return 1;
+		}
 
         LanzadorDeException.verificarNombre(data.getNombre());
         LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
