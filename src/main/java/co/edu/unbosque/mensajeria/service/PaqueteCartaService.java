@@ -170,10 +170,11 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return null;
 	}
 
-	public List<PaqueteCartaDTO> findByDireccionDestino(String direccion) {
+	public List<PaqueteCartaDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 		LanzadorDeException.verificarDireccion(direccion);
+//		LanzadorDeException.verificarCiudad(ciudad);
 
-		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByDireccionDestino(direccion);
+		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByDireccionDestinoAndCiudadDestino(direccion,ciudad);
 		List<PaqueteCartaDTO> dtoList = new ArrayList<>();
 
 		if (encontrados.isPresent()) {
@@ -207,11 +208,11 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		long horas = java.time.Duration.between(ahora, dto.getFechaEstimadaEntrega()).toHours();
 		if (ahora.isAfter(dto.getFechaEstimadaEntrega())) {
 			dto.setEstadoPedido("ENTREGADO");
-			dto.setPrioridad(2);
+			dto.setEsPrioritario(false);
 		} else if (horas <= 3 && horas >= 0) {
-			dto.setPrioridad(1);
+			dto.setEsPrioritario(true);
 		} else {
-			dto.setPrioridad(2);
+			dto.setEsPrioritario(false);
 		}
 	}
 

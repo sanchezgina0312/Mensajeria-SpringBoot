@@ -12,6 +12,6 @@ public interface PaqueteCartaRepository extends CrudRepository<PaqueteCarta, Lon
 	public Optional<List<PaqueteCarta>> findByTamanio(String tamanio);
 	public Optional<List<PaqueteCarta>> findByTipoCarta(String tipoCarta);
 	public Optional<List<PaqueteCarta>> findByTamanioAndTipoCarta(String tamanio, String tipoCarta);
-	public Optional<List<PaqueteCarta>> findByDireccionDestino(String direccionDestino);
+	public Optional<List<PaqueteCarta>> findByDireccionDestinoAndCiudadDestino(String direccionDestino, String ciudadDestino);
 
 }

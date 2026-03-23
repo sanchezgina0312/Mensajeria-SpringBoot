@@ -36,9 +36,8 @@ public class PaqueteCartaController {
 
 	// http://localhost:8080/paquetecarta/crear?precioEnvio=2000&direccionDestino=AvSuba&tamanio=Sobre&fechaCreacionPedido=2024-03-20T08:00:00&fechaEstimadaEntrega=2024-03-23T08:00:00&tipoCarta=Documento
 	@PostMapping("/crear")
-	public ResponseEntity<String> crear(@RequestParam String direccionDestino,
-			@RequestParam String tamanio, @RequestParam String ciudadDestino, 
-			@RequestParam String tipoCarta) {
+	public ResponseEntity<String> crear(@RequestParam String direccionDestino, @RequestParam String tamanio,
+			@RequestParam String ciudadDestino, @RequestParam String tipoCarta) {
 
 		try {
 			PaqueteCartaDTO dto = new PaqueteCartaDTO();
@@ -48,7 +47,7 @@ public class PaqueteCartaController {
 			dto.setTipoCarta(tipoCarta);
 
 			int resultado = paqueteCartaSer.create(dto);
-			
+
 			if (resultado != 0) {
 				return new ResponseEntity<>("Paquete carta creada correctamente", HttpStatus.CREATED);
 			} else {
@@ -156,7 +155,7 @@ public class PaqueteCartaController {
 		}
 	}
 
-	@GetMapping("/seguimiento-id")
+	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
 		PaqueteCartaDTO p = paqueteCartaSer.findById(id);
 
@@ -166,10 +165,13 @@ public class PaqueteCartaController {
 			return new ResponseEntity<>("Número de guía de carta no existe", HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	// http://localhost:8080/paquetecarta/buscar-direccion-ciudad?dir=Calle123&ciudad=Bogota
+	@GetMapping("/buscardireccionyciudad")
+	public ResponseEntity<List<PaqueteCartaDTO>> buscarDireccionYCiudad(@RequestParam String dir,
+			@RequestParam String ciudad) {
 
-	@GetMapping("/buscar-direccion")
-	public ResponseEntity<List<PaqueteCartaDTO>> buscarDireccion(@RequestParam String dir) {
-		List<PaqueteCartaDTO> lista = paqueteCartaSer.findByDireccionDestino(dir);
+		List<PaqueteCartaDTO> lista = paqueteCartaSer.findByDireccionDestinoAndCiudadDestino(dir, ciudad);
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
