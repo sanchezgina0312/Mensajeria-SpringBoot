@@ -33,7 +33,7 @@ public class PaqueteNoAlimenticioController {
 	public PaqueteNoAlimenticioController() {
 	}
 
-	// http://localhost:8080/paquetenoalimenticio/crear?esFragil=true&precioEnvio=15000&direccionDestino=BarrioNorte&tamanio=Grande
+	// http://localhost:8080/paquetenoalimenticio/crear?remitente=Luis&destinatario=Carlos&direccionDestino=Calle+20&ciudadDestino=Cali&fechaEntrega=2024-08-15T10:00:00&tamanio=Grande&esFragil=true
 	@PostMapping("/crear")
 	public ResponseEntity<String> crear(@RequestParam String direccionDestino, @RequestParam String tamanio,
 			@RequestParam String ciudadDestino, @RequestParam boolean esFragil) {
@@ -75,7 +75,7 @@ public class PaqueteNoAlimenticioController {
 		}
 	}
 
-	// http://localhost:8080/paquetenoalimenticio/actualizar?id=1&esFragil=false&precioEnvio=10000&direccionDestino=BarrioSur&tamanio=Mediano&fechaCreacionPedido=2024-03-20T08:00:00&fechaEstimadaEntrega=2024-03-21T08:00:00
+	// http://localhost:8080/paquetenoalimenticio/actualizar?id=1&remitente=Luis+M&destinatario=Carlos+P&direccionDestino=Carrera+50&ciudadDestino=Buga&fechaEntrega=2024-08-16T14:00:00&tamanio=Mediano&esFragil=false
 	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam boolean esFragil,
 			@RequestParam int precioEnvio, @RequestParam String direccionDestino, @RequestParam String tamanio,
@@ -127,7 +127,8 @@ public class PaqueteNoAlimenticioController {
 	    }
 	}
 
-	@GetMapping("/buscartamanio")
+	// http://localhost:8080/paquetenoalimenticio/buscarportamanio?tamanio=Grande
+	@GetMapping("/buscarportamanio")
 	public ResponseEntity<Object> buscarPorTamanio(@RequestParam String tamanio) {
 		
 		try {
@@ -143,8 +144,9 @@ public class PaqueteNoAlimenticioController {
 		}
 		
 	}
-
-	@GetMapping("/buscaresfragil")
+	
+	// http://localhost:8080/paquetenoalimenticio/buscarporesfragil?esFragil=true
+	@GetMapping("/buscarporesfragil")
 	public ResponseEntity<Object> buscarPorEsFragil(@RequestParam boolean esFragil) {
 	    try {
 	        List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByEsFragil(esFragil);
@@ -159,6 +161,7 @@ public class PaqueteNoAlimenticioController {
 	    }
 	}
 	
+	// http://localhost:8080/paquetenoalimenticio/buscarportamanioyfragil?tamanio=Grande&esFragil=true
 	@GetMapping("/buscarportamanioyfragil")
 	public ResponseEntity<Object> buscarPorTamanioAndFragil(@RequestParam String tamanio,
 			@RequestParam boolean esFragil) {
@@ -177,7 +180,8 @@ public class PaqueteNoAlimenticioController {
 	        return new ResponseEntity<>("El valor de debe ser true o false", HttpStatus.BAD_REQUEST);
 	    }
 	}
-
+	
+	// http://localhost:8080/paquetenoalimenticio/seguimientoid?id=1
 	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> findById(@RequestParam Long id) {
 		try {
@@ -196,7 +200,7 @@ public class PaqueteNoAlimenticioController {
 	    }
 	}
 	
-	// http://localhost:8080/paquetenoalimenticio/buscar-direccion-ciudad?dir=Calle123&ciudad=Bogota
+	// http://localhost:8080/paquetenoalimenticio/buscardireccionyciudad?dir=Calle+20&ciudad=Cali
 	@GetMapping("/buscardireccionyciudad")
 	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir,
 			@RequestParam String ciudad) {

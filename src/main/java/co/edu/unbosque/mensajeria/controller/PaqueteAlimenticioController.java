@@ -34,7 +34,7 @@ public class PaqueteAlimenticioController {
 	public PaqueteAlimenticioController() {
 	}
 
-	// http://localhost:8080/paquetealimenticio/crear?seEnviaHoy=true&tipoDeAlimento=Perecedero&precioEnvio=5000&direccionDestino=Calle10&tamanio=Mediano
+	// http://localhost:8080/paquetealimenticio/crear?remitente=Juan&destinatario=Ana&direccionDestino=Calle+10&ciudadDestino=Bogota&fechaEntrega=2024-05-20T14:30:00&tamanio=Grande&tipoAlimento=Perecedero
 	@PostMapping("/crear")
 	public ResponseEntity<String> crear(@RequestParam String direccionDestino, @RequestParam String tamanio,
 			@RequestParam String ciudadDestino, @RequestParam boolean seEnviaHoy, @RequestParam String tipoDeAlimento) {
@@ -79,7 +79,7 @@ public class PaqueteAlimenticioController {
 		}
 	}
 
-	// http://localhost:8080/paquetealimenticio/actualizar?id=1&seEnviaHoy=false&tipoDeAlimento=Seco&precioEnvio=4000&direccionDestino=Carrera5&tamanio=Pequeno&fechaCreacionPedido=2024-03-20T10:00:00&fechaEstimadaEntrega=2024-03-20T16:00:00
+	// http://localhost:8080/paquetealimenticio/actualizar?id=1&remitente=Juan+Perez&destinatario=Ana+Gomez&direccionDestino=Carrera+15&ciudadDestino=Medellin&fechaEntrega=2024-05-21T10:00:00&tamanio=Mediano&tipoAlimento=No+Perecedero
 	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam boolean seEnviaHoy,
 			@RequestParam String tipoDeAlimento, @RequestParam int precioEnvio, @RequestParam String direccionDestino,
@@ -135,7 +135,8 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
+	// http://localhost:8080/paquetealimenticio/buscarportamanio?tamanio=Grande
 	@GetMapping("/buscartamanio")
 	public ResponseEntity<Object> buscarPorTamanio(@RequestParam String tamanio) {
 		try {
@@ -149,8 +150,9 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-
-	@GetMapping("/buscarenviahoy")
+	
+	// http://localhost:8080/paquetealimenticio/buscarporenviahoy?enviadhoy=true
+	@GetMapping("/buscarporenviahoy")
 	public ResponseEntity<Object> buscarPorSeEnviaHoy(@RequestParam boolean seEnviaHoy) {
 		try {
 			List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findBySeEnviaHoy(seEnviaHoy);
@@ -163,8 +165,9 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>("El valor debe ser true o false", HttpStatus.BAD_REQUEST);
 		}
 	}
-
-	@GetMapping("/buscartipoalimento")
+	
+	// http://localhost:8080/paquetealimenticio/buscarportipoalimento?tipoAlimento=Perecedero
+	@GetMapping("/buscarportipoalimento")
 	public ResponseEntity<Object> buscarPorTipoDeAlimento(@RequestParam String tipoDeAlimento) {
 		try {
 			List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByTipoDeAlimento(tipoDeAlimento);
@@ -177,7 +180,8 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
+	// http://localhost:8080/paquetealimenticio/buscarportamanioytipo?tamanio=Pequeño&tipoAlimento=No+Perecedero
 	@GetMapping("/buscarportamanioytipo")
 	public ResponseEntity<Object> buscarPorTamanioAndTipo(@RequestParam String tamanio,
 			@RequestParam String tipoDeAlimento) {
@@ -195,7 +199,8 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
+	// http://localhost:8080/paquetealimenticio/seguimientoid?id=10
 	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
 		try {
@@ -213,7 +218,7 @@ public class PaqueteAlimenticioController {
 		}
 	}
 
-	// http://localhost:8080/paquetealimenticio/buscar-direccion-ciudad?dir=Calle123&ciudad=Bogota
+	// http://localhost:8080/paquetealimenticio/buscardireccionyciudad?dir=Calle+123&ciudad=Bogota
 	@GetMapping("/buscardireccionyciudad")
 	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir,
 			@RequestParam String ciudad) {

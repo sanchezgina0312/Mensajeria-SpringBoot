@@ -35,7 +35,7 @@ public class ConductorController {
 	public ConductorController() {
 	}
 
-	// http://localhost:8080/conductor/crear?nombre=Juan&cedula=123&correo=juan@mail.com&telefono=3001&turno=M&placaVehiculo=ABC123
+	// http://localhost:8080/conductor/crear?nombre=Juan&cedula=12345&correo=juan@mail.com&telefono=300123&turno=M&placaVehiculo=ABC123
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearConductor(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno,
@@ -80,7 +80,7 @@ public class ConductorController {
 		}
 	}
 
-	// http://localhost:8080/conductor/actualizar?id=1&nombre=Juan&cedula=123&correo=j@mail.com&telefono=300&turno=T&placaVehiculo=XYZ789
+	// http://localhost:8080/conductor/actualizar?id=1&nombre=Juan+Pablo&cedula=12345&correo=juanp@mail.com&telefono=311444&turno=T&placaVehiculo=XYZ789
 	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam String nombre,
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
@@ -130,7 +130,7 @@ public class ConductorController {
 		}
 	}
 
-	// http://localhost:8080/conductor/buscarpornombre?nombre=Juan Perez
+	// http://localhost:8080/conductor/buscarpornombre?nombre=Juan
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ConductorDTO>> buscarPorNombre(@RequestParam String nombre) {
 		List<ConductorDTO> lista = conductorSer.findByNombre(nombre);
@@ -141,7 +141,7 @@ public class ConductorController {
 		}
 	}
 
-	// http://localhost:8080/conductor/buscarporcedula?cedula=123456789
+	// http://localhost:8080/conductor/buscarporcedula?cedula=12345
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ConductorDTO>> buscarPorCedula(@RequestParam String cedula) {
 		List<ConductorDTO> lista = conductorSer.findByCedula(cedula);
@@ -163,7 +163,7 @@ public class ConductorController {
 		}
 	}
 
-	// http://localhost:8080/conductor/buscarportelefono?telefono=3001234567
+	// http://localhost:8080/conductor/buscarportelefono?telefono=300123
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<ConductorDTO>> buscarPorTelefono(@RequestParam String telefono) {
 		List<ConductorDTO> lista = conductorSer.findByTelefono(telefono);
@@ -185,8 +185,7 @@ public class ConductorController {
 		}
 	}
 
-	// http://localhost:8080/conductor/buscarpornombreycedula?nombre=Juan
-	// Perez&cedula=123456789
+	// http://localhost:8080/conductor/buscarpornombreycedula?nombre=Juan&cedula=12345
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<ConductorDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
@@ -199,7 +198,6 @@ public class ConductorController {
 	}
 
 	// http://localhost:8080/conductor/buscarporplacavehiculoynombre?placaVehiculo=ABC123&nombre=Juan
-	// Perez
 	@GetMapping("/buscarporplacavehiculoynombre")
 	public ResponseEntity<List<ConductorDTO>> buscarPorPlacaVehiculoAndNombre(@RequestParam String placaVehiculo,
 			@RequestParam String nombre) {

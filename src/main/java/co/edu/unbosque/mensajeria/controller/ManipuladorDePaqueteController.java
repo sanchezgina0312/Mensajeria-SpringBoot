@@ -34,7 +34,7 @@ public class ManipuladorDePaqueteController {
 	public ManipuladorDePaqueteController() {
 	}
 
-	// http://localhost:8080/manipuladordepaquete/crear?nombre=Luis&cedula=456&correo=luis@mail.com&telefono=310&turno=M&tipoManipulador=Carga
+	// http://localhost:8080/manipuladordepaquete/crear?nombre=Roberto&cedula=4455&correo=roberto@mail.com&telefono=318777&turno=N&tipoManipulador=Carga
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearManipulador(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno,
@@ -80,7 +80,7 @@ public class ManipuladorDePaqueteController {
 		}
 	}
 
-	// http://localhost:8080/manipuladordepaquete/actualizar?id=1&nombre=Luis&cedula=456&correo=l@mail.com&telefono=311&turno=T&tipoManipulador=Descarga
+	// http://localhost:8080/manipuladordepaquete/actualizar?id=1&nombre=Roberto+Carlos&cedula=4455&correo=rcarlos@mail.com&telefono=318888&turno=M&tipoManipulador=Logistica
 	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam String nombre,
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
@@ -130,7 +130,8 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>("Error al procesar la solicitud", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
+	// http://localhost:8080/manipuladordepaquete/buscarpornombre?nombre=Roberto
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorNombre(@RequestParam String nombre) {
 		List<ManipuladorDePaqueteDTO> lista = manipuladorSer.findByNombre(nombre);
@@ -140,7 +141,8 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/manipuladordepaquete/buscarporcedula?cedula=4455
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorCedula(@RequestParam String cedula) {
 		List<ManipuladorDePaqueteDTO> lista = manipuladorSer.findByCedula(cedula);
@@ -150,7 +152,8 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/manipuladordepaquete/buscarporcorreo?correo=roberto@mail.com
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorCorreo(@RequestParam String correo) {
 		List<ManipuladorDePaqueteDTO> lista = manipuladorSer.findByCorreo(correo);
@@ -160,7 +163,8 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/manipuladordepaquete/buscarportelefono?telefono=318777
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorTelefono(@RequestParam String telefono) {
 		List<ManipuladorDePaqueteDTO> lista = manipuladorSer.findByTelefono(telefono);
@@ -170,7 +174,8 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/manipuladordepaquete/buscarportipomanipulador?tipoManipulador=Carga
 	@GetMapping("/buscarportipomanipulador")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorTipoManipulador(
 			@RequestParam String tipoManipulador) {
@@ -181,7 +186,8 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/manipuladordepaquete/buscarpornombreycedula?nombre=Roberto&cedula=4455
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {

@@ -35,7 +35,7 @@ public class ClienteNormalController {
 	public ClienteNormalController() {
 	}
 
-	// http://localhost:8080/clientenormal/crear?nombre=Normal&cedula=111&correo=n@mail.com&telefono=700&metodoPago=Efectivo&tipoPedido=Unico
+	// http://localhost:8080/clientenormal/crear?nombre=Pedro&cedula=5566&correo=pedro@mail.com&telefono=310111&tipoPedido=Salud&metodoPago=Efectivo
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearClienteNormal(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
@@ -104,7 +104,7 @@ public class ClienteNormalController {
 		}
 	}
 
-	// http://localhost:8080/clientenormal/actualizarclientenormal?id=1&nombre=Pedro&cedula=456&correo=p@mail.com&telefono=600&metodoPago=Tarjeta&tipoPedido=Express
+	// http://localhost:8080/clientenormal/actualizar?id=1&nombre=Pedro+Gomez&cedula=5566&correo=pgomez@mail.com&telefono=310999&tipoPedido=Hogar&metodoPago=Transferencia
 	@PutMapping("/actualizarclientenormal")
 	public ResponseEntity<String> actualizarClienteNormal(@RequestParam Long id, @RequestParam String nombre,
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
@@ -143,7 +143,8 @@ public class ClienteNormalController {
 			return new ResponseEntity<>("Error inesperado", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
+	// http://localhost:8080/clientenormal/buscarpornombre?nombre=Pedro
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorNombre(@RequestParam String nombre) {
 		List<ClienteNormalDTO> lista = clienteNormalService.findByNombre(nombre);
@@ -153,7 +154,8 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clientenormal/buscarporcedula?cedula=5566
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorCedula(@RequestParam String cedula) {
 		List<ClienteNormalDTO> lista = clienteNormalService.findByCedula(cedula);
@@ -163,7 +165,8 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clientenormal/buscarporcorreo?correo=pedro@mail.com
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorCorreo(@RequestParam String correo) {
 		List<ClienteNormalDTO> lista = clienteNormalService.findByCorreo(correo);
@@ -173,7 +176,8 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clientenormal/buscarportelefono?telefono=310111
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorTelefono(@RequestParam String telefono) {
 		List<ClienteNormalDTO> lista = clienteNormalService.findByTelefono(telefono);
@@ -183,7 +187,8 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clientenormal/buscarpormetodopago?metodoPago=Efectivo
 	@GetMapping("/buscarpormetodopago")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorMetodoPago(@RequestParam String metodoPago) {
 		List<ClienteNormalDTO> lista = clienteNormalService.findByMetodoPago(metodoPago);
@@ -193,7 +198,8 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clientenormal/buscarportipopedido?tipoPedido=Salud
 	@GetMapping("/buscarportipopedido")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorTipoPedido(@RequestParam String tipoPedido) {
 		List<ClienteNormalDTO> lista = clienteNormalService.findByTipoPedido(tipoPedido);
@@ -204,6 +210,7 @@ public class ClienteNormalController {
 		}
 	}
 
+	// http://localhost:8080/clientenormal/buscarpornombreycedula?nombre=Pedro&cedula=5566
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
@@ -214,7 +221,8 @@ public class ClienteNormalController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clientenormal/buscarportipopedidoymetodopago?tipoPedido=Salud&metodoPago=Efectivo
 	@GetMapping("/buscarportipopedidoymetodopago")
 	public ResponseEntity<List<ClienteNormalDTO>> buscarPorTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {

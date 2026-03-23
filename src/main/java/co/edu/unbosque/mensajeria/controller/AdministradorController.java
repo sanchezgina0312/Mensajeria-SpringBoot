@@ -33,7 +33,7 @@ public class AdministradorController {
 
 	}
 
-	// http://localhost:8080/administrador/crear?nombre=Admin1&cedula=999&correo=a@mail.com&telefono=000&turno=N
+	// http://localhost:8080/administrador/crear?nombre=Carlos&cedula=1010&correo=carlos@mail.com&telefono=315000&turno=M&usuario=admin1&contrasenia=pass123
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearAdministrador(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam char turno) {
@@ -87,7 +87,7 @@ public class AdministradorController {
 		}
 	}
 
-	// http://localhost:8080/administrador/actualizar?id=1&nombre=Jefe&cedula=001&correo=admin@mail.com&telefono=100&turno=T&usuario=admin2&contrasenia=nueva
+	// http://localhost:8080/administrador/actualizar?id=1&nombre=Carlos+Editado&cedula=1010&correo=carlos_nuevo@mail.com&telefono=320000&turno=T&usuario=admin_actualizado&contrasenia=newpass
 	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam String nombre,
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
@@ -152,7 +152,7 @@ public class AdministradorController {
 		}
 	}
 
-	// http://localhost:8080/administrador/buscarpornombre?nombre=Juan Perez
+	// http://localhost:8080/administrador/buscarpornombre?nombre=Carlos
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorNombre(@RequestParam String nombre) {
 		List<AdministradorDTO> lista = administradorSer.findByNombre(nombre);
@@ -163,7 +163,7 @@ public class AdministradorController {
 		}
 	}
 
-	// http://localhost:8080/administrador/buscarporcedula?cedula=123456789
+	// http://localhost:8080/administrador/buscarporcedula?cedula=1010
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorCedula(@RequestParam String cedula) {
 		List<AdministradorDTO> lista = administradorSer.findByCedula(cedula);
@@ -174,7 +174,7 @@ public class AdministradorController {
 		}
 	}
 
-	// http://localhost:8080/administrador/buscarporcorreo?correo=admin@mail.com
+	// http://localhost:8080/administrador/buscarporcorreo?correo=carlos@mail.com
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorCorreo(@RequestParam String correo) {
 		List<AdministradorDTO> lista = administradorSer.findByCorreo(correo);
@@ -185,7 +185,7 @@ public class AdministradorController {
 		}
 	}
 
-	// http://localhost:8080/administrador/buscarportelefono?telefono=3001234567
+	// http://localhost:8080/administrador/buscarportelefono?telefono=315000
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorTelefono(@RequestParam String telefono) {
 		List<AdministradorDTO> lista = administradorSer.findByTelefono(telefono);
@@ -207,7 +207,7 @@ public class AdministradorController {
 		}
 	}
 
-	// http://localhost:8080/administrador/buscarporcontrasenia?contrasenia=1234
+	// http://http://localhost:8080/administrador/buscarporcontrasenia?contrasenia=pass123
 	@GetMapping("/buscarporcontrasenia")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorContrasenia(@RequestParam String contrasenia) {
 		List<AdministradorDTO> lista = administradorSer.findByContrasenia(contrasenia);
@@ -218,8 +218,7 @@ public class AdministradorController {
 		}
 	}
 
-	// http://localhost:8080/administrador/buscarpornombreycedula?nombre=Juan
-	// Perez&cedula=123456789
+	// http://localhost:8080/administrador/buscarpornombreycedula?nombre=Carlos&cedula=1010
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
@@ -231,7 +230,7 @@ public class AdministradorController {
 		}
 	}
 
-	// http://localhost:8080/administrador/buscarporusuarioycontrasenia?usuario=admin&contrasenia=1234
+	// http://localhost:8080/administrador/buscarporusuarioycontrasenia?usuario=admin1&contrasenia=pass123
 	@GetMapping("/buscarporusuarioycontrasenia")
 	public ResponseEntity<List<AdministradorDTO>> buscarPorUsuarioAndContrasenia(@RequestParam String usuario,
 			@RequestParam String contrasenia) {

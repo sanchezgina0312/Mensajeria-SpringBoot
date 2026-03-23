@@ -35,7 +35,7 @@ public class ClienteConcurrenteController {
 	public ClienteConcurrenteController() {
 	}
 
-	// http://localhost:8080/clienteconcurrente/crear?nombre=Frecuente&cedula=222&correo=f@mail.com&telefono=800&metodoPago=Debito&tipoPedido=Diario&tarifaConcurrente=1.2
+	// http://localhost:8080/clienteconcurrente/crear?nombre=Mariana&cedula=7890&correo=mariana@mail.com&telefono=322000&tipoPedido=Alimenticio&metodoPago=Efectivo
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearClienteConcurrente(@RequestParam String nombre, @RequestParam String cedula,
 			@RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
@@ -115,7 +115,7 @@ public class ClienteConcurrenteController {
 		}
 	}
 
-	// http://localhost:8080/clienteconcurrente/actualizarclienteconcurrente?id=1&nombre=Maria&cedula=789&correo=m@mail.com&telefono=500&metodoPago=Transferencia&tipoPedido=Recurrente&tarifaConcurrente=2000.0
+	// http://localhost:8080/clienteconcurrente/actualizar?id=1&nombre=Mariana+Lopez&cedula=7890&correo=marianal@mail.com&telefono=322999&tipoPedido=No+Alimenticio&metodoPago=Tarjeta
 	@PutMapping("/actualizarclienteconcurrente")
 	public ResponseEntity<String> actualizarClienteConcurrente(@RequestParam Long id, @RequestParam String nombre,
 			@RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
@@ -164,7 +164,8 @@ public class ClienteConcurrenteController {
 		}
 
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarpornombre?nombre=Mariana
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorNombre(@RequestParam String nombre) {
 
@@ -176,7 +177,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarporcedula?cedula=7890
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorCedula(@RequestParam String cedula) {
 
@@ -188,7 +190,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarporcorreo?correo=mariana@mail.com
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorCorreo(@RequestParam String correo) {
 
@@ -200,7 +203,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarportelefono?telefono=322000
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorTelefono(@RequestParam String telefono) {
 
@@ -212,7 +216,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarpormetodopago?metodoPago=Efectivo
 	@GetMapping("/buscarpormetodopago")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorMetodoPago(@RequestParam String metodoPago) {
 
@@ -224,7 +229,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarportipopedido?tipoPedido=Alimenticio
 	@GetMapping("/buscarportipopedido")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorTipoPedido(@RequestParam String tipoPedido) {
 
@@ -236,7 +242,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarpornombreycedula?nombre=Mariana&cedula=7890
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
 			@RequestParam String cedula) {
@@ -249,7 +256,8 @@ public class ClienteConcurrenteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
+	// http://localhost:8080/clienteconcurrente/buscarportipopedidoymetodopago?tipoPedido=Alimenticio&metodoPago=Efectivo
 	@GetMapping("/buscarportipopedidoymetodopago")
 	public ResponseEntity<List<ClienteConcurrenteDTO>> buscarPorTipoPedidoAndMetodoPago(@RequestParam String tipoPedido,
 			@RequestParam String metodoPago) {
