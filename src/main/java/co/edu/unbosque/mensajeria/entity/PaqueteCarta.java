@@ -21,19 +21,19 @@ public class PaqueteCarta extends Paquete {
 		this.tipoCarta = tipoCarta;
 	}
 
-	public PaqueteCarta(int precioEnvio, String direccionDestino, String tamanio, LocalDateTime fechaCreacionPedido,
-			LocalDateTime fechaEstimadaEntrega, String ciudadDestino, String estadoPedido, int prioridad,
-			double precioFinal, String tipoCarta) {
-		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
-				estadoPedido, prioridad, precioFinal);
+	public PaqueteCarta(long id, int precioEnvio, String direccionDestino, String tamanio,
+			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
+			String estadoPedido, boolean esPrioritario, double precioFinal, String tipoCarta) {
+		super(id, precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, esPrioritario, precioFinal);
 		this.tipoCarta = tipoCarta;
 	}
-
-	public PaqueteCarta(int precioEnvio, String direccionDestino, String tamanio, LocalDateTime fechaCreacionPedido,
-			LocalDateTime fechaEstimadaEntrega, String ciudadDestino, String estadoPedido, int prioridad,
-			double precioFinal) {
-		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
-				estadoPedido, prioridad, precioFinal);
+	
+	public PaqueteCarta(long id, int precioEnvio, String direccionDestino, String tamanio,
+			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
+			String estadoPedido, boolean esPrioritario, double precioFinal) {
+		super(id, precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, esPrioritario, precioFinal);
 	}
 
 	public String getTipoCarta() {

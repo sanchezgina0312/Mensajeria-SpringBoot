@@ -232,11 +232,11 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 		if (ahora.isAfter(dto.getFechaEstimadaEntrega())) {
 			dto.setEstadoPedido("ENTREGADO");
-			dto.setPrioridad(2);
+			dto.setEsPrioritario(false);
 		} else if (horasRestantes <= 3 && horasRestantes >= 0) {
-			dto.setPrioridad(1);
+			dto.setEsPrioritario(true);
 		} else {
-			dto.setPrioridad(2);
+			dto.setEsPrioritario(false);
 		}
 	}
 

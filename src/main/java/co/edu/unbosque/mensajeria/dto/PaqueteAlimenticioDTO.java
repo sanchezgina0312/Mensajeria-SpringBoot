@@ -20,20 +20,21 @@ public class PaqueteAlimenticioDTO extends Paquete {
 		this.tipoDeAlimento = tipoDeAlimento;
 	}
 
-	public PaqueteAlimenticioDTO(int precioEnvio, String direccionDestino, String tamanio,
+	public PaqueteAlimenticioDTO(long id, int precioEnvio, String direccionDestino, String tamanio,
 			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
-			String estadoPedido, int prioridad, double precioFinal, boolean seEnviaHoy, String tipoDeAlimento) {
-		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
-				estadoPedido, prioridad, precioFinal);
+			String estadoPedido, boolean esPrioritario, double precioFinal, boolean seEnviaHoy, String tipoDeAlimento) {
+		super(id, precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, esPrioritario, precioFinal);
 		this.seEnviaHoy = seEnviaHoy;
 		this.tipoDeAlimento = tipoDeAlimento;
 	}
 
-	public PaqueteAlimenticioDTO(int precioEnvio, String direccionDestino, String tamanio,
+	public PaqueteAlimenticioDTO(long id, int precioEnvio, String direccionDestino, String tamanio,
 			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
-			String estadoPedido, int prioridad, double precioFinal) {
-		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
-				estadoPedido, prioridad, precioFinal);
+			String estadoPedido, boolean esPrioritario, double precioFinal) {
+		super(id, precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, esPrioritario, precioFinal);
+		// TODO Auto-generated constructor stub
 	}
 
 	public boolean isSeEnviaHoy() {
