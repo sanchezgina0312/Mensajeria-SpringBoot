@@ -172,10 +172,12 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return null;
 	}
 
-	public List<PaqueteNoAlimenticioDTO> findByDireccionDestino(String direccion) {
-		LanzadorDeException.verificarDireccion(direccion);
+	public List<PaqueteNoAlimenticioDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 
-		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByDireccionDestino(direccion);
+		LanzadorDeException.verificarDireccion(direccion);
+//	    LanzadorDeException.verificarCiudad(ciudad);
+
+		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByDireccionDestinoAndCiudadDestino(direccion, ciudad);
 		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
 
 		if (encontrados.isPresent()) {
