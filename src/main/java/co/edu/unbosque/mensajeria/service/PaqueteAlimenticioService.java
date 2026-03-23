@@ -41,7 +41,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		registrarPlazo6Horas(data);
 
 		double montoConRecargo = calcularPrecioPorTamaño(10000, data.getTamanio());
-		double montoFinal = aplicarDescuentoPorCliente(montoConRecargo, "NORMAL");
+		double montoFinal = aplicarDescuentoPorCliente(montoConRecargo, "CONCURRENTE");
 
 		data.setPrecioEnvio((int) montoConRecargo);
 		data.setPrecioFinal(montoFinal);
