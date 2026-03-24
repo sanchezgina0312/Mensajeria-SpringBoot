@@ -21,7 +21,6 @@ import co.edu.unbosque.mensajeria.service.ClienteNormalService;
  * el correcto funcionamiento de las operaciones CRUD y consultas personalizadas
  * usando Mockito.
  * 
- * @author Natalia D
  */
 class ClienteNormalServiceTest {
 

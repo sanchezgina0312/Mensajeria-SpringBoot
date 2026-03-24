@@ -12,7 +12,6 @@ import java.util.List;
  * 
  * @param <T> tipo de dato sobre el cual se aplican las operaciones
  * 
- * @author Gina Buitrago
  */
 public interface CRUDOperation<T> {
 	

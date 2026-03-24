@@ -25,7 +25,6 @@ import co.edu.unbosque.mensajeria.service.PaqueteNoAlimenticioService;
  * paquetes no alimenticios, utilizando Mockito para simular el repositorio.
  * </p>
  * 
- * @author Natalia D
  * @version 1.0
  */
 class PaqueteNoAlimenticioServiceTest {

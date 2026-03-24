@@ -24,7 +24,6 @@ import co.edu.unbosque.mensajeria.util.LanzadorDeException;
  * convertir entre entidades y DTOs, y LanzadorDeException para validar los datos.
  * </p>
  * 
- * @author Angie Villarreal
  */
 @Service
 public class AdministradorService implements CRUDOperation<AdministradorDTO> {

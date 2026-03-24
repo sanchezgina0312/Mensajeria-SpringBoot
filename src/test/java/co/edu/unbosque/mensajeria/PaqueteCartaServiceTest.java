@@ -29,7 +29,6 @@ import co.edu.unbosque.mensajeria.service.PaqueteCartaService;
  * datos y {@link ModelMapper} para la conversión entre entidades y DTOs.
  * </p>
  * 
- * @author
  * @version 1.0
  */
 class PaqueteCartaServiceTest {

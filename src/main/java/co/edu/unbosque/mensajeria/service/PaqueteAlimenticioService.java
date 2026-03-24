@@ -22,7 +22,6 @@ import co.edu.unbosque.mensajeria.util.LanzadorDeException;
  * y procesar estados de entrega en tiempo real.
  * Utiliza ModelMapper para la conversión entre entidades y DTOs.
  * </p>
- * * @author Angie Villarreal
  */
 @Service
 public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimenticioDTO> {

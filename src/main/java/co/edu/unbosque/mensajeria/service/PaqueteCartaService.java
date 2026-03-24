@@ -22,7 +22,6 @@ import co.edu.unbosque.mensajeria.util.LanzadorDeException;
  * procesar tiempos de entrega estimados.
  * Utiliza ModelMapper para la conversión entre entidades y DTOs.
  * </p>
- * * @author Angie Villarreal
  */
 @Service
 public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {

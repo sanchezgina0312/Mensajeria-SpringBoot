@@ -34,7 +34,6 @@ import co.edu.unbosque.mensajeria.service.ClienteConcurrenteService;
  *
  * <p>Base URL: {@code /clienteconcurrente}</p>
  *
- * @author Jairo Esteban
  * @version 1.0
  * @since 1.0
  * @see ClienteConcurrenteService

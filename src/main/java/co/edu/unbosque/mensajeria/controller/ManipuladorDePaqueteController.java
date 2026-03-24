@@ -33,7 +33,6 @@ import co.edu.unbosque.mensajeria.service.ManipuladorDePaqueteService;
  *
  * <p>Base URL: {@code /manipuladordepaquete}</p>
  *
- * @author Angie Villarreal
  * @version 1.0
  */
 @RestController

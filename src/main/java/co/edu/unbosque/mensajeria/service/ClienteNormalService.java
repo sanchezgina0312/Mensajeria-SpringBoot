@@ -27,7 +27,6 @@ import co.edu.unbosque.mensajeria.util.LanzadorDeException;
  * de la información.
  * </p>
  * 
- * @author Jairo Esteban
  */
 @Service
 public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {

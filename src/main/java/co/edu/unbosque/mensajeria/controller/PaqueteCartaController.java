@@ -35,7 +35,6 @@ import co.edu.unbosque.mensajeria.service.PaqueteCartaService;
  * Base URL: {@code /paquetecarta}
  * </p>
  *
- * @author Gina Buitrago
  * @version 1.0
  */
 @RestController

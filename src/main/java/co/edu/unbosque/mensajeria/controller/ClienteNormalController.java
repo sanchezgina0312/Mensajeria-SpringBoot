@@ -34,7 +34,6 @@ import co.edu.unbosque.mensajeria.service.ClienteNormalService;
  *
  * <p>Base URL: {@code /clientenormal}</p>
  *
- * @author Jairo Esteban
  * @version 1.0
  * @since 1.0
  * @see ClienteNormalService

@@ -34,7 +34,6 @@ import co.edu.unbosque.mensajeria.service.ConductorService;
  *
  * <p>Base URL: {@code /conductor}</p>
  *
- * @author Angie Villarreal
  * @version 1.0
  * @since 1.0
  * @see ConductorService

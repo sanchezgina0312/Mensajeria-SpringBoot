@@ -37,7 +37,6 @@ import co.edu.unbosque.mensajeria.service.PaqueteAlimenticioService;
  * <li>El DTO NO se modifica en create(), solo la entidad.</li>
  * </ul>
  *
- * @author Natalia D
  */
 class PaqueteAlimenticioServiceTest {
 

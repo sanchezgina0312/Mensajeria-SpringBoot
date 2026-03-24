@@ -22,7 +22,6 @@ import co.edu.unbosque.mensajeria.util.LanzadorDeException;
  * entre entidades y DTOs.
  * </p>
  * 
- * @author Jairo Esteban
  */
 @Service
 public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {

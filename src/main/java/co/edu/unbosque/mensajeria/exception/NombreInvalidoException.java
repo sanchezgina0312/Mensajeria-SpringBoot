@@ -9,7 +9,6 @@ package co.edu.unbosque.mensajeria.exception;
  * no verificada (<i>unchecked exception</i>) y no requiere ser declarada
  * explícitamente en la firma de los métodos que la lancen.</p>
  *
- * @author Angie Villarreal
  * @version 1.0
  * @since 1.0
  * @see RuntimeException

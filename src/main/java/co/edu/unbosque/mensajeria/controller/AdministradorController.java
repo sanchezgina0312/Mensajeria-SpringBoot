@@ -32,7 +32,6 @@ import co.edu.unbosque.mensajeria.service.AdministradorService;
  *
  * <p>Base URL: {@code /administrador}</p>
  *
- * @author Angie Villarreal
  * @version 1.0
  * @since 1.0
  * @see AdministradorService
