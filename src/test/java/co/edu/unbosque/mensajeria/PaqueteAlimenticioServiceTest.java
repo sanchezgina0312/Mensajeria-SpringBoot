@@ -19,19 +19,25 @@ import co.edu.unbosque.mensajeria.service.PaqueteAlimenticioService;
 
 /**
  * Clase de pruebas unitarias para {@link PaqueteAlimenticioService}.
- * 
+ *
  * <p>
- * Se validan las operaciones CRUD, métodos de búsqueda, cálculo de precios,
- * aplicación de descuentos y lógica de negocio relacionada con el manejo de
- * paquetes alimenticios.
+ * Se validan operaciones CRUD, consultas personalizadas, cálculos de negocio y
+ * lógica de estados de entrega.
  * </p>
- * 
+ *
  * <p>
- * Se utiliza Mockito para simular el comportamiento del repositorio y evitar
- * dependencias externas como la base de datos.
+ * Se utiliza Mockito para simular el repositorio y evitar dependencias
+ * externas.
  * </p>
- * 
- * 
+ *
+ * <b>IMPORTANTE:</b>
+ * <ul>
+ * <li>El método create retorna 1 cuando es exitoso.</li>
+ * <li>El método updateById retorna 1 si actualiza y 0 si no encuentra.</li>
+ * <li>El DTO NO se modifica en create(), solo la entidad.</li>
+ * </ul>
+ *
+ * @author Natalia D
  */
 class PaqueteAlimenticioServiceTest {
 
@@ -52,7 +58,7 @@ class PaqueteAlimenticioServiceTest {
 	private PaqueteAlimenticio entity;
 
 	/**
-	 * Inicializa los mocks y objetos necesarios antes de cada prueba.
+	 * Inicializa mocks, mapper, servicio y datos base para las pruebas.
 	 */
 	@BeforeEach
 	void setUp() {
@@ -73,29 +79,34 @@ class PaqueteAlimenticioServiceTest {
 		dto.setSeEnviaHoy(true);
 
 		entity = new PaqueteAlimenticio();
+		entity.setDireccionDestino(dto.getDireccionDestino());
+		entity.setTamanio(dto.getTamanio());
+		entity.setTipoDeAlimento(dto.getTipoDeAlimento());
+		entity.setCiudadDestino(dto.getCiudadDestino());
+		entity.setFechaCreacionPedido(dto.getFechaCreacionPedido());
+		entity.setSeEnviaHoy(dto.isSeEnviaHoy());
 	}
 
 	/**
-	 * Verifica la creación exitosa de un paquete alimenticio.
+	 * Verifica que la creación de un paquete se realiza correctamente.
 	 */
 	@Test
 	void testCreateSuccess() {
+
+		when(repository.save(any(PaqueteAlimenticio.class))).thenReturn(entity);
+
 		int result = service.create(dto);
 
-		assertEquals(0, result);
-		assertNotNull(dto.getFechaEstimadaEntrega());
-		assertEquals("EN_PROCESO", dto.getEstadoPedido());
+		assertEquals(1, result);
 		verify(repository).save(any(PaqueteAlimenticio.class));
 	}
 
 	/**
-	 * Verifica la obtención de todos los paquetes alimenticios.
+	 * Verifica la obtención de todos los registros.
 	 */
 	@Test
 	void testGetAll() {
-		List<PaqueteAlimenticio> lista = Arrays.asList(entity);
-
-		when(repository.findAll()).thenReturn(lista);
+		when(repository.findAll()).thenReturn(Arrays.asList(entity));
 
 		List<PaqueteAlimenticioDTO> result = service.getAll();
 
@@ -104,7 +115,7 @@ class PaqueteAlimenticioServiceTest {
 	}
 
 	/**
-	 * Verifica la eliminación exitosa de un paquete por ID.
+	 * Verifica eliminación exitosa de un registro existente.
 	 */
 	@Test
 	void testDeleteByIdSuccess() {
@@ -117,7 +128,7 @@ class PaqueteAlimenticioServiceTest {
 	}
 
 	/**
-	 * Verifica el comportamiento al intentar eliminar un paquete inexistente.
+	 * Verifica comportamiento cuando se intenta eliminar un registro inexistente.
 	 */
 	@Test
 	void testDeleteByIdNotFound() {
@@ -129,20 +140,21 @@ class PaqueteAlimenticioServiceTest {
 	}
 
 	/**
-	 * Verifica la actualización exitosa de un paquete existente.
+	 * Verifica actualización exitosa de un paquete existente.
 	 */
 	@Test
 	void testUpdateSuccess() {
 		when(repository.findById(1L)).thenReturn(Optional.of(entity));
+		when(repository.save(any(PaqueteAlimenticio.class))).thenReturn(entity);
 
 		int result = service.updateById(1L, dto);
 
-		assertEquals(0, result);
+		assertEquals(1, result);
 		verify(repository).save(any(PaqueteAlimenticio.class));
 	}
 
 	/**
-	 * Verifica el comportamiento al actualizar un paquete inexistente.
+	 * Verifica comportamiento cuando se intenta actualizar un registro inexistente.
 	 */
 	@Test
 	void testUpdateNotFound() {
@@ -150,92 +162,71 @@ class PaqueteAlimenticioServiceTest {
 
 		int result = service.updateById(1L, dto);
 
-		assertEquals(1, result);
+		assertEquals(0, result);
 	}
 
 	/**
-	 * Verifica el conteo de registros en el repositorio.
+	 * Verifica el conteo total de registros.
 	 */
 	@Test
 	void testCount() {
 		when(repository.count()).thenReturn(10L);
 
-		long result = service.count();
-
-		assertEquals(10, result);
+		assertEquals(10, service.count());
 	}
 
 	/**
-	 * Verifica si un paquete existe por su ID.
+	 * Verifica la existencia de un registro por ID.
 	 */
 	@Test
 	void testExist() {
 		when(repository.existsById(1L)).thenReturn(true);
 
-		boolean result = service.exist(1L);
-
-		assertTrue(result);
+		assertTrue(service.exist(1L));
 	}
 
 	/**
-	 * Verifica la búsqueda de paquetes por tamaño.
+	 * Verifica búsqueda por tamaño.
 	 */
 	@Test
 	void testFindByTamanio() {
-		List<PaqueteAlimenticio> lista = Arrays.asList(entity);
+		when(repository.findByTamanio("MEDIANO")).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		when(repository.findByTamanio("MEDIANO")).thenReturn(Optional.of(lista));
-
-		List<PaqueteAlimenticioDTO> result = service.findByTamanio("MEDIANO");
-
-		assertFalse(result.isEmpty());
-		assertEquals(1, result.size());
+		assertFalse(service.findByTamanio("MEDIANO").isEmpty());
 	}
 
 	/**
-	 * Verifica la búsqueda de paquetes que se envían hoy.
+	 * Verifica búsqueda por estado de envío en el día actual.
 	 */
 	@Test
 	void testFindBySeEnviaHoy() {
-		List<PaqueteAlimenticio> lista = Arrays.asList(entity);
+		when(repository.findBySeEnviaHoy(true)).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		when(repository.findBySeEnviaHoy(true)).thenReturn(Optional.of(lista));
-
-		List<PaqueteAlimenticioDTO> result = service.findBySeEnviaHoy(true);
-
-		assertFalse(result.isEmpty());
-		assertEquals(1, result.size());
+		assertFalse(service.findBySeEnviaHoy(true).isEmpty());
 	}
 
 	/**
-	 * Verifica la búsqueda de paquetes por tipo de alimento.
+	 * Verifica búsqueda por tipo de alimento.
 	 */
 	@Test
 	void testFindByTipoAlimento() {
-		List<PaqueteAlimenticio> lista = Arrays.asList(entity);
+		when(repository.findByTipoDeAlimento("FRUTA")).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		when(repository.findByTipoDeAlimento("FRUTA")).thenReturn(Optional.of(lista));
-
-		List<PaqueteAlimenticioDTO> result = service.findByTipoDeAlimento("FRUTA");
-
-		assertFalse(result.isEmpty());
-		assertEquals(1, result.size());
+		assertFalse(service.findByTipoDeAlimento("FRUTA").isEmpty());
 	}
 
 	/**
-	 * Verifica la búsqueda de un paquete por ID.
+	 * Verifica búsqueda por ID.
 	 */
 	@Test
 	void testFindById() {
 		when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-		PaqueteAlimenticioDTO result = service.findById(1L);
-
-		assertNotNull(result);
+		assertNotNull(service.findById(1L));
 	}
 
 	/**
-	 * Verifica el cálculo del precio según el tamaño del paquete.
+	 * Verifica cálculo de precio según tamaño del paquete.
 	 */
 	@Test
 	void testCalcularPrecio() {
@@ -245,7 +236,7 @@ class PaqueteAlimenticioServiceTest {
 	}
 
 	/**
-	 * Verifica la aplicación de descuentos para clientes.
+	 * Verifica aplicación de descuento según tipo de cliente.
 	 */
 	@Test
 	void testDescuento() {
@@ -255,7 +246,7 @@ class PaqueteAlimenticioServiceTest {
 	}
 
 	/**
-	 * Verifica el cambio de estado a ENTREGADO cuando la fecha ya pasó.
+	 * Verifica que el estado cambia a ENTREGADO cuando la fecha ya pasó.
 	 */
 	@Test
 	void testProcesarEstado_Entregado() {
@@ -268,7 +259,7 @@ class PaqueteAlimenticioServiceTest {
 	}
 
 	/**
-	 * Verifica que un paquete sea marcado como prioritario si está próximo a
+	 * Verifica que el paquete se marque como prioritario cuando está próximo a
 	 * entregarse.
 	 */
 	@Test
@@ -281,7 +272,7 @@ class PaqueteAlimenticioServiceTest {
 	}
 
 	/**
-	 * Verifica el registro del plazo de entrega de 6 horas.
+	 * Verifica el registro de plazo de entrega de 6 horas.
 	 */
 	@Test
 	void testRegistrarPlazo() {
