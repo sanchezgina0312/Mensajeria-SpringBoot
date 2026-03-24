@@ -34,7 +34,7 @@ import co.edu.unbosque.mensajeria.service.PaqueteCartaService;
  *
  * <p>Base URL: {@code /paquetecarta}</p>
  *
- * @author Angie Villarreal
+ * @author Gina Buitrago
  * @version 1.0
  */
 @RestController

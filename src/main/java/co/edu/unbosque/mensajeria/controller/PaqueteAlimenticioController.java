@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  *
  * <p>Base URL: {@code /paquetealimenticio}</p>
  *
- * @author Angie Villarreal
+ * @author Gina Buitrago
  * @version 1.0
  */
 @RestController
