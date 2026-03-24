@@ -81,40 +81,34 @@ public class PaqueteAlimenticioController {
 
 	// http://localhost:8080/paquetealimenticio/actualizar?id=1&remitente=Juan+Perez&destinatario=Ana+Gomez&direccionDestino=Carrera+15&ciudadDestino=Medellin&fechaEntrega=2024-05-21T10:00:00&tamanio=Mediano&tipoAlimento=No+Perecedero
 	@PutMapping("/actualizar")
-	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam boolean seEnviaHoy,
-			@RequestParam String tipoDeAlimento, @RequestParam int precioEnvio, @RequestParam String direccionDestino,
-			@RequestParam String tamanio, @RequestParam LocalDateTime fechaCreacionPedido,
-			@RequestParam LocalDateTime fechaEstimadaEntrega) {
+	public ResponseEntity<Object> actualizar(@RequestParam Long id, @RequestParam String direccionDestino,
+			@RequestParam String ciudadDestino, @RequestParam String tamanio, @RequestParam String tipoDeAlimento) {
 		try {
 			PaqueteAlimenticioDTO nuevo = new PaqueteAlimenticioDTO();
-
-			nuevo.setSeEnviaHoy(seEnviaHoy);
-			nuevo.setTipoDeAlimento(tipoDeAlimento);
-			nuevo.setTamanio(tamanio);
 			nuevo.setDireccionDestino(direccionDestino);
-			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
-			nuevo.setPrecioEnvio(precioEnvio);
+			nuevo.setCiudadDestino(ciudadDestino);
+			nuevo.setTamanio(tamanio);
+			nuevo.setTipoDeAlimento(tipoDeAlimento);
 
 			int status = paqueteAlimenticioSer.updateById(id, nuevo);
-			if (status == 0) {
-				return new ResponseEntity<>("Paquete alimenticio actualizado con éxito", HttpStatus.ACCEPTED);
+			if (status == 1) {
+				return new ResponseEntity<>("Paquete alimenticio actualizado con éxito", HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("El ID no existe en la base de datos",
+				return new ResponseEntity<>("Error: Paquete no encontrado o ya fue enviado hoy",
 						HttpStatus.BAD_REQUEST);
 			}
 		} catch (DireccionInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (TipoDeAlimentoInvalidoException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (CiudadInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TipoDeAlimentoInvalidoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (MethodArgumentTypeMismatchException e) {
-			return new ResponseEntity<>("El formato no corresponde con el requerido", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("El formato del ID no es válido", HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -127,7 +121,8 @@ public class PaqueteAlimenticioController {
 			if (status == 0) {
 				return new ResponseEntity<>("Paquete alimenticio eliminado con éxito", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("No se encontró el paquete alimenticio con el ID ingresado" + id, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("No se encontró el paquete alimenticio con el ID ingresado" + id,
+						HttpStatus.BAD_REQUEST);
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -135,7 +130,7 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	// http://localhost:8080/paquetealimenticio/buscarportamanio?tamanio=Grande
 	@GetMapping("/buscartamanio")
 	public ResponseEntity<Object> buscarPorTamanio(@RequestParam String tamanio) {
@@ -150,7 +145,7 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	// http://localhost:8080/paquetealimenticio/buscarporenviahoy?enviadhoy=true
 	@GetMapping("/buscarporenviahoy")
 	public ResponseEntity<Object> buscarPorSeEnviaHoy(@RequestParam boolean seEnviaHoy) {
@@ -165,7 +160,7 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>("El valor debe ser true o false", HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	// http://localhost:8080/paquetealimenticio/buscarportipoalimento?tipoAlimento=Perecedero
 	@GetMapping("/buscarportipoalimento")
 	public ResponseEntity<Object> buscarPorTipoDeAlimento(@RequestParam String tipoDeAlimento) {
@@ -180,7 +175,7 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	// http://localhost:8080/paquetealimenticio/buscarportamanioytipo?tamanio=Pequeño&tipoAlimento=No+Perecedero
 	@GetMapping("/buscarportamanioytipo")
 	public ResponseEntity<Object> buscarPorTamanioAndTipo(@RequestParam String tamanio,
@@ -199,7 +194,7 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	// http://localhost:8080/paquetealimenticio/seguimientoid?id=10
 	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
@@ -209,7 +204,8 @@ public class PaqueteAlimenticioController {
 			if (p != null) {
 				return new ResponseEntity<>(p, HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("No se encontró el paquete alimenticio con el ID ingresado", HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>("No se encontró el paquete alimenticio con el ID ingresado",
+						HttpStatus.NOT_FOUND);
 			}
 		} catch (MethodArgumentTypeMismatchException e) {
 			return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
@@ -220,10 +216,10 @@ public class PaqueteAlimenticioController {
 
 	// http://localhost:8080/paquetealimenticio/buscardireccionyciudad?dir=Calle+123&ciudad=Bogota
 	@GetMapping("/buscardireccionyciudad")
-	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir,
-			@RequestParam String ciudad) {
+	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir, @RequestParam String ciudad) {
 		try {
-			List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByDireccionDestinoAndCiudadDestino(dir, ciudad);
+			List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByDireccionDestinoAndCiudadDestino(dir,
+					ciudad);
 
 			if (lista.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);

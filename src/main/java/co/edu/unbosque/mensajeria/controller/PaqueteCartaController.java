@@ -62,7 +62,7 @@ public class PaqueteCartaController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TipoDeCartaInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}   catch (CiudadInvalidaException e) {
+		} catch (CiudadInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -80,40 +80,34 @@ public class PaqueteCartaController {
 
 	// http://localhost:8080/paquetecarta/actualizar?id=1&remitente=Juan+Actualizado&destinatario=Maria+Lopez&direccionDestino=Carrera+15&ciudadDestino=Medellin&fechaEntrega=2025-01-01T10:00:00&tamanio=Pequeño&tipoCarta=Normal
 	@PutMapping("/actualizar")
-	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam int precioEnvio,
-			@RequestParam String direccionDestino, @RequestParam String tamanio,
-			@RequestParam LocalDateTime fechaCreacionPedido, @RequestParam LocalDateTime fechaEstimadaEntrega,
-			@RequestParam String tipoCarta) {
+	public ResponseEntity<Object> actualizar(@RequestParam Long id, @RequestParam String direccionDestino,
+			@RequestParam String ciudadDestino, @RequestParam String tamanio, @RequestParam String tipoCarta) {
 		try {
 			PaqueteCartaDTO nuevo = new PaqueteCartaDTO();
-
 			nuevo.setDireccionDestino(direccionDestino);
-			nuevo.setFechaCreacionPedido(fechaCreacionPedido);
-			nuevo.setFechaEstimadaEntrega(fechaEstimadaEntrega);
-			nuevo.setPrecioEnvio(precioEnvio);
+			nuevo.setCiudadDestino(ciudadDestino);
 			nuevo.setTamanio(tamanio);
 			nuevo.setTipoCarta(tipoCarta);
 
 			int status = paqueteCartaSer.updateById(id, nuevo);
-			if (status == 0) {
-				return new ResponseEntity<>("Carta actualizada con éxito.", HttpStatus.ACCEPTED);
+			if (status == 1) {
+				return new ResponseEntity<>("Carta actualizada con éxito", HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("No se encontró la carta con el ID ingresado",
-						HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("No se encontró la carta con el ID ingresado", HttpStatus.NOT_FOUND);
 			}
 		} catch (DireccionInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (TipoDeCartaInvalidaException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}  catch (CiudadInvalidaException e) {
+		} catch (CiudadInvalidaException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (TipoDeCartaInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (MethodArgumentTypeMismatchException e) {
-	        return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
-	    }
+			return new ResponseEntity<>("El formato del ID no es válido", HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	// http://localhost:8080/paquetecarta/eliminar?id=1
@@ -128,11 +122,11 @@ public class PaqueteCartaController {
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}  catch (MethodArgumentTypeMismatchException e) {
-	        return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
-	    }
+		} catch (MethodArgumentTypeMismatchException e) {
+			return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
+		}
 	}
-	
+
 	// http://localhost:8080/paquetecarta/buscarportamanio?tamanio=Pequeño
 	@GetMapping("/buscarportamanio")
 	public ResponseEntity<Object> buscarPorTamanio(@RequestParam String tamanio) {
@@ -146,13 +140,13 @@ public class PaqueteCartaController {
 			}
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} 
+		}
 	}
-	
+
 	// http://localhost:8080/paquetecarta/buscarportipocarta?tipoCarta=Certificada
 	@GetMapping("/buscarportipocarta")
 	public ResponseEntity<Object> buscarPorTipoCarta(@RequestParam String tipoCarta) {
-		
+
 		try {
 			List<PaqueteCartaDTO> lista = paqueteCartaSer.findByTipoCarta(tipoCarta);
 			if (!lista.isEmpty()) {
@@ -162,14 +156,14 @@ public class PaqueteCartaController {
 			}
 		} catch (TipoDeCartaInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} 
+		}
 	}
-	
+
 	// http://localhost:8080/paquetecarta/buscarportamanioytipocarta?tamanio=Pequeño&tipoCarta=Documento
 	@GetMapping("/buscarportamanioytipocarta")
 	public ResponseEntity<Object> buscarPorTamanioAndTipoCarta(@RequestParam String tamanio,
 			@RequestParam String tipoCarta) {
-		
+
 		try {
 			List<PaqueteCartaDTO> lista = paqueteCartaSer.findByTamanioAndTipoCarta(tamanio, tipoCarta);
 			if (!lista.isEmpty()) {
@@ -179,14 +173,14 @@ public class PaqueteCartaController {
 			}
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} 
+		}
 
 	}
-	
+
 	// http://localhost:8080/paquetecarta/seguimientoid?id=1
 	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
-		
+
 		try {
 			PaqueteCartaDTO p = paqueteCartaSer.findById(id);
 			if (p != null) {
@@ -196,15 +190,14 @@ public class PaqueteCartaController {
 			}
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}  catch (MethodArgumentTypeMismatchException e) {
-	        return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
-	    }
+		} catch (MethodArgumentTypeMismatchException e) {
+			return new ResponseEntity<>("El valor debe ser un número entero", HttpStatus.BAD_REQUEST);
+		}
 	}
-	
+
 	// http://localhost:8080/paquetecarta/buscardireccionyciudad?dir=Calle+123&ciudad=Bogota
 	@GetMapping("/buscardireccionyciudad")
-	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir,
-			@RequestParam String ciudad) {
+	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir, @RequestParam String ciudad) {
 
 		try {
 			List<PaqueteCartaDTO> lista = paqueteCartaSer.findByDireccionDestinoAndCiudadDestino(dir, ciudad);
@@ -216,6 +209,6 @@ public class PaqueteCartaController {
 			}
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} 
+		}
 	}
 }
