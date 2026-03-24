@@ -50,16 +50,22 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 		procesarEstadoYTiempoDTO(data);
 
-		PaqueteAlimenticio entity = mapper.map(data, PaqueteAlimenticio.class);
-		paqueteAlimenticioRep.save(entity);
-		return 0;
+		try {
+			PaqueteAlimenticio entity = mapper.map(data, PaqueteAlimenticio.class);
+			paqueteAlimenticioRep.save(entity);
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error en Paquete No Alimenticio: " + e.getMessage());
+			return 0;
+		}
 	}
 
 	@Override
 	public List<PaqueteAlimenticioDTO> getAll() {
 		List<PaqueteAlimenticio> listaEntidad = (List<PaqueteAlimenticio>) paqueteAlimenticioRep.findAll();
 		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
-		for (PaqueteAlimenticio p : listaEntidad) { 
+		for (PaqueteAlimenticio p : listaEntidad) {
 			PaqueteAlimenticioDTO dto = mapper.map(p, PaqueteAlimenticioDTO.class);
 			procesarEstadoYTiempoDTO(dto);
 			dtoList.add(dto);
@@ -98,10 +104,10 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 			temp.setFechaEstimadaEntrega(data.getFechaEstimadaEntrega());
 			temp.setSeEnviaHoy(data.isSeEnviaHoy());
 			temp.setTipoDeAlimento(data.getTipoDeAlimento());
-			
+
 			PaqueteAlimenticioDTO dtoParaActualizar = mapper.map(temp, PaqueteAlimenticioDTO.class);
 			procesarEstadoYTiempoDTO(dtoParaActualizar);
-			
+
 			paqueteAlimenticioRep.save(mapper.map(dtoParaActualizar, PaqueteAlimenticio.class));
 			return 0;
 		}

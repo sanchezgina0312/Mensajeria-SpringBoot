@@ -58,7 +58,8 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	        paqueteNoAlimenticioRep.save(entity);
 	        return 1;
 	    } catch (Exception e) {
-	        e.getMessage(); 
+	    	e.printStackTrace();
+	    	System.out.println("Error en Paquete No Alimenticio: " + e.getMessage());
 	        return 0;
 	    }
 	}

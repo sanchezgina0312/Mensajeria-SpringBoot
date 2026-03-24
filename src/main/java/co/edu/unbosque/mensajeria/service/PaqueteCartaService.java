@@ -48,9 +48,15 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 
 		procesarEstadoYTiempoDTO(data);
 
-		PaqueteCarta entity = mapper.map(data, PaqueteCarta.class);
-		paqueteCartaRep.save(entity);
-		return 0;
+		try {
+			PaqueteCarta entity = mapper.map(data, PaqueteCarta.class);
+			paqueteCartaRep.save(entity);
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error en Paquete No Alimenticio: " + e.getMessage());
+			return 0;
+		}
 	}
 
 	@Override
