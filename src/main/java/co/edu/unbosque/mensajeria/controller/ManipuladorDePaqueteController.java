@@ -223,7 +223,7 @@ public class ManipuladorDePaqueteController {
 			if (status == 0) {
 				return new ResponseEntity<>("Dato eliminado con éxito", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("Error: No se encontró el registro con ID " + id, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("No se encontró el manipulador de paquete con el ID ingresado: " + id, HttpStatus.BAD_REQUEST);
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

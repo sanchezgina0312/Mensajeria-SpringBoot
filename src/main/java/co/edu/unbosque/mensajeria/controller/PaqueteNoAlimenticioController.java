@@ -219,7 +219,7 @@ public class PaqueteNoAlimenticioController {
 			if (status == 0) {
 				return new ResponseEntity<>("Paquete no alimenticio eliminado con éxito", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("No se encontró el paquete no alimenticio con el ID ingresado" + id,
+				return new ResponseEntity<>("No se encontró el paquete no alimenticio con el ID ingresado: " + id,
 						HttpStatus.BAD_REQUEST);
 			}
 		} catch (IdInvalidoException e) {

@@ -225,7 +225,7 @@ public class AdministradorController {
             if (status == 0) {
                 return new ResponseEntity<>("Administrador eliminado con éxito", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("No se encontró ningún administrador con el ID ingresado",
+                return new ResponseEntity<>("No se encontró ningún administrador con el ID ingresado: " + id,
                         HttpStatus.NOT_FOUND);
             }
         } catch (IdInvalidoException e) {
