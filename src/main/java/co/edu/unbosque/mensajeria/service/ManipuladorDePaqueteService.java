@@ -3,14 +3,27 @@ package co.edu.unbosque.mensajeria.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import co.edu.unbosque.mensajeria.dto.ManipuladorDePaqueteDTO;
 import co.edu.unbosque.mensajeria.entity.ManipuladorDePaquete;
 import co.edu.unbosque.mensajeria.repository.ManipuladorDePaqueteRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
+/**
+ * Servicio encargado de gestionar las operaciones CRUD de los manipuladores de paquetes.
+ * <p>
+ * Permite crear, consultar, actualizar y eliminar manipuladores, así como
+ * realizar búsquedas por diferentes atributos como nombre, cédula, correo,
+ * teléfono y tipo de manipulador.
+ * Utiliza ModelMapper para la conversión entre entidades y DTOs.
+ * </p>
+ * 
+ * @author Angie Villarreal
+ */
 @Service
 public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDePaqueteDTO> {
 
@@ -20,9 +33,18 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 	@Autowired
 	private ModelMapper mapper;
 
+	/**
+	 * Constructor por defecto.
+	 */
 	public ManipuladorDePaqueteService() {
 	}
 
+	/**
+	 * Crea un nuevo manipulador de paquete.
+	 * 
+	 * @param data datos del manipulador
+	 * @return 0 si se crea correctamente, 1 si ya existe
+	 */
 	@Override
 	public int create(ManipuladorDePaqueteDTO data) {
 		LanzadorDeException.verificarCedula(data.getCedula());
@@ -31,7 +53,9 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		LanzadorDeException.verificarTelefono(data.getTelefono());
 		LanzadorDeException.verificarTipoManipulador(data.getTipoManipulador());
 
-		LanzadorDeException.verificarDuplicado(manipuladorRep.existsByCedula(data.getCedula()), "La cédula " + data.getCedula() + " ya se encuentra registrada para un manipulador.");
+		LanzadorDeException.verificarDuplicado(
+				manipuladorRep.existsByCedula(data.getCedula()),
+				"La cédula " + data.getCedula() + " ya se encuentra registrada para un manipulador.");
 
 		if (manipuladorRep.existsByCedula(data.getCedula())) {
 			return 1;
@@ -42,6 +66,11 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		}
 	}
 
+	/**
+	 * Obtiene todos los manipuladores de paquetes.
+	 * 
+	 * @return lista de manipuladores
+	 */
 	@Override
 	public List<ManipuladorDePaqueteDTO> getAll() {
 		List<ManipuladorDePaquete> entityList = (List<ManipuladorDePaquete>) manipuladorRep.findAll();
@@ -52,6 +81,12 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		return dtoList;
 	}
 
+	/**
+	 * Elimina un manipulador por ID.
+	 * 
+	 * @param id identificador del manipulador
+	 * @return 0 si se elimina, 1 si no existe
+	 */
 	@Override
 	public int deleteById(Long id) {
 		LanzadorDeException.verificarId(id);
@@ -65,6 +100,13 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		}
 	}
 
+	/**
+	 * Actualiza un manipulador existente.
+	 * 
+	 * @param id identificador del manipulador
+	 * @param data nuevos datos
+	 * @return 0 si se actualiza correctamente, 1 si hay error
+	 */
 	@Override
 	public int updateById(Long id, ManipuladorDePaqueteDTO data) {
 		LanzadorDeException.verificarId(id);
@@ -80,7 +122,11 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 			ManipuladorDePaquete temp = encontrado.get();
 
 			if (!temp.getCedula().equals(data.getCedula())) {
-				LanzadorDeException.verificarDuplicado(manipuladorRep.existsByCedula(data.getCedula()), "No se puede actualizar: la cédula " + data.getCedula() + " ya pertenece a otro manipulador.");
+				LanzadorDeException.verificarDuplicado(
+						manipuladorRep.existsByCedula(data.getCedula()),
+						"No se puede actualizar: la cédula " + data.getCedula()
+								+ " ya pertenece a otro manipulador.");
+
 				if (manipuladorRep.existsByCedula(data.getCedula())) {
 					return 1;
 				}
@@ -99,17 +145,31 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		}
 	}
 
+	/**
+	 * Cuenta los manipuladores registrados.
+	 * 
+	 * @return total de manipuladores
+	 */
 	@Override
 	public long count() {
 		return manipuladorRep.count();
 	}
 
+	/**
+	 * Verifica si existe un manipulador por ID.
+	 * 
+	 * @param id identificador
+	 * @return true si existe, false si no
+	 */
 	@Override
 	public boolean exist(Long id) {
 		LanzadorDeException.verificarId(id);
 		return manipuladorRep.existsById(id);
 	}
 
+	/**
+	 * Busca manipuladores por nombre.
+	 */
 	public List<ManipuladorDePaqueteDTO> findByNombre(String nombre) {
 		LanzadorDeException.verificarNombre(nombre);
 		Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByNombre(nombre);
@@ -120,6 +180,9 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		return dtoList;
 	}
 
+	/**
+	 * Busca manipuladores por cédula.
+	 */
 	public List<ManipuladorDePaqueteDTO> findByCedula(String cedula) {
 		LanzadorDeException.verificarCedula(cedula);
 		Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByCedula(cedula);
@@ -130,6 +193,9 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		return dtoList;
 	}
 
+	/**
+	 * Busca manipuladores por correo.
+	 */
 	public List<ManipuladorDePaqueteDTO> findByCorreo(String correo) {
 		LanzadorDeException.verificarCorreoElectronico(correo);
 		Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByCorreo(correo);
@@ -140,6 +206,9 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		return dtoList;
 	}
 
+	/**
+	 * Busca manipuladores por teléfono.
+	 */
 	public List<ManipuladorDePaqueteDTO> findByTelefono(String telefono) {
 		LanzadorDeException.verificarTelefono(telefono);
 		Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByTelefono(telefono);
@@ -150,6 +219,9 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		return dtoList;
 	}
 
+	/**
+	 * Busca manipuladores por tipo.
+	 */
 	public List<ManipuladorDePaqueteDTO> findByTipoManipulador(String tipoManipulador) {
 		LanzadorDeException.verificarTipoManipulador(tipoManipulador);
 		Optional<List<ManipuladorDePaquete>> encontrados = manipuladorRep.findByTipoManipulador(tipoManipulador);
@@ -160,6 +232,9 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		return dtoList;
 	}
 
+	/**
+	 * Busca manipuladores por nombre y cédula.
+	 */
 	public List<ManipuladorDePaqueteDTO> findByNombreAndCedula(String nombre, String cedula) {
 		LanzadorDeException.verificarNombre(nombre);
 		LanzadorDeException.verificarCedula(cedula);
@@ -170,13 +245,18 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		}
 		return dtoList;
 	}
-	
+
+	/**
+	 * Permite inyectar el repositorio manualmente (testing).
+	 */
 	public void setManipuladorDePaqueteRep(ManipuladorDePaqueteRepository repo) {
-	    this.manipuladorRep= repo;
+		this.manipuladorRep = repo;
 	}
 
+	/**
+	 * Permite inyectar el mapper manualmente (testing).
+	 */
 	public void setMapper(ModelMapper mapper) {
-	    this.mapper = mapper;
+		this.mapper = mapper;
 	}
-	
 }
