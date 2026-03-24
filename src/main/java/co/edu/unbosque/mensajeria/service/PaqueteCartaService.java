@@ -14,6 +14,16 @@ import co.edu.unbosque.mensajeria.entity.PaqueteCarta;
 import co.edu.unbosque.mensajeria.repository.PaqueteCartaRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
+/**
+ * Servicio encargado de gestionar las operaciones CRUD de los paquetes de tipo carta.
+ * <p>
+ * Permite crear, consultar, actualizar y eliminar paquetes de carta, así como
+ * realizar cálculos de precios por tamaño, gestionar el estado del envío y 
+ * procesar tiempos de entrega estimados.
+ * Utiliza ModelMapper para la conversión entre entidades y DTOs.
+ * </p>
+ * * @author Angie Villarreal
+ */
 @Service
 public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 
@@ -23,10 +33,18 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 	@Autowired
 	private ModelMapper mapper;
 
+	/**
+	 * Constructor por defecto.
+	 */
 	public PaqueteCartaService() {
 
 	}
 
+	/**
+	 * Crea un nuevo paquete de carta.
+	 * * @param data datos del paquete de carta
+	 * @return 1 si se crea correctamente
+	 */
 	@Override
 	public int create(PaqueteCartaDTO data) {
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
@@ -47,6 +65,10 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return 1;
 	}
 
+	/**
+	 * Obtiene todos los paquetes de carta.
+	 * * @return lista de paquetes de carta
+	 */
 	@Override
 	public List<PaqueteCartaDTO> getAll() {
 		List<PaqueteCarta> entities = (List<PaqueteCarta>) paqueteCartaRep.findAll();
@@ -67,6 +89,11 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Elimina un paquete de carta por ID.
+	 * * @param id identificador del paquete
+	 * @return 0 si se elimina, 1 si no existe
+	 */
 	@Override
 	public int deleteById(Long id) {
 
@@ -80,6 +107,13 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return 1;
 	}
 
+	/**
+	 * Actualiza un paquete de carta existente.
+	 * * @param id identificador del paquete
+	 * @param data nuevos datos
+	 * @return 1 si se actualiza correctamente, 0 si hay error
+	 */
+	@Override
 	public int updateById(Long id, PaqueteCartaDTO data) {
 		Optional<PaqueteCarta> encontrado = paqueteCartaRep.findById(id);
 		if (encontrado.isPresent()) {
@@ -108,16 +142,28 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return 0;
 	}
 
+	/**
+	 * Cuenta los paquetes de carta registrados.
+	 * * @return total de paquetes
+	 */
 	@Override
 	public long count() {
 		return paqueteCartaRep.count();
 	}
 
+	/**
+	 * Verifica si existe un paquete de carta por ID.
+	 * * @param id identificador
+	 * @return true si existe, false si no
+	 */
 	@Override
 	public boolean exist(Long id) {
 		return paqueteCartaRep.existsById(id) ? true : false;
 	}
 
+	/**
+	 * Busca paquetes de carta por tamaño.
+	 */
 	public List<PaqueteCartaDTO> findByTamanio(String tamanio) {
 		LanzadorDeException.verificarTamanoPaquete(tamanio);
 		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByTamanio(tamanio);
@@ -135,6 +181,9 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		}
 	}
 
+	/**
+	 * Busca paquetes de carta por tipo de carta.
+	 */
 	public List<PaqueteCartaDTO> findByTipoCarta(String tipoCarta) {
 		LanzadorDeException.verificarTipoCarta(tipoCarta);
 		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByTipoCarta(tipoCarta);
@@ -152,6 +201,9 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		}
 	}
 
+	/**
+	 * Busca paquetes de carta por tamaño y tipo de carta.
+	 */
 	public List<PaqueteCartaDTO> findByTamanioAndTipoCarta(String tamanio, String tipoCarta) {
 		LanzadorDeException.verificarTamanoPaquete(tamanio);
 		LanzadorDeException.verificarTipoCarta(tipoCarta);
@@ -170,6 +222,9 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		}
 	}
 
+	/**
+	 * Busca un paquete de carta por ID.
+	 */
 	public PaqueteCartaDTO findById(Long id) {
 		Optional<PaqueteCarta> encontrado = paqueteCartaRep.findById(id);
 		if (encontrado.isPresent()) {
@@ -180,6 +235,9 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return null;
 	}
 
+	/**
+	 * Busca paquetes de carta por dirección y ciudad de destino.
+	 */
 	public List<PaqueteCartaDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 		LanzadorDeException.verificarDireccion(direccion);
 		LanzadorDeException.verificarCiudad(ciudad);
@@ -198,6 +256,9 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Calcula el precio basado en el tamaño del paquete de carta.
+	 */
 	public double calcularPrecioPorTamaño(double base, String tamaño) {
 		if (tamaño.equalsIgnoreCase("MEDIANO"))
 			return base + 2000;
@@ -206,6 +267,9 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return base;
 	}
 
+	/**
+	 * Aplica descuentos según el tipo de cliente.
+	 */
 	public double aplicarDescuentoPorCliente(double precioActual, String tipoCliente) {
 		if (tipoCliente.equalsIgnoreCase("CONCURRENTE"))
 			return precioActual * 0.90;
@@ -214,6 +278,9 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return precioActual;
 	}
 
+	/**
+	 * Procesa el estado del pedido y verifica la prioridad según el tiempo restante.
+	 */
 	public void procesarEstadoYTiempoDTO(PaqueteCartaDTO dto) {
 		LocalDateTime ahora = LocalDateTime.now();
 		if (dto.getFechaEstimadaEntrega() == null)
@@ -229,15 +296,24 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		}
 	}
 
+	/**
+	 * Registra un plazo de entrega de 72 horas.
+	 */
 	public int registrarPlazo72Horas(PaqueteCartaDTO data) {
 		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(72));
 		return 0;
 	}
 
+	/**
+	 * Permite inyectar el repositorio manualmente (testing).
+	 */
 	public void setPaqueteCartaRep(PaqueteCartaRepository repo) {
 		this.paqueteCartaRep = repo;
 	}
 
+	/**
+	 * Permite inyectar el mapper manualmente (testing).
+	 */
 	public void setMapper(ModelMapper mapper) {
 		this.mapper = mapper;
 	}

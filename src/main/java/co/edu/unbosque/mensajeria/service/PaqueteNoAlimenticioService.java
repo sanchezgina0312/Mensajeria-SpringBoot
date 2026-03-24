@@ -14,6 +14,16 @@ import co.edu.unbosque.mensajeria.entity.PaqueteNoAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteNoAlimenticioRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
+/**
+ * Servicio encargado de gestionar las operaciones CRUD de los paquetes no alimenticios.
+ * <p>
+ * Permite crear, consultar, actualizar y eliminar paquetes no alimenticios, así como
+ * realizar cálculos de precios por tamaño, gestionar la fragilidad del envío y 
+ * procesar tiempos de entrega estimados.
+ * Utiliza ModelMapper para la conversión entre entidades y DTOs.
+ * </p>
+ * * @author Angie Villarreal
+ */
 @Service
 public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlimenticioDTO> {
 
@@ -23,10 +33,18 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	@Autowired
 	private ModelMapper mapper;
 
+	/**
+	 * Constructor por defecto.
+	 */
 	public PaqueteNoAlimenticioService() {
 
 	}
 
+	/**
+	 * Crea un nuevo paquete no alimenticio.
+	 * * @param data datos del paquete no alimenticio
+	 * @return 1 si se crea correctamente
+	 */
 	@Override
 	public int create(PaqueteNoAlimenticioDTO data) {
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
@@ -46,6 +64,10 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return 1;
 	}
 
+	/**
+	 * Obtiene todos los paquetes no alimenticios.
+	 * * @return lista de paquetes no alimenticios
+	 */
 	@Override
 	public List<PaqueteNoAlimenticioDTO> getAll() {
 		List<PaqueteNoAlimenticio> entities = (List<PaqueteNoAlimenticio>) paqueteNoAlimenticioRep.findAll();
@@ -66,6 +88,11 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return dtoList;
 	}
 
+	/**
+	 * Elimina un paquete no alimenticio por ID.
+	 * * @param id identificador del paquete
+	 * @return 0 si se elimina, 1 si no existe
+	 */
 	@Override
 	public int deleteById(Long id) {
 		LanzadorDeException.verificarId(id);
@@ -78,6 +105,13 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return 1;
 	}
 
+	/**
+	 * Actualiza un paquete no alimenticio existente.
+	 * * @param id identificador del paquete
+	 * @param data nuevos datos
+	 * @return 1 si se actualiza correctamente, 0 si no existe
+	 */
+	@Override
 	public int updateById(Long id, PaqueteNoAlimenticioDTO data) {
 		Optional<PaqueteNoAlimenticio> encontrado = paqueteNoAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
@@ -104,16 +138,28 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return 0;
 	}
 
+	/**
+	 * Cuenta los paquetes no alimenticios registrados.
+	 * * @return total de paquetes
+	 */
 	@Override
 	public long count() {
 		return paqueteNoAlimenticioRep.count();
 	}
 
+	/**
+	 * Verifica si existe un paquete no alimenticio por ID.
+	 * * @param id identificador
+	 * @return true si existe, false si no
+	 */
 	@Override
 	public boolean exist(Long id) {
 		return paqueteNoAlimenticioRep.existsById(id) ? true : false;
 	}
 
+	/**
+	 * Busca paquetes no alimenticios por tamaño.
+	 */
 	public List<PaqueteNoAlimenticioDTO> findByTamanio(String tamanio) {
 		LanzadorDeException.verificarTamanoPaquete(tamanio);
 		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByTamanio(tamanio);
@@ -131,6 +177,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		}
 	}
 
+	/**
+	 * Busca paquetes no alimenticios por fragilidad.
+	 */
 	public List<PaqueteNoAlimenticioDTO> findByEsFragil(boolean esFragil) {
 		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByEsFragil(esFragil);
 		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
@@ -147,6 +196,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		}
 	}
 
+	/**
+	 * Busca paquetes no alimenticios por tamaño y fragilidad.
+	 */
 	public List<PaqueteNoAlimenticioDTO> findByTamanioAndEsFragil(String tamanio, boolean esFragil) {
 		LanzadorDeException.verificarTamanoPaquete(tamanio);
 		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByTamanioAndEsFragil(tamanio,
@@ -165,6 +217,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		}
 	}
 
+	/**
+	 * Busca un paquete no alimenticio por ID.
+	 */
 	public PaqueteNoAlimenticioDTO findById(Long id) {
 		Optional<PaqueteNoAlimenticio> encontrado = paqueteNoAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
@@ -175,6 +230,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return null;
 	}
 
+	/**
+	 * Busca paquetes no alimenticios por dirección y ciudad de destino.
+	 */
 	public List<PaqueteNoAlimenticioDTO> findByDireccionDestinoAndCiudadDestino(String direccion, String ciudad) {
 
 		LanzadorDeException.verificarDireccion(direccion);
@@ -194,6 +252,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return dtoList;
 	}
 
+	/**
+	 * Calcula el precio basado en el tamaño del paquete no alimenticio.
+	 */
 	public double calcularPrecioPorTamaño(double base, String tamaño) {
 		if (tamaño.equalsIgnoreCase("MEDIANO"))
 			return base + 7000;
@@ -202,6 +263,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return base;
 	}
 
+	/**
+	 * Aplica descuentos según el tipo de cliente.
+	 */
 	public double aplicarDescuentoPorCliente(double precioActual, String tipoCliente) {
 		if (tipoCliente.equalsIgnoreCase("CONCURRENTE"))
 			return precioActual * 0.90;
@@ -210,6 +274,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return precioActual;
 	}
 
+	/**
+	 * Procesa el estado del pedido y verifica la prioridad según el tiempo restante.
+	 */
 	public void procesarEstadoYTiempoDTO(PaqueteNoAlimenticioDTO dto) {
 		LocalDateTime ahora = LocalDateTime.now();
 		if (dto.getFechaEstimadaEntrega() == null)
@@ -225,15 +292,24 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		}
 	}
 
+	/**
+	 * Registra un plazo de entrega de 24 horas.
+	 */
 	public int registrarPlazo24Horas(PaqueteNoAlimenticioDTO data) {
 		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(24));
 		return 0;
 	}
 
+	/**
+	 * Permite inyectar el repositorio manualmente (testing).
+	 */
 	public void setPaqueteNoAlimenticioRep(PaqueteNoAlimenticioRepository repo) {
 		this.paqueteNoAlimenticioRep = repo;
 	}
 
+	/**
+	 * Permite inyectar el mapper manualmente (testing).
+	 */
 	public void setMapper(ModelMapper mapper) {
 		this.mapper = mapper;
 	}
