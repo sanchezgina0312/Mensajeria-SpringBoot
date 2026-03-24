@@ -20,8 +20,34 @@ import co.edu.unbosque.mensajeria.exception.TipoManipuladorInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TipoPedidoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 
+/**
+ * Clase utilitaria que centraliza la validación de datos del dominio del sistema de mensajería.
+ * <p>
+ * Cada método verifica las reglas de negocio correspondientes a un campo específico
+ * y lanza una excepción personalizada en caso de que el valor no cumpla con los requisitos.
+ * Todos los métodos son estáticos, por lo que no es necesario instanciar la clase.
+ * </p>
+ *
+ * @author Angie Villarreal
+ * @version 1.0
+ */
 public class LanzadorDeException {
 
+	/**
+	 * Verifica que el nombre proporcionado sea válido según las reglas del sistema.
+	 * <p>
+	 * El nombre debe cumplir las siguientes condiciones:
+	 * <ul>
+	 *   <li>No contener espacios dobles.</li>
+	 *   <li>Contener únicamente letras (incluyendo tildes y ñ) y espacios simples.</li>
+	 *   <li>Tener al menos dos palabras (nombre y apellido).</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param nombre el nombre completo a validar.
+	 * @throws NombreInvalidoException si el nombre contiene espacios dobles, caracteres no permitidos
+	 *                                  o tiene menos de dos palabras.
+	 */
 	public static void verificarNombre(String nombre) {
 		if (nombre.contains("  ")) {
 			throw new NombreInvalidoException("El nombre no puede contener espacios dobles");
@@ -35,6 +61,18 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el correo electrónico proporcionado tenga un formato válido.
+	 * <p>
+	 * El correo debe seguir el patrón estándar: {@code usuario@dominio.extension},
+	 * donde la extensión debe tener entre 2 y 6 caracteres alfabéticos.
+	 * Ejemplo válido: {@code usuario@dominio.com}
+	 * </p>
+	 *
+	 * @param correo la dirección de correo electrónico a validar.
+	 * @return {@code true} si el correo tiene un formato válido.
+	 * @throws CorreoInvalidoException si el correo no cumple con el formato esperado.
+	 */
 	public static boolean verificarCorreoElectronico(String correo) {
 		Pattern pattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
 		Matcher matcher = pattern.matcher(correo);
@@ -47,6 +85,22 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el número de cédula proporcionado sea válido.
+	 * <p>
+	 * La cédula debe cumplir las siguientes condiciones:
+	 * <ul>
+	 *   <li>No ser nula ni vacía.</li>
+	 *   <li>No contener espacios.</li>
+	 *   <li>Contener únicamente dígitos numéricos.</li>
+	 *   <li>Tener entre 6 y 10 dígitos.</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param cedula el número de cédula a validar.
+	 * @throws CedulaInvalidaException si la cédula es nula, vacía, contiene espacios,
+	 *                                  caracteres no numéricos o no tiene la longitud esperada.
+	 */
 	public static void verificarCedula(String cedula) {
 
 		if (cedula == null || cedula.isEmpty()) {
@@ -66,15 +120,27 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que la dirección proporcionada sea válida según el formato colombiano.
+	 * <p>
+	 * La dirección debe cumplir las siguientes condiciones:
+	 * <ul>
+	 *   <li>No ser nula ni vacía.</li>
+	 *   <li>No contener espacios dobles.</li>
+	 *   <li>Contener únicamente letras, números, {@code #}, {@code -}, {@code .} y espacios.</li>
+	 *   <li>Seguir el formato colombiano, iniciando con un tipo de vía reconocido
+	 *       (Calle, Carrera, Transversal, Diagonal, Avenida, Av, Cl, Cra, Tv, Dg)
+	 *       seguido del número y la nomenclatura {@code # número-número}.</li>
+	 *   <li>Tener entre 5 y 100 caracteres.</li>
+	 * </ul>
+	 * Ejemplos válidos: {@code Calle 123 # 45-67}, {@code Cra 7 # 32-16}, {@code Av 68 # 10-45 apto 302}
+	 * </p>
+	 *
+	 * @param direccion la dirección a validar.
+	 * @throws DireccionInvalidaException si la dirección es nula, vacía, contiene caracteres inválidos,
+	 *                                     no sigue el formato colombiano o excede los límites de longitud.
+	 */
 	public static void verificarDireccion(String direccion) {
-
-		/*
-		 * Ejemplos de direcciones válidas:
-		 * 
-		 * Calle 123 # 45-67 Cra 7 # 32-16 Avenida 68 # 10-45 Av 68 # 10-45 apto 302
-		 * Carrera 15 # 100-25 Transversal 45A # 12-34 Diagonal 23 # 45-10 Cl 10 # 8-20
-		 * barrio Centro
-		 */
 
 		if (direccion == null || direccion.isEmpty()) {
 			throw new DireccionInvalidaException("La dirección no puede estar vacía");
@@ -98,13 +164,25 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el método de pago proporcionado sea uno de los aceptados por el sistema.
+	 * <p>
+	 * Los métodos de pago válidos son (sin distinción de mayúsculas/minúsculas):
+	 * <ul>
+	 *   <li>{@code EFECTIVO}</li>
+	 *   <li>{@code TARJETA_CREDITO}</li>
+	 *   <li>{@code TARJETA_DEBITO}</li>
+	 *   <li>{@code NEQUI}</li>
+	 *   <li>{@code DAVIPLATA}</li>
+	 *   <li>{@code TRANSFERENCIA}</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param metodoPago el método de pago a validar.
+	 * @throws MetodoDePagoInvalidoException si el método de pago es nulo, vacío, contiene espacios
+	 *                                        o no corresponde a ninguno de los valores permitidos.
+	 */
 	public static void verificarMetodoPago(String metodoPago) {
-
-		/*
-		 * Métodos de pago aceptados:
-		 * 
-		 * EFECTIVO TARJETA_CREDITO TARJETA_DEBITO NEQUI DAVIPLATA TRANSFERENCIA
-		 */
 
 		if (metodoPago == null || metodoPago.isEmpty()) {
 			throw new MetodoDePagoInvalidoException("El método de pago no puede estar vacío");
@@ -114,7 +192,6 @@ public class LanzadorDeException {
 			throw new MetodoDePagoInvalidoException("El método de pago no debe contener espacios");
 		}
 
-		// Normalizamos a mayúsculas para evitar errores
 		metodoPago = metodoPago.toUpperCase();
 
 		if (!metodoPago.equals("EFECTIVO") && !metodoPago.equals("TARJETA_CREDITO")
@@ -125,6 +202,22 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que la placa vehicular proporcionada sea válida según el formato colombiano.
+	 * <p>
+	 * La placa debe cumplir las siguientes condiciones:
+	 * <ul>
+	 *   <li>No ser nula ni vacía.</li>
+	 *   <li>No contener espacios.</li>
+	 *   <li>Seguir el formato colombiano: tres letras mayúsculas seguidas de tres dígitos
+	 *       (ejemplo: {@code ABC123}).</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param placa la placa vehicular a validar.
+	 * @throws PlacaInvalidaException si la placa es nula, vacía, contiene espacios
+	 *                                 o no sigue el formato {@code ABC123}.
+	 */
 	public static void verificarPlaca(String placa) {
 
 		if (placa == null || placa.isEmpty()) {
@@ -142,14 +235,22 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el tamaño del paquete sea uno de los valores aceptados por el sistema.
+	 * <p>
+	 * Los tamaños válidos son (sin distinción de mayúsculas/minúsculas):
+	 * <ul>
+	 *   <li>{@code PEQUENO}</li>
+	 *   <li>{@code MEDIANO}</li>
+	 *   <li>{@code GRANDE}</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param tamano el tamaño del paquete a validar.
+	 * @throws TamanioInvalidoException si el tamaño es nulo, vacío, contiene espacios
+	 *                                   o no corresponde a ninguno de los valores permitidos.
+	 */
 	public static void verificarTamanoPaquete(String tamano) {
-
-		/*
-		 * Tamaños de paquete aceptados:
-		 * 
-		 * PEQUENO MEDIANO GRANDE
-		 * 
-		 */
 
 		if (tamano == null || tamano.isEmpty()) {
 			throw new TamanioInvalidoException("El tamaño del paquete no puede estar vacío");
@@ -167,6 +268,24 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el número de teléfono proporcionado sea válido para Colombia.
+	 * <p>
+	 * El teléfono debe cumplir las siguientes condiciones:
+	 * <ul>
+	 *   <li>No ser nulo ni vacío.</li>
+	 *   <li>No contener espacios.</li>
+	 *   <li>Contener únicamente dígitos numéricos.</li>
+	 *   <li>Tener exactamente 10 dígitos.</li>
+	 *   <li>Iniciar con el dígito {@code 3} (formato de celular colombiano).</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param telefono el número de teléfono a validar.
+	 * @throws TelefonoInvalidoException si el teléfono es nulo, vacío, contiene espacios,
+	 *                                    caracteres no numéricos, no tiene 10 dígitos
+	 *                                    o no inicia con {@code 3}.
+	 */
 	public static void verificarTelefono(String telefono) {
 
 		if (telefono == null || telefono.isEmpty()) {
@@ -190,14 +309,25 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el tipo de alimento proporcionado sea uno de los valores aceptados por el sistema.
+	 * <p>
+	 * Los tipos de alimento válidos son (sin distinción de mayúsculas/minúsculas):
+	 * <ul>
+	 *   <li>{@code FRUTA}</li>
+	 *   <li>{@code VERDURA}</li>
+	 *   <li>{@code CARNE}</li>
+	 *   <li>{@code LACTEO}</li>
+	 *   <li>{@code CEREAL}</li>
+	 *   <li>{@code BEBIDA}</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param tipo el tipo de alimento a validar.
+	 * @throws TipoDeAlimentoInvalidoException si el tipo es nulo, vacío, contiene espacios
+	 *                                          o no corresponde a ninguno de los valores permitidos.
+	 */
 	public static void verificarTipoAlimento(String tipo) {
-
-		/*
-		 * Tipos de alimento aceptados:
-		 * 
-		 * FRUTA VERDURA CARNE LACTEO CEREAL BEBIDA
-		 * 
-		 */
 
 		if (tipo == null || tipo.isEmpty()) {
 			throw new TipoDeAlimentoInvalidoException("El tipo de alimento no puede estar vacío");
@@ -216,14 +346,23 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el tipo de carta proporcionado sea uno de los valores aceptados por el sistema.
+	 * <p>
+	 * Los tipos de carta válidos son (sin distinción de mayúsculas/minúsculas):
+	 * <ul>
+	 *   <li>{@code ESTANDAR}</li>
+	 *   <li>{@code CERTIFICADA}</li>
+	 *   <li>{@code JURIDICA}</li>
+	 *   <li>{@code PUBLICITARIA}</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param tipo el tipo de carta a validar.
+	 * @throws TipoDeCartaInvalidaException si el tipo es nulo, vacío, contiene espacios
+	 *                                       o no corresponde a ninguno de los valores permitidos.
+	 */
 	public static void verificarTipoCarta(String tipo) {
-
-		/*
-		 * Tipos de carta aceptados:
-		 * 
-		 * ESTANDAR CERTIFICADA JURIDICA PUBLICITARIA
-		 * 
-		 */
 
 		if (tipo == null || tipo.isEmpty()) {
 			throw new TipoDeCartaInvalidaException("El tipo de carta no puede estar vacío");
@@ -233,7 +372,6 @@ public class LanzadorDeException {
 			throw new TipoDeCartaInvalidaException("El tipo no debe contener espacios");
 		}
 
-		// Normalizar a mayúsculas
 		tipo = tipo.toUpperCase();
 
 		if (!tipo.equals("ESTANDAR") && !tipo.equals("CERTIFICADA") && !tipo.equals("JURIDICA")
@@ -243,14 +381,22 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el tipo de manipulador proporcionado sea uno de los valores aceptados por el sistema.
+	 * <p>
+	 * Los tipos de manipulador válidos son (sin distinción de mayúsculas/minúsculas):
+	 * <ul>
+	 *   <li>{@code PAQUETES_ALIMENTICIOS}</li>
+	 *   <li>{@code PAQUETES_NO_ALIMENTICIOS}</li>
+	 *   <li>{@code CARTAS}</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param tipo el tipo de manipulador a validar.
+	 * @throws TipoManipuladorInvalidoException si el tipo es nulo, vacío, contiene espacios
+	 *                                           o no corresponde a ninguno de los valores permitidos.
+	 */
 	public static void verificarTipoManipulador(String tipo) {
-
-		/*
-		 * Tipos de manipulador aceptados:
-		 * 
-		 * PAQUETES_ALIMENTICIOS PAQUETES_NO_ALIMENTICIOS CARTAS
-		 * 
-		 */
 
 		if (tipo == null || tipo.isEmpty()) {
 			throw new TipoManipuladorInvalidoException("El tipo de manipulador no puede estar vacío");
@@ -260,7 +406,6 @@ public class LanzadorDeException {
 			throw new TipoManipuladorInvalidoException("El tipo no debe contener espacios");
 		}
 
-		// Normalizar a mayúsculas
 		tipo = tipo.toUpperCase();
 
 		if (!tipo.equals("PAQUETES_ALIMENTICIOS") && !tipo.equals("PAQUETES_NO_ALIMENTICIOS")
@@ -270,14 +415,22 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el tipo de pedido proporcionado sea uno de los valores aceptados por el sistema.
+	 * <p>
+	 * Los tipos de pedido válidos son (sin distinción de mayúsculas/minúsculas):
+	 * <ul>
+	 *   <li>{@code ALIMENTICIO}</li>
+	 *   <li>{@code NO_ALIMENTICIO}</li>
+	 *   <li>{@code CARTA}</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param tipo el tipo de pedido a validar.
+	 * @throws TipoPedidoInvalidoException si el tipo es nulo, vacío, contiene espacios
+	 *                                      o no corresponde a ninguno de los valores permitidos.
+	 */
 	public static void verificarTipoPedido(String tipo) {
-
-		/*
-		 * Tipos de pedido aceptados:
-		 * 
-		 * ALIMENTICIO NO_ALIMENTICIO CARTA
-		 * 
-		 */
 
 		if (tipo == null || tipo.isEmpty()) {
 			throw new TipoPedidoInvalidoException("El tipo de pedido no puede estar vacío");
@@ -295,11 +448,21 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el turno proporcionado sea uno de los valores aceptados por el sistema.
+	 * <p>
+	 * Los turnos válidos son (sin distinción de mayúsculas/minúsculas):
+	 * <ul>
+	 *   <li>{@code D} - Turno de día.</li>
+	 *   <li>{@code N} - Turno de noche.</li>
+	 *   <li>{@code M} - Turno mixto.</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param turno el carácter que representa el turno a validar.
+	 * @throws TurnoInvalidoException si el turno no corresponde a {@code D}, {@code N} ni {@code M}.
+	 */
 	public static void verificarTurno(char turno) {
-
-		/*
-		 * Turnos aceptados: D -> Día N -> Noche M -> Mixto
-		 */
 
 		turno = Character.toUpperCase(turno);
 
@@ -308,6 +471,19 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el ID proporcionado sea válido.
+	 * <p>
+	 * El ID debe cumplir las siguientes condiciones:
+	 * <ul>
+	 *   <li>No ser nulo.</li>
+	 *   <li>Ser un número positivo (mayor que cero).</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param id el identificador a validar.
+	 * @throws IdInvalidoException si el ID es nulo o menor o igual a cero.
+	 */
 	public static void verificarId(Long id) {
 		if (id == null) {
 			throw new IdInvalidoException("El ID no puede ser nulo");
@@ -318,6 +494,19 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que la ciudad de destino proporcionada sea válida.
+	 * <p>
+	 * La ciudad debe cumplir las siguientes condiciones:
+	 * <ul>
+	 *   <li>No ser nula ni estar vacía (incluyendo solo espacios en blanco).</li>
+	 *   <li>Contener únicamente letras (incluyendo tildes y ñ) y espacios.</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param ciudadDestino el nombre de la ciudad de destino a validar.
+	 * @throws CiudadInvalidaException si la ciudad es nula, vacía o contiene caracteres no permitidos.
+	 */
 	public static void verificarCiudad(String ciudadDestino) {
 
 		if (ciudadDestino == null || ciudadDestino.trim().isEmpty()) {
@@ -329,11 +518,21 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica que el estado del pedido proporcionado sea uno de los valores permitidos.
+	 * <p>
+	 * Solo se aceptan los siguientes estados de transición para actualización:
+	 * <ul>
+	 *   <li>{@code EN_PROCESO}</li>
+	 *   <li>{@code ENTREGADO}</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param estadoPedido el estado del pedido a validar.
+	 * @throws EstadoPedidoInvalidoException si el estado es nulo, vacío o no corresponde
+	 *                                        a {@code EN_PROCESO} ni {@code ENTREGADO}.
+	 */
 	public static void verificarEstadoPedido(String estadoPedido) {
-
-		/*
-		 * Estados de pedido aceptados: PENDIENTE EN_PROCESO ENVIADO ENTREGADO CANCELADO
-		 */
 
 		if (estadoPedido == null || estadoPedido.trim().isEmpty()) {
 			throw new EstadoPedidoInvalidoException("El estado del pedido no puede estar vacío");
@@ -345,6 +544,18 @@ public class LanzadorDeException {
 		}
 	}
 
+	/**
+	 * Verifica si un registro duplicado ya existe en el sistema y lanza una excepción si es así.
+	 * <p>
+	 * Este método es utilizado para evitar la creación de registros con datos ya existentes,
+	 * como cédulas duplicadas. El mensaje de la excepción es personalizable según el contexto.
+	 * </p>
+	 *
+	 * @param existe  {@code true} si el registro ya existe; {@code false} en caso contrario.
+	 * @param mensaje el mensaje descriptivo que se incluirá en la excepción si hay duplicado.
+	 * @throws CedulaInvalidaException si {@code existe} es {@code true}, indicando que el registro
+	 *                                  ya se encuentra registrado en el sistema.
+	 */
 	public static void verificarDuplicado(boolean existe, String mensaje) {
 		if (existe) {
 			throw new CedulaInvalidaException(mensaje);
