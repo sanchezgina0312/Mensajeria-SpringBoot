@@ -239,4 +239,12 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return 0;
 	}
 
+	public void setPaqueteNoAlimenticioRep(PaqueteNoAlimenticioRepository repo) {
+		this.paqueteNoAlimenticioRep = repo;
+	}
+
+	public void setMapper(ModelMapper mapper) {
+		this.mapper = mapper;
+	}
+
 }
