@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 /**
  * Controlador REST para la gestión de paquetes no alimenticios.
  * <p>
- * Expone endpoints HTTP para realizar operaciones CRUD sobre los paquetes
- * no alimenticios registrados en el sistema de mensajería, así como búsquedas
- * por criterios como tamaño, fragilidad, dirección y ciudad de destino.
+ * Expone endpoints HTTP para realizar operaciones CRUD sobre los paquetes no
+ * alimenticios registrados en el sistema de mensajería, así como búsquedas por
+ * criterios como tamaño, fragilidad, dirección y ciudad de destino.
  * </p>
  *
- * <p>Base URL: {@code /paquetenoalimenticio}</p>
+ * <p>
+ * Base URL: {@code /paquetenoalimenticio}
+ * </p>
  *
  * @author Gina Buitrago
  * @version 1.0
@@ -63,13 +65,17 @@ public class PaqueteNoAlimenticioController {
 	 * </p>
 	 *
 	 * @param direccionDestino dirección de destino del paquete
-	 * @param tamanio          tamaño del paquete (p. ej. {@code "Grande"}, {@code "Mediano"}, {@code "Pequeño"})
+	 * @param tamanio          tamaño del paquete (p. ej. {@code "Grande"},
+	 *                         {@code "Mediano"}, {@code "Pequeño"})
 	 * @param ciudadDestino    ciudad de destino del paquete
-	 * @param esFragil         indica si el paquete es frágil ({@code true} o {@code false})
-	 * @return {@link ResponseEntity} con un mensaje de resultado y el código HTTP correspondiente:
+	 * @param esFragil         indica si el paquete es frágil ({@code true} o
+	 *                         {@code false})
+	 * @return {@link ResponseEntity} con un mensaje de resultado y el código HTTP
+	 *         correspondiente:
 	 *         <ul>
-	 *           <li>{@code 201 CREATED} – paquete registrado exitosamente</li>
-	 *           <li>{@code 400 BAD_REQUEST} – datos inválidos o formato incorrecto</li>
+	 *         <li>{@code 201 CREATED} – paquete registrado exitosamente</li>
+	 *         <li>{@code 400 BAD_REQUEST} – datos inválidos o formato
+	 *         incorrecto</li>
 	 *         </ul>
 	 */
 	// http://localhost:8080/paquetenoalimenticio/crear?remitente=Luis&destinatario=Carlos&direccionDestino=Calle+20&ciudadDestino=Cali&fechaEntrega=2024-08-15T10:00:00&tamanio=Grande&esFragil=true
@@ -104,7 +110,8 @@ public class PaqueteNoAlimenticioController {
 	}
 
 	/**
-	 * Retorna la lista completa de paquetes no alimenticios registrados en el sistema.
+	 * Retorna la lista completa de paquetes no alimenticios registrados en el
+	 * sistema.
 	 * <p>
 	 * Endpoint: {@code GET /paquetenoalimenticio/mostrartodo}
 	 * </p>
@@ -113,10 +120,11 @@ public class PaqueteNoAlimenticioController {
 	 * {@code http://localhost:8080/paquetenoalimenticio/mostrartodo}
 	 * </p>
 	 *
-	 * @return {@link ResponseEntity} con la lista de {@link PaqueteNoAlimenticioDTO} y el código HTTP correspondiente:
+	 * @return {@link ResponseEntity} con la lista de
+	 *         {@link PaqueteNoAlimenticioDTO} y el código HTTP correspondiente:
 	 *         <ul>
-	 *           <li>{@code 202 ACCEPTED} – lista retornada exitosamente</li>
-	 *           <li>{@code 204 NO_CONTENT} – no hay paquetes registrados</li>
+	 *         <li>{@code 202 ACCEPTED} – lista retornada exitosamente</li>
+	 *         <li>{@code 204 NO_CONTENT} – no hay paquetes registrados</li>
 	 *         </ul>
 	 */
 	// http://localhost:8080/paquetenoalimenticio/mostrartodo
@@ -131,7 +139,8 @@ public class PaqueteNoAlimenticioController {
 	}
 
 	/**
-	 * Actualiza los datos de un paquete no alimenticio existente identificado por su ID.
+	 * Actualiza los datos de un paquete no alimenticio existente identificado por
+	 * su ID.
 	 * <p>
 	 * Endpoint: {@code PUT /paquetenoalimenticio/actualizar}
 	 * </p>
@@ -147,10 +156,12 @@ public class PaqueteNoAlimenticioController {
 	 * @param tamanio              nuevo tamaño del paquete
 	 * @param fechaCreacionPedido  nueva fecha de creación del pedido
 	 * @param fechaEstimadaEntrega nueva fecha estimada de entrega
-	 * @return {@link ResponseEntity} con un mensaje de resultado y el código HTTP correspondiente:
+	 * @return {@link ResponseEntity} con un mensaje de resultado y el código HTTP
+	 *         correspondiente:
 	 *         <ul>
-	 *           <li>{@code 202 ACCEPTED} – paquete actualizado exitosamente</li>
-	 *           <li>{@code 400 BAD_REQUEST} – ID no encontrado, datos inválidos o formato incorrecto</li>
+	 *         <li>{@code 202 ACCEPTED} – paquete actualizado exitosamente</li>
+	 *         <li>{@code 400 BAD_REQUEST} – ID no encontrado, datos inválidos o
+	 *         formato incorrecto</li>
 	 *         </ul>
 	 */
 	// http://localhost:8080/paquetenoalimenticio/actualizar?id=1&remitente=Luis+M&destinatario=Carlos+P&direccionDestino=Carrera+50&ciudadDestino=Buga&fechaEntrega=2024-08-16T14:00:00&tamanio=Mediano&esFragil=false
@@ -178,11 +189,8 @@ public class PaqueteNoAlimenticioController {
 		} catch (CiudadInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (MethodArgumentTypeMismatchException e) {
-<<<<<<< HEAD
 			return new ResponseEntity<>("El formato del ID no es válido", HttpStatus.BAD_REQUEST);
-=======
 			return new ResponseEntity<>("El formato no corresponde con el requerido", HttpStatus.BAD_REQUEST);
->>>>>>> 3ded234e7254e19399a0395bd14043a5139d4b9d
 		}
 	}
 
@@ -197,10 +205,12 @@ public class PaqueteNoAlimenticioController {
 	 * </p>
 	 *
 	 * @param id identificador único del paquete a eliminar
-	 * @return {@link ResponseEntity} con un mensaje de resultado y el código HTTP correspondiente:
+	 * @return {@link ResponseEntity} con un mensaje de resultado y el código HTTP
+	 *         correspondiente:
 	 *         <ul>
-	 *           <li>{@code 202 ACCEPTED} – paquete eliminado exitosamente</li>
-	 *           <li>{@code 400 BAD_REQUEST} – ID no encontrado, inválido o con formato incorrecto</li>
+	 *         <li>{@code 202 ACCEPTED} – paquete eliminado exitosamente</li>
+	 *         <li>{@code 400 BAD_REQUEST} – ID no encontrado, inválido o con
+	 *         formato incorrecto</li>
 	 *         </ul>
 	 */
 	// http://localhost:8080/paquetenoalimenticio/eliminar?id=1
@@ -231,12 +241,14 @@ public class PaqueteNoAlimenticioController {
 	 * {@code http://localhost:8080/paquetenoalimenticio/buscarportamanio?tamanio=Grande}
 	 * </p>
 	 *
-	 * @param tamanio tamaño del paquete a buscar (p. ej. {@code "Grande"}, {@code "Mediano"}, {@code "Pequeño"})
-	 * @return {@link ResponseEntity} con la lista de {@link PaqueteNoAlimenticioDTO} encontrados y el código HTTP:
+	 * @param tamanio tamaño del paquete a buscar (p. ej. {@code "Grande"},
+	 *                {@code "Mediano"}, {@code "Pequeño"})
+	 * @return {@link ResponseEntity} con la lista de
+	 *         {@link PaqueteNoAlimenticioDTO} encontrados y el código HTTP:
 	 *         <ul>
-	 *           <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
-	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
-	 *           <li>{@code 400 BAD_REQUEST} – tamaño inválido</li>
+	 *         <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
+	 *         <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         <li>{@code 400 BAD_REQUEST} – tamaño inválido</li>
 	 *         </ul>
 	 */
 	// http://localhost:8080/paquetenoalimenticio/buscarportamanio?tamanio=Grande
@@ -254,11 +266,7 @@ public class PaqueteNoAlimenticioController {
 		} catch (TamanioInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-<<<<<<< HEAD
 
-	}
-
-=======
 	}
 
 	/**
@@ -271,15 +279,16 @@ public class PaqueteNoAlimenticioController {
 	 * {@code http://localhost:8080/paquetenoalimenticio/buscarporesfragil?esFragil=true}
 	 * </p>
 	 *
-	 * @param esFragil valor booleano que indica si el paquete es frágil ({@code true} o {@code false})
-	 * @return {@link ResponseEntity} con la lista de {@link PaqueteNoAlimenticioDTO} encontrados y el código HTTP:
+	 * @param esFragil valor booleano que indica si el paquete es frágil
+	 *                 ({@code true} o {@code false})
+	 * @return {@link ResponseEntity} con la lista de
+	 *         {@link PaqueteNoAlimenticioDTO} encontrados y el código HTTP:
 	 *         <ul>
-	 *           <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
-	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
-	 *           <li>{@code 400 BAD_REQUEST} – el valor no es un booleano válido</li>
+	 *         <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
+	 *         <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         <li>{@code 400 BAD_REQUEST} – el valor no es un booleano válido</li>
 	 *         </ul>
 	 */
->>>>>>> 3ded234e7254e19399a0395bd14043a5139d4b9d
 	// http://localhost:8080/paquetenoalimenticio/buscarporesfragil?esFragil=true
 	@GetMapping("/buscarporesfragil")
 	public ResponseEntity<Object> buscarPorEsFragil(@RequestParam boolean esFragil) {
@@ -296,10 +305,9 @@ public class PaqueteNoAlimenticioController {
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	/**
-	 * Busca paquetes no alimenticios filtrando simultáneamente por tamaño y fragilidad.
+	 * Busca paquetes no alimenticios filtrando simultáneamente por tamaño y
+	 * fragilidad.
 	 * <p>
 	 * Endpoint: {@code GET /paquetenoalimenticio/buscarportamanioyfragil}
 	 * </p>
@@ -310,14 +318,15 @@ public class PaqueteNoAlimenticioController {
 	 *
 	 * @param tamanio  tamaño del paquete a buscar
 	 * @param esFragil indica si el paquete es frágil ({@code true} o {@code false})
-	 * @return {@link ResponseEntity} con la lista de {@link PaqueteNoAlimenticioDTO} encontrados y el código HTTP:
+	 * @return {@link ResponseEntity} con la lista de
+	 *         {@link PaqueteNoAlimenticioDTO} encontrados y el código HTTP:
 	 *         <ul>
-	 *           <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
-	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
-	 *           <li>{@code 400 BAD_REQUEST} – tamaño inválido o valor booleano incorrecto</li>
+	 *         <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
+	 *         <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         <li>{@code 400 BAD_REQUEST} – tamaño inválido o valor booleano
+	 *         incorrecto</li>
 	 *         </ul>
 	 */
->>>>>>> 3ded234e7254e19399a0395bd14043a5139d4b9d
 	// http://localhost:8080/paquetenoalimenticio/buscarportamanioyfragil?tamanio=Grande&esFragil=true
 	@GetMapping("/buscarportamanioyfragil")
 	public ResponseEntity<Object> buscarPorTamanioAndFragil(@RequestParam String tamanio,
@@ -338,10 +347,9 @@ public class PaqueteNoAlimenticioController {
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	/**
-	 * Busca y retorna un paquete no alimenticio específico por su ID para realizar seguimiento.
+	 * Busca y retorna un paquete no alimenticio específico por su ID para realizar
+	 * seguimiento.
 	 * <p>
 	 * Endpoint: {@code GET /paquetenoalimenticio/seguimientoid}
 	 * </p>
@@ -351,14 +359,16 @@ public class PaqueteNoAlimenticioController {
 	 * </p>
 	 *
 	 * @param id identificador único del paquete a consultar
-	 * @return {@link ResponseEntity} con el {@link PaqueteNoAlimenticioDTO} encontrado y el código HTTP:
+	 * @return {@link ResponseEntity} con el {@link PaqueteNoAlimenticioDTO}
+	 *         encontrado y el código HTTP:
 	 *         <ul>
-	 *           <li>{@code 200 OK} – paquete encontrado exitosamente</li>
-	 *           <li>{@code 404 NOT_FOUND} – no se encontró un paquete con el ID ingresado</li>
-	 *           <li>{@code 400 BAD_REQUEST} – ID con formato incorrecto o inválido</li>
+	 *         <li>{@code 200 OK} – paquete encontrado exitosamente</li>
+	 *         <li>{@code 404 NOT_FOUND} – no se encontró un paquete con el ID
+	 *         ingresado</li>
+	 *         <li>{@code 400 BAD_REQUEST} – ID con formato incorrecto o
+	 *         inválido</li>
 	 *         </ul>
 	 */
->>>>>>> 3ded234e7254e19399a0395bd14043a5139d4b9d
 	// http://localhost:8080/paquetenoalimenticio/seguimientoid?id=1
 	@GetMapping("/seguimientoid")
 	public ResponseEntity<Object> findById(@RequestParam Long id) {
@@ -379,13 +389,9 @@ public class PaqueteNoAlimenticioController {
 		}
 	}
 
-<<<<<<< HEAD
-	// http://localhost:8080/paquetenoalimenticio/buscardireccionyciudad?dir=Calle+20&ciudad=Cali
-	@GetMapping("/buscardireccionyciudad")
-	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir, @RequestParam String ciudad) {
-=======
 	/**
-	 * Busca paquetes no alimenticios filtrando simultáneamente por dirección y ciudad de destino.
+	 * Busca paquetes no alimenticios filtrando simultáneamente por dirección y
+	 * ciudad de destino.
 	 * <p>
 	 * Endpoint: {@code GET /paquetenoalimenticio/buscardireccionyciudad}
 	 * </p>
@@ -396,19 +402,17 @@ public class PaqueteNoAlimenticioController {
 	 *
 	 * @param dir    dirección de destino del paquete a buscar
 	 * @param ciudad ciudad de destino del paquete a buscar
-	 * @return {@link ResponseEntity} con la lista de {@link PaqueteNoAlimenticioDTO} encontrados y el código HTTP:
+	 * @return {@link ResponseEntity} con la lista de
+	 *         {@link PaqueteNoAlimenticioDTO} encontrados y el código HTTP:
 	 *         <ul>
-	 *           <li>{@code 200 OK} – se encontraron resultados</li>
-	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
-	 *           <li>{@code 400 BAD_REQUEST} – dirección inválida</li>
+	 *         <li>{@code 200 OK} – se encontraron resultados</li>
+	 *         <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         <li>{@code 400 BAD_REQUEST} – dirección inválida</li>
 	 *         </ul>
 	 */
 	// http://localhost:8080/paquetenoalimenticio/buscardireccionyciudad?dir=Calle+20&ciudad=Cali
 	@GetMapping("/buscardireccionyciudad")
-	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir,
-			@RequestParam String ciudad) {
->>>>>>> 3ded234e7254e19399a0395bd14043a5139d4b9d
-
+	public ResponseEntity<Object> buscarDireccionYCiudad(@RequestParam String dir, @RequestParam String ciudad) {
 		try {
 			List<PaqueteNoAlimenticioDTO> lista = paqueteNoAlimenticioSer.findByDireccionDestinoAndCiudadDestino(dir,
 					ciudad);
@@ -422,10 +426,6 @@ public class PaqueteNoAlimenticioController {
 		} catch (DireccionInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-<<<<<<< HEAD
-
-=======
->>>>>>> 3ded234e7254e19399a0395bd14043a5139d4b9d
 	}
 
 }
