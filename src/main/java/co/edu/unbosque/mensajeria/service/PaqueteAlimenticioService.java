@@ -254,5 +254,14 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(6));
 		return 0;
 	}
+	
+	public void setPaqueteAlimenticioRep(PaqueteAlimenticioRepository repo) {
+	    this.paqueteAlimenticioRep= repo;
+	}
+
+	public void setMapper(ModelMapper mapper) {
+	    this.mapper = mapper;
+	}
+	
 
 }

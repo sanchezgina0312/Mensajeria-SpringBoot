@@ -173,6 +173,16 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		}
 		return dtoList;
 	}
+	
+	public void setConductorRep(ConductorRepository repo) {
+	    this.conductorRep= repo;
+	}
+
+	public void setMapper(ModelMapper mapper) {
+	    this.mapper = mapper;
+	}
+	
+	
 
 
 }
