@@ -17,18 +17,43 @@ import co.edu.unbosque.mensajeria.entity.PaqueteAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteAlimenticioRepository;
 import co.edu.unbosque.mensajeria.service.PaqueteAlimenticioService;
 
+/**
+ * Clase de pruebas unitarias para {@link PaqueteAlimenticioService}.
+ * 
+ * <p>
+ * Se validan las operaciones CRUD, métodos de búsqueda, cálculo de precios,
+ * aplicación de descuentos y lógica de negocio relacionada con el manejo de
+ * paquetes alimenticios.
+ * </p>
+ * 
+ * <p>
+ * Se utiliza Mockito para simular el comportamiento del repositorio y evitar
+ * dependencias externas como la base de datos.
+ * </p>
+ * 
+ * 
+ */
 class PaqueteAlimenticioServiceTest {
 
+	/** Mock del repositorio */
 	@Mock
 	private PaqueteAlimenticioRepository repository;
 
+	/** Mapper para conversión DTO - Entidad */
 	private ModelMapper mapper;
 
+	/** Servicio a probar */
 	private PaqueteAlimenticioService service;
 
+	/** Objeto DTO de prueba */
 	private PaqueteAlimenticioDTO dto;
+
+	/** Entidad de prueba */
 	private PaqueteAlimenticio entity;
 
+	/**
+	 * Inicializa los mocks y objetos necesarios antes de cada prueba.
+	 */
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -36,8 +61,8 @@ class PaqueteAlimenticioServiceTest {
 		mapper = new ModelMapper();
 
 		service = new PaqueteAlimenticioService();
-		service.setPaqueteAlimenticioRep(repository); 
-		service.setMapper(mapper); 
+		service.setPaqueteAlimenticioRep(repository);
+		service.setMapper(mapper);
 
 		dto = new PaqueteAlimenticioDTO();
 		dto.setDireccionDestino("Calle 10 # 20-30");
@@ -50,6 +75,9 @@ class PaqueteAlimenticioServiceTest {
 		entity = new PaqueteAlimenticio();
 	}
 
+	/**
+	 * Verifica la creación exitosa de un paquete alimenticio.
+	 */
 	@Test
 	void testCreateSuccess() {
 		int result = service.create(dto);
@@ -60,6 +88,9 @@ class PaqueteAlimenticioServiceTest {
 		verify(repository).save(any(PaqueteAlimenticio.class));
 	}
 
+	/**
+	 * Verifica la obtención de todos los paquetes alimenticios.
+	 */
 	@Test
 	void testGetAll() {
 		List<PaqueteAlimenticio> lista = Arrays.asList(entity);
@@ -72,6 +103,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(1, result.size());
 	}
 
+	/**
+	 * Verifica la eliminación exitosa de un paquete por ID.
+	 */
 	@Test
 	void testDeleteByIdSuccess() {
 		when(repository.findById(1L)).thenReturn(Optional.of(entity));
@@ -82,6 +116,9 @@ class PaqueteAlimenticioServiceTest {
 		verify(repository).delete(entity);
 	}
 
+	/**
+	 * Verifica el comportamiento al intentar eliminar un paquete inexistente.
+	 */
 	@Test
 	void testDeleteByIdNotFound() {
 		when(repository.findById(1L)).thenReturn(Optional.empty());
@@ -91,6 +128,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(1, result);
 	}
 
+	/**
+	 * Verifica la actualización exitosa de un paquete existente.
+	 */
 	@Test
 	void testUpdateSuccess() {
 		when(repository.findById(1L)).thenReturn(Optional.of(entity));
@@ -101,6 +141,9 @@ class PaqueteAlimenticioServiceTest {
 		verify(repository).save(any(PaqueteAlimenticio.class));
 	}
 
+	/**
+	 * Verifica el comportamiento al actualizar un paquete inexistente.
+	 */
 	@Test
 	void testUpdateNotFound() {
 		when(repository.findById(1L)).thenReturn(Optional.empty());
@@ -110,6 +153,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(1, result);
 	}
 
+	/**
+	 * Verifica el conteo de registros en el repositorio.
+	 */
 	@Test
 	void testCount() {
 		when(repository.count()).thenReturn(10L);
@@ -119,6 +165,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(10, result);
 	}
 
+	/**
+	 * Verifica si un paquete existe por su ID.
+	 */
 	@Test
 	void testExist() {
 		when(repository.existsById(1L)).thenReturn(true);
@@ -128,6 +177,9 @@ class PaqueteAlimenticioServiceTest {
 		assertTrue(result);
 	}
 
+	/**
+	 * Verifica la búsqueda de paquetes por tamaño.
+	 */
 	@Test
 	void testFindByTamanio() {
 		List<PaqueteAlimenticio> lista = Arrays.asList(entity);
@@ -140,6 +192,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(1, result.size());
 	}
 
+	/**
+	 * Verifica la búsqueda de paquetes que se envían hoy.
+	 */
 	@Test
 	void testFindBySeEnviaHoy() {
 		List<PaqueteAlimenticio> lista = Arrays.asList(entity);
@@ -152,6 +207,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(1, result.size());
 	}
 
+	/**
+	 * Verifica la búsqueda de paquetes por tipo de alimento.
+	 */
 	@Test
 	void testFindByTipoAlimento() {
 		List<PaqueteAlimenticio> lista = Arrays.asList(entity);
@@ -164,6 +222,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(1, result.size());
 	}
 
+	/**
+	 * Verifica la búsqueda de un paquete por ID.
+	 */
 	@Test
 	void testFindById() {
 		when(repository.findById(1L)).thenReturn(Optional.of(entity));
@@ -173,6 +234,9 @@ class PaqueteAlimenticioServiceTest {
 		assertNotNull(result);
 	}
 
+	/**
+	 * Verifica el cálculo del precio según el tamaño del paquete.
+	 */
 	@Test
 	void testCalcularPrecio() {
 		double result = service.calcularPrecioPorTamaño(10000, "GRANDE");
@@ -180,6 +244,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(20000, result);
 	}
 
+	/**
+	 * Verifica la aplicación de descuentos para clientes.
+	 */
 	@Test
 	void testDescuento() {
 		double result = service.aplicarDescuentoPorCliente(10000, "PREMIUM");
@@ -187,6 +254,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(7500, result);
 	}
 
+	/**
+	 * Verifica el cambio de estado a ENTREGADO cuando la fecha ya pasó.
+	 */
 	@Test
 	void testProcesarEstado_Entregado() {
 		dto.setFechaEstimadaEntrega(LocalDateTime.now().minusHours(1));
@@ -197,6 +267,10 @@ class PaqueteAlimenticioServiceTest {
 		assertFalse(dto.isEsPrioritario());
 	}
 
+	/**
+	 * Verifica que un paquete sea marcado como prioritario si está próximo a
+	 * entregarse.
+	 */
 	@Test
 	void testProcesarEstado_Prioritario() {
 		dto.setFechaEstimadaEntrega(LocalDateTime.now().plusHours(2));
@@ -206,6 +280,9 @@ class PaqueteAlimenticioServiceTest {
 		assertTrue(dto.isEsPrioritario());
 	}
 
+	/**
+	 * Verifica el registro del plazo de entrega de 6 horas.
+	 */
 	@Test
 	void testRegistrarPlazo() {
 		dto.setFechaCreacionPedido(LocalDateTime.now());

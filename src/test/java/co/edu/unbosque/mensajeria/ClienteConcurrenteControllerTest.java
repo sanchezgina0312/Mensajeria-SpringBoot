@@ -14,19 +14,52 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+/**
+ * Clase de pruebas para el controlador ClienteConcurrenteController.
+ * 
+ * Esta clase valida el correcto funcionamiento de los endpoints REST
+ * relacionados con la gestión de clientes concurrentes, incluyendo
+ * operaciones CRUD y consultas específicas.
+ */
 @SpringBootTest
 class ClienteConcurrenteControllerTest {
 
+	/**
+	 * Contexto web de la aplicación cargado por Spring Boot.
+	 * 
+	 * Permite acceder a todos los beans configurados en la aplicación
+	 * durante la ejecución de las pruebas de integración.
+	 */
     @Autowired
     private WebApplicationContext context;
 
+    /**
+     * Objeto MockMvc utilizado para simular peticiones HTTP
+     * hacia los endpoints del controlador sin necesidad de
+     * desplegar un servidor real.
+     * 
+     * Permite validar respuestas, estados HTTP y comportamiento
+     * de los controladores REST.
+     */
     private MockMvc mockMvc;
 
+    /**
+     * Configura el entorno de pruebas antes de cada test,
+     * inicializando MockMvc con el contexto de la aplicación.
+     */
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
+    /**
+     * Verifica la creación de un cliente concurrente.
+     * 
+     * Se genera una cédula única para evitar conflictos
+     * y se espera un estado HTTP 201 (Created).
+     * 
+     * @throws Exception si ocurre un error en la petición
+     */
     @Test
     void crearClienteConcurrente() throws Exception {
         
@@ -43,12 +76,25 @@ class ClienteConcurrenteControllerTest {
                 .andExpect(status().isCreated()); 
     }
 
+    /**
+     * Verifica que el endpoint de consulta de todos los clientes
+     * retorne una respuesta exitosa.
+     * 
+     * @throws Exception si ocurre un error en la petición
+     */
     @Test
     void mostrarTodo() throws Exception {
         mockMvc.perform(get("/clienteconcurrente/mostrartodo"))
                 .andExpect(status().is2xxSuccessful()); 
     }
 
+    /**
+     * Verifica la actualización de un cliente concurrente existente.
+     * 
+     * Se espera un estado HTTP 202 (Accepted).
+     * 
+     * @throws Exception si ocurre un error en la petición
+     */
     @Test
     void actualizarClienteConcurrente() throws Exception {
         
@@ -64,6 +110,14 @@ class ClienteConcurrenteControllerTest {
                 .andExpect(status().isAccepted()); 
     }
 
+    /**
+     * Verifica la eliminación de un cliente concurrente.
+     * 
+     * Primero se crea un cliente de prueba y luego se elimina
+     * utilizando su ID. Se espera un estado HTTP 202 (Accepted).
+     * 
+     * @throws Exception si ocurre un error en la petición
+     */
     @Test
     void eliminarClienteConcurrente() throws Exception {
         
@@ -81,6 +135,11 @@ class ClienteConcurrenteControllerTest {
                 .andExpect(status().isAccepted()); 
     }
 
+    /**
+     * Verifica la búsqueda de clientes por nombre.
+     * 
+     * @throws Exception si ocurre un error en la petición
+     */
     @Test
     void buscarPorNombre() throws Exception {
         mockMvc.perform(get("/clienteconcurrente/buscarpornombre")
@@ -88,6 +147,11 @@ class ClienteConcurrenteControllerTest {
                 .andExpect(status().is2xxSuccessful());
     }
 
+    /**
+     * Verifica la búsqueda de clientes por método de pago.
+     * 
+     * @throws Exception si ocurre un error en la petición
+     */
     @Test
     void buscarPorMetodoPago() throws Exception {
         mockMvc.perform(get("/clienteconcurrente/buscarpormetodopago")
@@ -95,6 +159,11 @@ class ClienteConcurrenteControllerTest {
                 .andExpect(status().is2xxSuccessful());
     }
 
+    /**
+     * Verifica la búsqueda de clientes por tipo de pedido.
+     * 
+     * @throws Exception si ocurre un error en la petición
+     */
     @Test
     void buscarPorTipoPedido() throws Exception {
         mockMvc.perform(get("/clienteconcurrente/buscarportipopedido")
@@ -102,6 +171,11 @@ class ClienteConcurrenteControllerTest {
                 .andExpect(status().is2xxSuccessful());
     }
 
+    /**
+     * Verifica la búsqueda de clientes por nombre y cédula.
+     * 
+     * @throws Exception si ocurre un error en la petición
+     */
     @Test
     void buscarPorNombreAndCedula() throws Exception {
         mockMvc.perform(get("/clienteconcurrente/buscarpornombreycedula")

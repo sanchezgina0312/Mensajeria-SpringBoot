@@ -16,18 +16,48 @@ import co.edu.unbosque.mensajeria.entity.ClientePremium;
 import co.edu.unbosque.mensajeria.repository.ClientePremiumRepository;
 import co.edu.unbosque.mensajeria.service.ClientePremiumService;
 
+/**
+ * Clase de pruebas unitarias para el servicio {@link ClientePremiumService}.
+ * 
+ * Se encarga de validar el correcto funcionamiento de las operaciones CRUD y de
+ * búsqueda relacionadas con la entidad ClientePremium.
+ * 
+ * Se utiliza Mockito para simular el comportamiento del repositorio y evitar
+ * dependencias reales con la base de datos.
+ */
 class ClientePremiumServiceTest {
 
+	/**
+	 * Mock del repositorio de ClientePremium. Simula el acceso a datos sin
+	 * conectarse a la base real.
+	 */
 	@Mock
 	private ClientePremiumRepository repo;
 
+	/**
+	 * Mapper utilizado para convertir entre entidad y DTO.
+	 */
 	private ModelMapper mapper;
 
+	/**
+	 * Servicio a probar.
+	 */
 	private ClientePremiumService service;
 
+	/**
+	 * Objeto DTO de prueba.
+	 */
 	private ClientePremiumDTO dto;
+
+	/**
+	 * Entidad de prueba.
+	 */
 	private ClientePremium entity;
 
+	/**
+	 * Configuración inicial antes de cada prueba. Inicializa mocks, servicio,
+	 * mapper y objetos de prueba.
+	 */
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -35,8 +65,8 @@ class ClientePremiumServiceTest {
 		mapper = new ModelMapper();
 
 		service = new ClientePremiumService();
-		service.setClientePremiumRep(repo);              
-		service.setMapper(mapper);          
+		service.setClientePremiumRep(repo);
+		service.setMapper(mapper);
 
 		dto = new ClientePremiumDTO();
 		dto.setCedula("123456789");
@@ -55,6 +85,9 @@ class ClientePremiumServiceTest {
 		entity.setTipoPedido(dto.getTipoPedido());
 	}
 
+	/**
+	 * Verifica que un cliente se crea correctamente cuando no existe previamente.
+	 */
 	@Test
 	void testCreateSuccess() {
 		when(repo.existsByCedula(dto.getCedula())).thenReturn(false);
@@ -65,6 +98,10 @@ class ClientePremiumServiceTest {
 		verify(repo).save(any(ClientePremium.class));
 	}
 
+	/**
+	 * Verifica que se lance una excepción cuando se intenta crear un cliente con
+	 * cédula duplicada.
+	 */
 	@Test
 	void testCreateDuplicado() {
 		when(repo.existsByCedula(dto.getCedula())).thenReturn(true);
@@ -72,11 +109,12 @@ class ClientePremiumServiceTest {
 		assertThrows(Exception.class, () -> service.create(dto));
 	}
 
+	/**
+	 * Verifica que se obtenga correctamente la lista de clientes.
+	 */
 	@Test
 	void testGetAll() {
-		List<ClientePremium> lista = Arrays.asList(entity);
-
-		when(repo.findAll()).thenReturn(lista);
+		when(repo.findAll()).thenReturn(Arrays.asList(entity));
 
 		List<ClientePremiumDTO> result = service.getAll();
 
@@ -84,6 +122,9 @@ class ClientePremiumServiceTest {
 		assertEquals(1, result.size());
 	}
 
+	/**
+	 * Verifica eliminación exitosa de un cliente existente.
+	 */
 	@Test
 	void testDeleteSuccess() {
 		when(repo.findById(1L)).thenReturn(Optional.of(entity));
@@ -94,6 +135,9 @@ class ClientePremiumServiceTest {
 		verify(repo).delete(entity);
 	}
 
+	/**
+	 * Verifica comportamiento cuando se intenta eliminar un cliente inexistente.
+	 */
 	@Test
 	void testDeleteNotFound() {
 		when(repo.findById(1L)).thenReturn(Optional.empty());
@@ -103,6 +147,9 @@ class ClientePremiumServiceTest {
 		assertEquals(1, result);
 	}
 
+	/**
+	 * Verifica actualización exitosa de un cliente existente.
+	 */
 	@Test
 	void testUpdateSuccess() {
 		when(repo.findById(1L)).thenReturn(Optional.of(entity));
@@ -114,6 +161,9 @@ class ClientePremiumServiceTest {
 		verify(repo).save(any(ClientePremium.class));
 	}
 
+	/**
+	 * Verifica comportamiento cuando se intenta actualizar un cliente inexistente.
+	 */
 	@Test
 	void testUpdateNotFound() {
 		when(repo.findById(1L)).thenReturn(Optional.empty());
@@ -123,6 +173,9 @@ class ClientePremiumServiceTest {
 		assertEquals(1, result);
 	}
 
+	/**
+	 * Verifica el conteo total de clientes.
+	 */
 	@Test
 	void testCount() {
 		when(repo.count()).thenReturn(10L);
@@ -132,6 +185,9 @@ class ClientePremiumServiceTest {
 		assertEquals(10, result);
 	}
 
+	/**
+	 * Verifica si existe un cliente por ID.
+	 */
 	@Test
 	void testExist() {
 		when(repo.existsById(1L)).thenReturn(true);
@@ -141,92 +197,101 @@ class ClientePremiumServiceTest {
 		assertTrue(result);
 	}
 
+	/**
+	 * Verifica búsqueda por nombre.
+	 */
 	@Test
 	void testFindByNombre() {
-		List<ClientePremium> lista = Arrays.asList(entity);
-
-		when(repo.findByNombre(dto.getNombre())).thenReturn(Optional.of(lista));
+		when(repo.findByNombre(dto.getNombre())).thenReturn(Optional.of(Arrays.asList(entity)));
 
 		List<ClientePremiumDTO> result = service.findByNombre(dto.getNombre());
 
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica búsqueda por cédula.
+	 */
 	@Test
 	void testFindByCedula() {
-		List<ClientePremium> lista = Arrays.asList(entity);
-
-		when(repo.findByCedula(dto.getCedula())).thenReturn(Optional.of(lista));
+		when(repo.findByCedula(dto.getCedula())).thenReturn(Optional.of(Arrays.asList(entity)));
 
 		List<ClientePremiumDTO> result = service.findByCedula(dto.getCedula());
 
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica búsqueda por correo.
+	 */
 	@Test
 	void testFindByCorreo() {
-		List<ClientePremium> lista = Arrays.asList(entity);
-
-		when(repo.findByCorreo(dto.getCorreo())).thenReturn(Optional.of(lista));
+		when(repo.findByCorreo(dto.getCorreo())).thenReturn(Optional.of(Arrays.asList(entity)));
 
 		List<ClientePremiumDTO> result = service.findByCorreo(dto.getCorreo());
 
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica búsqueda por teléfono.
+	 */
 	@Test
 	void testFindByTelefono() {
-		List<ClientePremium> lista = Arrays.asList(entity);
-
-		when(repo.findByTelefono(dto.getTelefono())).thenReturn(Optional.of(lista));
+		when(repo.findByTelefono(dto.getTelefono())).thenReturn(Optional.of(Arrays.asList(entity)));
 
 		List<ClientePremiumDTO> result = service.findByTelefono(dto.getTelefono());
 
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica búsqueda por método de pago.
+	 */
 	@Test
 	void testFindByMetodoPago() {
-		List<ClientePremium> lista = Arrays.asList(entity);
-
-		when(repo.findByMetodoPago(dto.getMetodoPago())).thenReturn(Optional.of(lista));
+		when(repo.findByMetodoPago(dto.getMetodoPago())).thenReturn(Optional.of(Arrays.asList(entity)));
 
 		List<ClientePremiumDTO> result = service.findByMetodoPago(dto.getMetodoPago());
 
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica búsqueda por tipo de pedido.
+	 */
 	@Test
 	void testFindByTipoPedido() {
-		List<ClientePremium> lista = Arrays.asList(entity);
-
-		when(repo.findByTipoPedido(dto.getTipoPedido())).thenReturn(Optional.of(lista));
+		when(repo.findByTipoPedido(dto.getTipoPedido())).thenReturn(Optional.of(Arrays.asList(entity)));
 
 		List<ClientePremiumDTO> result = service.findByTipoPedido(dto.getTipoPedido());
 
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica búsqueda combinada por nombre y cédula.
+	 */
 	@Test
 	void testFindByNombreAndCedula() {
-		List<ClientePremium> lista = Arrays.asList(entity);
-
 		when(repo.findByNombreAndCedula(dto.getNombre(), dto.getCedula()))
-				.thenReturn(Optional.of(lista));
+				.thenReturn(Optional.of(Arrays.asList(entity)));
 
 		List<ClientePremiumDTO> result = service.findByNombreAndCedula(dto.getNombre(), dto.getCedula());
 
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica búsqueda combinada por tipo de pedido y método de pago.
+	 */
 	@Test
 	void testFindByTipoPedidoAndMetodoPago() {
-		List<ClientePremium> lista = Arrays.asList(entity);
-
 		when(repo.findByTipoPedidoAndMetodoPago(dto.getTipoPedido(), dto.getMetodoPago()))
-				.thenReturn(Optional.of(lista));
+				.thenReturn(Optional.of(Arrays.asList(entity)));
 
-		List<ClientePremiumDTO> result = service.findByTipoPedidoAndMetodoPago(dto.getTipoPedido(), dto.getMetodoPago());
+		List<ClientePremiumDTO> result = service.findByTipoPedidoAndMetodoPago(dto.getTipoPedido(),
+				dto.getMetodoPago());
 
 		assertFalse(result.isEmpty());
 	}

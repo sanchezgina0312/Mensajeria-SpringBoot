@@ -16,18 +16,48 @@ import co.edu.unbosque.mensajeria.entity.Conductor;
 import co.edu.unbosque.mensajeria.repository.ConductorRepository;
 import co.edu.unbosque.mensajeria.service.ConductorService;
 
+/**
+ * Clase de pruebas unitarias para el servicio ConductorService.
+ * 
+ * Esta clase valida el correcto funcionamiento de las operaciones CRUD y de
+ * búsqueda relacionadas con la entidad Conductor.
+ * 
+ * Se utiliza Mockito para simular el comportamiento del repositorio y
+ * ModelMapper para la conversión entre entidades y DTOs.
+ */
 class ConductorServiceTest {
 
+	/**
+	 * Mock del repositorio de Conductores. Permite simular las operaciones de
+	 * acceso a datos.
+	 */
 	@Mock
 	private ConductorRepository repo;
 
+	/**
+	 * Mapper real utilizado para convertir entre entidad y DTO.
+	 */
 	private ModelMapper mapper;
 
+	/**
+	 * Servicio que será probado.
+	 */
 	private ConductorService service;
 
+	/**
+	 * Objeto DTO de prueba.
+	 */
 	private ConductorDTO dto;
+
+	/**
+	 * Entidad de prueba.
+	 */
 	private Conductor entity;
 
+	/**
+	 * Inicializa los mocks, el mapper real, el servicio y los datos de prueba antes
+	 * de cada test.
+	 */
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -35,8 +65,8 @@ class ConductorServiceTest {
 		mapper = new ModelMapper();
 
 		service = new ConductorService();
-		service.setConductorRep(repo); 
-		service.setMapper(mapper); 
+		service.setConductorRep(repo);
+		service.setMapper(mapper);
 
 		dto = new ConductorDTO();
 		dto.setCedula("123456789");
@@ -53,6 +83,12 @@ class ConductorServiceTest {
 		entity.setPlacaVehiculo(dto.getPlacaVehiculo());
 	}
 
+	/**
+	 * Verifica la creación exitosa de un conductor.
+	 * 
+	 * Se espera que la cédula no exista previamente y que el método retorne 0
+	 * indicando éxito.
+	 */
 	@Test
 	void testCreateSuccess() {
 		when(repo.existsByCedula(dto.getCedula())).thenReturn(false);
@@ -63,6 +99,11 @@ class ConductorServiceTest {
 		verify(repo).save(any(Conductor.class));
 	}
 
+	/**
+	 * Verifica que no se permita crear un conductor duplicado.
+	 * 
+	 * Se espera que se lance una excepción cuando la cédula ya existe.
+	 */
 	@Test
 	void testCreateDuplicado() {
 		when(repo.existsByCedula(dto.getCedula())).thenReturn(true);
@@ -70,6 +111,11 @@ class ConductorServiceTest {
 		assertThrows(Exception.class, () -> service.create(dto));
 	}
 
+	/**
+	 * Verifica la obtención de todos los conductores.
+	 * 
+	 * Se espera una lista no vacía con el tamaño correcto.
+	 */
 	@Test
 	void testGetAll() {
 		List<Conductor> lista = Arrays.asList(entity);
@@ -82,6 +128,9 @@ class ConductorServiceTest {
 		assertEquals(1, result.size());
 	}
 
+	/**
+	 * Verifica la eliminación exitosa de un conductor existente.
+	 */
 	@Test
 	void testDeleteSuccess() {
 		when(repo.findById(1L)).thenReturn(Optional.of(entity));
@@ -92,6 +141,10 @@ class ConductorServiceTest {
 		verify(repo).delete(entity);
 	}
 
+	/**
+	 * Verifica el comportamiento cuando se intenta eliminar un conductor que no
+	 * existe.
+	 */
 	@Test
 	void testDeleteNotFound() {
 		when(repo.findById(1L)).thenReturn(Optional.empty());
@@ -101,6 +154,9 @@ class ConductorServiceTest {
 		assertEquals(1, result);
 	}
 
+	/**
+	 * Verifica la actualización exitosa de un conductor.
+	 */
 	@Test
 	void testUpdateSuccess() {
 		when(repo.findById(1L)).thenReturn(Optional.of(entity));
@@ -112,6 +168,10 @@ class ConductorServiceTest {
 		verify(repo).save(any(Conductor.class));
 	}
 
+	/**
+	 * Verifica el comportamiento cuando se intenta actualizar un conductor
+	 * inexistente.
+	 */
 	@Test
 	void testUpdateNotFound() {
 		when(repo.findById(1L)).thenReturn(Optional.empty());
@@ -121,6 +181,9 @@ class ConductorServiceTest {
 		assertEquals(1, result);
 	}
 
+	/**
+	 * Verifica el conteo total de conductores.
+	 */
 	@Test
 	void testCount() {
 		when(repo.count()).thenReturn(3L);
@@ -130,6 +193,9 @@ class ConductorServiceTest {
 		assertEquals(3, result);
 	}
 
+	/**
+	 * Verifica si un conductor existe por su ID.
+	 */
 	@Test
 	void testExist() {
 		when(repo.existsById(1L)).thenReturn(true);
@@ -139,6 +205,9 @@ class ConductorServiceTest {
 		assertTrue(result);
 	}
 
+	/**
+	 * Verifica la búsqueda de conductores por nombre.
+	 */
 	@Test
 	void testFindByNombre() {
 		List<Conductor> lista = Arrays.asList(entity);
@@ -150,6 +219,9 @@ class ConductorServiceTest {
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica la búsqueda de conductores por cédula.
+	 */
 	@Test
 	void testFindByCedula() {
 		List<Conductor> lista = Arrays.asList(entity);
@@ -161,6 +233,9 @@ class ConductorServiceTest {
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica la búsqueda de conductores por correo.
+	 */
 	@Test
 	void testFindByCorreo() {
 		List<Conductor> lista = Arrays.asList(entity);
@@ -172,6 +247,9 @@ class ConductorServiceTest {
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica la búsqueda de conductores por teléfono.
+	 */
 	@Test
 	void testFindByTelefono() {
 		List<Conductor> lista = Arrays.asList(entity);
@@ -183,6 +261,9 @@ class ConductorServiceTest {
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica la búsqueda de conductores por placa del vehículo.
+	 */
 	@Test
 	void testFindByPlacaVehiculo() {
 		List<Conductor> lista = Arrays.asList(entity);
@@ -194,6 +275,9 @@ class ConductorServiceTest {
 		assertFalse(result.isEmpty());
 	}
 
+	/**
+	 * Verifica la búsqueda combinada por nombre y cédula.
+	 */
 	@Test
 	void testFindByNombreAndCedula() {
 		List<Conductor> lista = Arrays.asList(entity);
