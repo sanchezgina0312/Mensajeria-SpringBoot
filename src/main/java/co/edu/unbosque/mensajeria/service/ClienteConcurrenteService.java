@@ -196,4 +196,12 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
 		}
 		return dtoList;
 	}
+	
+	public void setClienteConcurrenteRep(ClienteConcurrenteRepository repo) {
+	    this.clienteConcurrenteRep = repo;
+	}
+
+	public void setMapper(ModelMapper mapper) {
+	    this.mapper = mapper;
+	}
 }
