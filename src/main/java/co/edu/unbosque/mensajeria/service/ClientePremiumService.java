@@ -10,10 +10,20 @@ import org.springframework.stereotype.Service;
 
 import co.edu.unbosque.mensajeria.dto.ClientePremiumDTO;
 import co.edu.unbosque.mensajeria.entity.ClientePremium;
-import co.edu.unbosque.mensajeria.repository.ClienteNormalRepository;
 import co.edu.unbosque.mensajeria.repository.ClientePremiumRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
+/**
+ * Servicio encargado de gestionar las operaciones CRUD de clientes premium.
+ * <p>
+ * Esta clase permite crear, consultar, actualizar y eliminar clientes premium,
+ * así como realizar búsquedas por diferentes atributos.
+ * Utiliza un repositorio para el acceso a datos y ModelMapper para convertir
+ * entre entidades y DTOs.
+ * </p>
+ * 
+ * @author Jairo Esteban
+ */
 @Service
 public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 
@@ -23,6 +33,12 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 	@Autowired
 	private ModelMapper mapper;
 
+	/**
+	 * Crea un nuevo cliente premium.
+	 * 
+	 * @param data datos del cliente a crear
+	 * @return 0 si se crea correctamente, 1 si ya existe
+	 */
 	@Override
 	public int create(ClientePremiumDTO data) {
 		LanzadorDeException.verificarCedula(data.getCedula());
@@ -32,7 +48,9 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
 		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
 
-		LanzadorDeException.verificarDuplicado(clientePremiumRep.existsByCedula(data.getCedula()), "La cédula " + data.getCedula() + " ya se encuentra registrada para un cliente premium.");
+		LanzadorDeException.verificarDuplicado(
+				clientePremiumRep.existsByCedula(data.getCedula()),
+				"La cédula " + data.getCedula() + " ya se encuentra registrada para un cliente premium.");
 
 		if (clientePremiumRep.existsByCedula(data.getCedula())) {
 			return 1;
@@ -43,6 +61,11 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		}
 	}
 
+	/**
+	 * Obtiene todos los clientes premium.
+	 * 
+	 * @return lista de clientes premium
+	 */
 	@Override
 	public List<ClientePremiumDTO> getAll() {
 		List<ClientePremium> entityList = (List<ClientePremium>) clientePremiumRep.findAll();
@@ -53,6 +76,12 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Elimina un cliente premium por ID.
+	 * 
+	 * @param id identificador del cliente
+	 * @return 0 si se elimina, 1 si no existe
+	 */
 	@Override
 	public int deleteById(Long id) {
 		LanzadorDeException.verificarId(id);
@@ -65,6 +94,13 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		}
 	}
 
+	/**
+	 * Actualiza un cliente premium existente.
+	 * 
+	 * @param id identificador del cliente
+	 * @param data nuevos datos
+	 * @return 0 si se actualiza correctamente, 1 si hay error
+	 */
 	@Override
 	public int updateById(Long id, ClientePremiumDTO data) {
 		LanzadorDeException.verificarId(id);
@@ -81,7 +117,11 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 			ClientePremium temp = encontrado.get();
 
 			if (!temp.getCedula().equals(data.getCedula())) {
-				LanzadorDeException.verificarDuplicado(clientePremiumRep.existsByCedula(data.getCedula()), "No se puede actualizar: la cédula " + data.getCedula() + " ya pertenece a otro cliente premium.");
+				LanzadorDeException.verificarDuplicado(
+						clientePremiumRep.existsByCedula(data.getCedula()),
+						"No se puede actualizar: la cédula " + data.getCedula()
+								+ " ya pertenece a otro cliente premium.");
+
 				if (clientePremiumRep.existsByCedula(data.getCedula())) {
 					return 1;
 				}
@@ -101,17 +141,31 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		}
 	}
 
+	/**
+	 * Cuenta los clientes premium.
+	 * 
+	 * @return número total de clientes
+	 */
 	@Override
 	public long count() {
 		return clientePremiumRep.count();
 	}
 
+	/**
+	 * Verifica si existe un cliente por ID.
+	 * 
+	 * @param id identificador
+	 * @return true si existe, false si no
+	 */
 	@Override
 	public boolean exist(Long id) {
 		LanzadorDeException.verificarId(id);
 		return clientePremiumRep.existsById(id);
 	}
 
+	/**
+	 * Busca por nombre.
+	 */
 	public List<ClientePremiumDTO> findByNombre(String nombre) {
 		LanzadorDeException.verificarNombre(nombre);
 		Optional<List<ClientePremium>> encontrados = clientePremiumRep.findByNombre(nombre);
@@ -122,6 +176,9 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca por cédula.
+	 */
 	public List<ClientePremiumDTO> findByCedula(String cedula) {
 		LanzadorDeException.verificarCedula(cedula);
 		Optional<List<ClientePremium>> encontrados = clientePremiumRep.findByCedula(cedula);
@@ -132,6 +189,9 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca por correo.
+	 */
 	public List<ClientePremiumDTO> findByCorreo(String correo) {
 		LanzadorDeException.verificarCorreoElectronico(correo);
 		Optional<List<ClientePremium>> encontrados = clientePremiumRep.findByCorreo(correo);
@@ -142,6 +202,9 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca por teléfono.
+	 */
 	public List<ClientePremiumDTO> findByTelefono(String telefono) {
 		LanzadorDeException.verificarTelefono(telefono);
 		Optional<List<ClientePremium>> encontrados = clientePremiumRep.findByTelefono(telefono);
@@ -152,6 +215,9 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca por método de pago.
+	 */
 	public List<ClientePremiumDTO> findByMetodoPago(String metodoPago) {
 		LanzadorDeException.verificarMetodoPago(metodoPago);
 		Optional<List<ClientePremium>> encontrados = clientePremiumRep.findByMetodoPago(metodoPago);
@@ -162,6 +228,9 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca por tipo de pedido.
+	 */
 	public List<ClientePremiumDTO> findByTipoPedido(String tipoPedido) {
 		LanzadorDeException.verificarTipoPedido(tipoPedido);
 		Optional<List<ClientePremium>> encontrados = clientePremiumRep.findByTipoPedido(tipoPedido);
@@ -172,6 +241,9 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca por nombre y cédula.
+	 */
 	public List<ClientePremiumDTO> findByNombreAndCedula(String nombre, String cedula) {
 		LanzadorDeException.verificarNombre(nombre);
 		LanzadorDeException.verificarCedula(cedula);
@@ -183,23 +255,32 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca por tipo de pedido y método de pago.
+	 */
 	public List<ClientePremiumDTO> findByTipoPedidoAndMetodoPago(String tipoPedido, String metodoPago) {
 		LanzadorDeException.verificarTipoPedido(tipoPedido);
 		LanzadorDeException.verificarMetodoPago(metodoPago);
-		Optional<List<ClientePremium>> encontrados = clientePremiumRep.findByTipoPedidoAndMetodoPago(tipoPedido,
-				metodoPago);
+		Optional<List<ClientePremium>> encontrados = clientePremiumRep
+				.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
 		List<ClientePremiumDTO> dtoList = new ArrayList<>();
 		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
 			encontrados.get().forEach(e -> dtoList.add(mapper.map(e, ClientePremiumDTO.class)));
 		}
 		return dtoList;
 	}
-	
+
+	/**
+	 * Permite inyectar el repositorio manualmente (testing).
+	 */
 	public void setClientePremiumRep(ClientePremiumRepository repo) {
-	    this.clientePremiumRep= repo;
+		this.clientePremiumRep = repo;
 	}
 
+	/**
+	 * Permite inyectar el mapper manualmente (testing).
+	 */
 	public void setMapper(ModelMapper mapper) {
-	    this.mapper = mapper;
+		this.mapper = mapper;
 	}
 }
