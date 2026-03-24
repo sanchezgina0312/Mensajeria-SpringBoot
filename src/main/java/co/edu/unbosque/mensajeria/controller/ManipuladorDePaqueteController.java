@@ -23,17 +23,60 @@ import co.edu.unbosque.mensajeria.exception.TipoManipuladorInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 import co.edu.unbosque.mensajeria.service.ManipuladorDePaqueteService;
 
+/**
+ * Controlador REST para la gestión de manipuladores de paquete.
+ * <p>
+ * Expone endpoints HTTP para realizar operaciones CRUD sobre los
+ * manipuladores de paquete registrados en el sistema de mensajería,
+ * así como búsquedas por diferentes criterios.
+ * </p>
+ *
+ * <p>Base URL: {@code /manipuladordepaquete}</p>
+ *
+ * @author Angie Villarreal
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/manipuladordepaquete")
 @CrossOrigin(origins = { "http://localhost:8080", "*" })
 public class ManipuladorDePaqueteController {
 
+	/**
+	 * Servicio que contiene la lógica de negocio para los manipuladores de paquete.
+	 */
 	@Autowired
 	private ManipuladorDePaqueteService manipuladorSer;
 
+	/**
+	 * Constructor por defecto de {@code ManipuladorDePaqueteController}.
+	 */
 	public ManipuladorDePaqueteController() {
 	}
 
+	/**
+	 * Crea un nuevo manipulador de paquete en el sistema.
+	 * <p>
+	 * Endpoint: {@code POST /manipuladordepaquete/crear}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/crear?nombre=Roberto&cedula=4455&correo=roberto@mail.com&telefono=318777&turno=N&tipoManipulador=Carga}
+	 * </p>
+	 *
+	 * @param nombre          nombre del manipulador de paquete
+	 * @param cedula          número de cédula del manipulador
+	 * @param correo          correo electrónico del manipulador
+	 * @param telefono        número de teléfono del manipulador
+	 * @param turno           turno asignado al manipulador (p. ej. {@code 'M'} para mañana, {@code 'N'} para noche)
+	 * @param tipoManipulador tipo de manipulador (p. ej. {@code "Carga"}, {@code "Logistica"})
+	 * @return {@link ResponseEntity} con un mensaje de resultado y el código HTTP correspondiente:
+	 *         <ul>
+	 *           <li>{@code 201 CREATED} – manipulador creado exitosamente</li>
+	 *           <li>{@code 409 CONFLICT} – la cédula ya se encuentra registrada</li>
+	 *           <li>{@code 400 BAD_REQUEST} – datos inválidos o error de validación</li>
+	 *           <li>{@code 500 INTERNAL_SERVER_ERROR} – error interno del servidor</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/crear?nombre=Roberto&cedula=4455&correo=roberto@mail.com&telefono=318777&turno=N&tipoManipulador=Carga
 	@PostMapping("/crear")
 	public ResponseEntity<String> crearManipulador(@RequestParam String nombre, @RequestParam String cedula,
@@ -69,6 +112,22 @@ public class ManipuladorDePaqueteController {
 		}
 	}
 
+	/**
+	 * Retorna la lista completa de manipuladores de paquete registrados en el sistema.
+	 * <p>
+	 * Endpoint: {@code GET /manipuladordepaquete/mostrartodo}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/mostrartodo}
+	 * </p>
+	 *
+	 * @return {@link ResponseEntity} con la lista de {@link ManipuladorDePaqueteDTO} y el código HTTP correspondiente:
+	 *         <ul>
+	 *           <li>{@code 202 ACCEPTED} – lista retornada exitosamente</li>
+	 *           <li>{@code 204 NO_CONTENT} – no hay manipuladores registrados</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/mostrartodo
 	@GetMapping("/mostrartodo")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> mostrarTodo() {
@@ -80,6 +139,30 @@ public class ManipuladorDePaqueteController {
 		}
 	}
 
+	/**
+	 * Actualiza los datos de un manipulador de paquete existente identificado por su ID.
+	 * <p>
+	 * Endpoint: {@code PUT /manipuladordepaquete/actualizar}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/actualizar?id=1&nombre=Roberto+Carlos&cedula=4455&correo=rcarlos@mail.com&telefono=318888&turno=M&tipoManipulador=Logistica}
+	 * </p>
+	 *
+	 * @param id              identificador único del manipulador a actualizar
+	 * @param nombre          nuevo nombre del manipulador
+	 * @param cedula          nueva cédula del manipulador
+	 * @param correo          nuevo correo electrónico del manipulador
+	 * @param telefono        nuevo número de teléfono del manipulador
+	 * @param turno           nuevo turno del manipulador
+	 * @param tipoManipulador nuevo tipo de manipulador
+	 * @return {@link ResponseEntity} con un mensaje de resultado y el código HTTP correspondiente:
+	 *         <ul>
+	 *           <li>{@code 202 ACCEPTED} – registro actualizado exitosamente</li>
+	 *           <li>{@code 400 BAD_REQUEST} – ID no encontrado o datos inválidos</li>
+	 *           <li>{@code 500 INTERNAL_SERVER_ERROR} – error inesperado en el servidor</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/actualizar?id=1&nombre=Roberto+Carlos&cedula=4455&correo=rcarlos@mail.com&telefono=318888&turno=M&tipoManipulador=Logistica
 	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Long id, @RequestParam String nombre,
@@ -114,6 +197,24 @@ public class ManipuladorDePaqueteController {
 		}
 	}
 
+	/**
+	 * Elimina un manipulador de paquete del sistema según su ID.
+	 * <p>
+	 * Endpoint: {@code DELETE /manipuladordepaquete/eliminar}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/eliminar?id=1}
+	 * </p>
+	 *
+	 * @param id identificador único del manipulador a eliminar
+	 * @return {@link ResponseEntity} con un mensaje de resultado y el código HTTP correspondiente:
+	 *         <ul>
+	 *           <li>{@code 202 ACCEPTED} – registro eliminado exitosamente</li>
+	 *           <li>{@code 400 BAD_REQUEST} – ID no encontrado o inválido</li>
+	 *           <li>{@code 500 INTERNAL_SERVER_ERROR} – error al procesar la solicitud</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/eliminar?id=1
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> delete(@RequestParam Long id) {
@@ -130,7 +231,24 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>("Error al procesar la solicitud", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
+	/**
+	 * Busca manipuladores de paquete por nombre.
+	 * <p>
+	 * Endpoint: {@code GET /manipuladordepaquete/buscarpornombre}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/buscarpornombre?nombre=Roberto}
+	 * </p>
+	 *
+	 * @param nombre nombre del manipulador a buscar
+	 * @return {@link ResponseEntity} con la lista de {@link ManipuladorDePaqueteDTO} encontrados y el código HTTP:
+	 *         <ul>
+	 *           <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
+	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/buscarpornombre?nombre=Roberto
 	@GetMapping("/buscarpornombre")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorNombre(@RequestParam String nombre) {
@@ -141,7 +259,24 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-	
+
+	/**
+	 * Busca manipuladores de paquete por número de cédula.
+	 * <p>
+	 * Endpoint: {@code GET /manipuladordepaquete/buscarporcedula}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/buscarporcedula?cedula=4455}
+	 * </p>
+	 *
+	 * @param cedula número de cédula del manipulador a buscar
+	 * @return {@link ResponseEntity} con la lista de {@link ManipuladorDePaqueteDTO} encontrados y el código HTTP:
+	 *         <ul>
+	 *           <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
+	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/buscarporcedula?cedula=4455
 	@GetMapping("/buscarporcedula")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorCedula(@RequestParam String cedula) {
@@ -152,7 +287,24 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-	
+
+	/**
+	 * Busca manipuladores de paquete por correo electrónico.
+	 * <p>
+	 * Endpoint: {@code GET /manipuladordepaquete/buscarporcorreo}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/buscarporcorreo?correo=roberto@mail.com}
+	 * </p>
+	 *
+	 * @param correo correo electrónico del manipulador a buscar
+	 * @return {@link ResponseEntity} con la lista de {@link ManipuladorDePaqueteDTO} encontrados y el código HTTP:
+	 *         <ul>
+	 *           <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
+	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/buscarporcorreo?correo=roberto@mail.com
 	@GetMapping("/buscarporcorreo")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorCorreo(@RequestParam String correo) {
@@ -163,7 +315,24 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-	
+
+	/**
+	 * Busca manipuladores de paquete por número de teléfono.
+	 * <p>
+	 * Endpoint: {@code GET /manipuladordepaquete/buscarportelefono}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/buscarportelefono?telefono=318777}
+	 * </p>
+	 *
+	 * @param telefono número de teléfono del manipulador a buscar
+	 * @return {@link ResponseEntity} con la lista de {@link ManipuladorDePaqueteDTO} encontrados y el código HTTP:
+	 *         <ul>
+	 *           <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
+	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/buscarportelefono?telefono=318777
 	@GetMapping("/buscarportelefono")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorTelefono(@RequestParam String telefono) {
@@ -174,7 +343,24 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-	
+
+	/**
+	 * Busca manipuladores de paquete según su tipo (p. ej. Carga, Logística).
+	 * <p>
+	 * Endpoint: {@code GET /manipuladordepaquete/buscarportipomanipulador}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/buscarportipomanipulador?tipoManipulador=Carga}
+	 * </p>
+	 *
+	 * @param tipoManipulador tipo del manipulador a buscar
+	 * @return {@link ResponseEntity} con la lista de {@link ManipuladorDePaqueteDTO} encontrados y el código HTTP:
+	 *         <ul>
+	 *           <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
+	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/buscarportipomanipulador?tipoManipulador=Carga
 	@GetMapping("/buscarportipomanipulador")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorTipoManipulador(
@@ -186,7 +372,25 @@ public class ManipuladorDePaqueteController {
 			return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
 		}
 	}
-	
+
+	/**
+	 * Busca manipuladores de paquete filtrando simultáneamente por nombre y cédula.
+	 * <p>
+	 * Endpoint: {@code GET /manipuladordepaquete/buscarpornombreycedula}
+	 * </p>
+	 * <p>
+	 * Ejemplo de uso:
+	 * {@code http://localhost:8080/manipuladordepaquete/buscarpornombreycedula?nombre=Roberto&cedula=4455}
+	 * </p>
+	 *
+	 * @param nombre nombre del manipulador a buscar
+	 * @param cedula cédula del manipulador a buscar
+	 * @return {@link ResponseEntity} con la lista de {@link ManipuladorDePaqueteDTO} encontrados y el código HTTP:
+	 *         <ul>
+	 *           <li>{@code 202 ACCEPTED} – se encontraron resultados</li>
+	 *           <li>{@code 204 NO_CONTENT} – no se encontraron coincidencias</li>
+	 *         </ul>
+	 */
 	// http://localhost:8080/manipuladordepaquete/buscarpornombreycedula?nombre=Roberto&cedula=4455
 	@GetMapping("/buscarpornombreycedula")
 	public ResponseEntity<List<ManipuladorDePaqueteDTO>> buscarPorNombreAndCedula(@RequestParam String nombre,
