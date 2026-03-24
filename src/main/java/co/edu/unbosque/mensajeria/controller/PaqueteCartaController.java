@@ -362,8 +362,8 @@ public class PaqueteCartaController {
 	 *         </ul>
 	 */
 	// http://localhost:8080/paquetecarta/seguimientoid?id=1
-	@GetMapping("/seguimientoid")
-	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
+	@GetMapping("/buscarporid")
+	public ResponseEntity<Object> buscarPorId(@RequestParam Long id) {
 
 		try {
 			PaqueteCartaDTO p = paqueteCartaSer.findById(id);

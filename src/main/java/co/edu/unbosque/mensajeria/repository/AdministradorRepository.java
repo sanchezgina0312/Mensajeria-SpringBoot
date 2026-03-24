@@ -51,7 +51,8 @@ public interface AdministradorRepository extends CrudRepository<Administrador, L
 	 * * @param usuario El nombre de usuario a consultar.
 	 * @return Un  Optional que contiene una lista de administradores encontrados.
 	 */
-	public Optional<List<Administrador>> findByUsuario(String usuario);			
+	public Optional<List<Administrador>> findByUsuario(String usuario);		
+	
 
 	/**
 	 * Busca administradores que coincidan simultáneamente con un nombre y una cédula.

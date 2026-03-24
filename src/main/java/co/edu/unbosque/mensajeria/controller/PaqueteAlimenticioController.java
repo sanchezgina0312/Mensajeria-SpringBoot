@@ -406,8 +406,8 @@ public class PaqueteAlimenticioController {
 	 *         </ul>
 	 */
 	// http://localhost:8080/paquetealimenticio/seguimientoid?id=10
-	@GetMapping("/seguimientoid")
-	public ResponseEntity<Object> seguimientoId(@RequestParam Long id) {
+	@GetMapping("/buscarPorId")
+	public ResponseEntity<Object> buscarPorId(@RequestParam Long id) {
 		try {
 			PaqueteAlimenticioDTO p = paqueteAlimenticioSer.findById(id);
 

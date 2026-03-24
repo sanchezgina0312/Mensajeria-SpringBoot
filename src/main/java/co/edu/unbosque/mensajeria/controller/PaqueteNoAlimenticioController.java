@@ -367,9 +367,9 @@ public class PaqueteNoAlimenticioController {
 	 *         inválido</li>
 	 *         </ul>
 	 */
-	// http://localhost:8080/paquetenoalimenticio/seguimientoid?id=1
-	@GetMapping("/seguimientoid")
-	public ResponseEntity<Object> findById(@RequestParam Long id) {
+	// http://localhost:8080/paquetenoalimenticio/buscarporidid?id=1
+	@GetMapping("/buscarporid")
+	public ResponseEntity<Object> buscarPorId(@RequestParam Long id) {
 		try {
 			PaqueteNoAlimenticioDTO p = paqueteNoAlimenticioSer.findById(id);
 
