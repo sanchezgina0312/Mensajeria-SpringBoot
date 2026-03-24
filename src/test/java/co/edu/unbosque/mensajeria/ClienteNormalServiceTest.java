@@ -16,18 +16,51 @@ import co.edu.unbosque.mensajeria.entity.ClienteNormal;
 import co.edu.unbosque.mensajeria.repository.ClienteNormalRepository;
 import co.edu.unbosque.mensajeria.service.ClienteNormalService;
 
+/**
+ * Clase de pruebas unitarias para el servicio ClienteNormalService. Se valida
+ * el correcto funcionamiento de las operaciones CRUD y consultas personalizadas
+ * usando Mockito.
+ * 
+ * @author Natalia D
+ */
 class ClienteNormalServiceTest {
 
+	/**
+	 * Mock del repositorio ClienteNormalRepository
+	 */
 	@Mock
 	private ClienteNormalRepository clienteNormalRep;
 
+	/**
+	 * Mapper para conversión entre Entity y DTO
+	 */
 	private ModelMapper mapper;
 
+	/**
+	 * Servicio a probar
+	 */
 	private ClienteNormalService service;
 
+	/**
+	 * Objeto DTO de prueba
+	 */
 	private ClienteNormalDTO dto;
+
+	/**
+	 * Objeto Entity de prueba
+	 */
 	private ClienteNormal entity;
 
+	/**
+	 * Valores válidos según las validaciones del sistema
+	 */
+	private static final String METODO_VALIDO = "EFECTIVO";
+	private static final String TIPO_VALIDO = "ALIMENTICIO";
+
+	/**
+	 * Configuración inicial antes de cada prueba. Se inicializan mocks, mapper,
+	 * servicio y objetos de prueba.
+	 */
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -35,7 +68,6 @@ class ClienteNormalServiceTest {
 		mapper = new ModelMapper();
 
 		service = new ClienteNormalService();
-
 		service.setClienteNormalRep(clienteNormalRep);
 		service.setMapper(mapper);
 
@@ -44,7 +76,8 @@ class ClienteNormalServiceTest {
 		dto.setCedula("123456");
 		dto.setCorreo("juan@mail.com");
 		dto.setTelefono("3001234567");
-		dto.setMetodoPago("TARJETA");
+		dto.setMetodoPago(METODO_VALIDO);
+		dto.setTipoPedido(TIPO_VALIDO);
 
 		entity = new ClienteNormal();
 		entity.setNombre(dto.getNombre());
@@ -52,33 +85,39 @@ class ClienteNormalServiceTest {
 		entity.setCorreo(dto.getCorreo());
 		entity.setTelefono(dto.getTelefono());
 		entity.setMetodoPago(dto.getMetodoPago());
+		entity.setTipoPedido(dto.getTipoPedido());
 	}
 
+	/**
+	 * Prueba la creación exitosa de un cliente.
+	 */
 	@Test
 	void testCreateSuccess() {
 		when(clienteNormalRep.existsByCedula(dto.getCedula())).thenReturn(false);
-		when(clienteNormalRep.save(any(ClienteNormal.class))).thenReturn(entity); 
+		when(clienteNormalRep.save(any(ClienteNormal.class))).thenReturn(entity);
 
 		int result = service.create(dto);
 
 		assertEquals(0, result);
 		verify(clienteNormalRep).save(any(ClienteNormal.class));
 	}
-	
+
+	/**
+	 * Prueba la creación cuando el cliente ya existe (duplicado).
+	 */
 	@Test
 	void testCreateDuplicado() {
 		when(clienteNormalRep.existsByCedula(dto.getCedula())).thenReturn(true);
 
-		assertThrows(Exception.class, () -> {
-			service.create(dto);
-		});
+		assertThrows(Exception.class, () -> service.create(dto));
 	}
 
+	/**
+	 * Prueba la obtención de todos los clientes.
+	 */
 	@Test
 	void testGetAll() {
-		List<ClienteNormal> lista = Arrays.asList(entity);
-
-		when(clienteNormalRep.findAll()).thenReturn(lista);
+		when(clienteNormalRep.findAll()).thenReturn(Arrays.asList(entity));
 
 		List<ClienteNormalDTO> result = service.getAll();
 
@@ -86,6 +125,9 @@ class ClienteNormalServiceTest {
 		assertEquals(1, result.size());
 	}
 
+	/**
+	 * Prueba la eliminación de un cliente existente por ID.
+	 */
 	@Test
 	void testDeleteByIdSuccess() {
 		when(clienteNormalRep.findById(1L)).thenReturn(Optional.of(entity));
@@ -96,6 +138,9 @@ class ClienteNormalServiceTest {
 		verify(clienteNormalRep).delete(entity);
 	}
 
+	/**
+	 * Prueba la eliminación cuando el cliente no existe.
+	 */
 	@Test
 	void testDeleteByIdNotFound() {
 		when(clienteNormalRep.findById(1L)).thenReturn(Optional.empty());
@@ -105,11 +150,14 @@ class ClienteNormalServiceTest {
 		assertEquals(1, result);
 	}
 
+	/**
+	 * Prueba la actualización exitosa de un cliente.
+	 */
 	@Test
 	void testUpdateSuccess() {
 		when(clienteNormalRep.findById(1L)).thenReturn(Optional.of(entity));
 		when(clienteNormalRep.existsByCedula(dto.getCedula())).thenReturn(false);
-		when(clienteNormalRep.save(any(ClienteNormal.class))).thenReturn(entity); 
+		when(clienteNormalRep.save(any(ClienteNormal.class))).thenReturn(entity);
 
 		int result = service.updateById(1L, dto);
 
@@ -117,6 +165,9 @@ class ClienteNormalServiceTest {
 		verify(clienteNormalRep).save(any(ClienteNormal.class));
 	}
 
+	/**
+	 * Prueba la actualización cuando el cliente no existe.
+	 */
 	@Test
 	void testUpdateNotFound() {
 		when(clienteNormalRep.findById(1L)).thenReturn(Optional.empty());
@@ -126,55 +177,53 @@ class ClienteNormalServiceTest {
 		assertEquals(1, result);
 	}
 
+	/**
+	 * Prueba el conteo total de registros.
+	 */
 	@Test
 	void testCount() {
 		when(clienteNormalRep.count()).thenReturn(3L);
 
-		long result = service.count();
-
-		assertEquals(3, result);
+		assertEquals(3, service.count());
 	}
 
+	/**
+	 * Prueba la existencia de un cliente por ID.
+	 */
 	@Test
 	void testExist() {
 		when(clienteNormalRep.existsById(1L)).thenReturn(true);
 
-		boolean result = service.exist(1L);
-
-		assertTrue(result);
+		assertTrue(service.exist(1L));
 	}
 
+	/**
+	 * Prueba la búsqueda de clientes por nombre.
+	 */
 	@Test
 	void testFindByNombre() {
-		List<ClienteNormal> lista = Arrays.asList(entity);
+		when(clienteNormalRep.findByNombre("Juan Perez")).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		when(clienteNormalRep.findByNombre("Juan Perez")).thenReturn(Optional.of(lista));
-
-		List<ClienteNormalDTO> result = service.findByNombre("Juan Perez");
-
-		assertFalse(result.isEmpty());
+		assertFalse(service.findByNombre("Juan Perez").isEmpty());
 	}
 
+	/**
+	 * Prueba la búsqueda de clientes por cédula.
+	 */
 	@Test
 	void testFindByCedula() {
-		List<ClienteNormal> lista = Arrays.asList(entity);
+		when(clienteNormalRep.findByCedula("123456")).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		when(clienteNormalRep.findByCedula("123456")).thenReturn(Optional.of(lista));
-
-		List<ClienteNormalDTO> result = service.findByCedula("123456");
-
-		assertFalse(result.isEmpty());
+		assertFalse(service.findByCedula("123456").isEmpty());
 	}
 
+	/**
+	 * Prueba la búsqueda de clientes por método de pago.
+	 */
 	@Test
 	void testFindByMetodoPago() {
-		List<ClienteNormal> lista = Arrays.asList(entity);
+		when(clienteNormalRep.findByMetodoPago(METODO_VALIDO)).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		when(clienteNormalRep.findByMetodoPago("TARJETA"))
-				.thenReturn(Optional.of(lista));
-
-		List<ClienteNormalDTO> result = service.findByMetodoPago("TARJETA");
-
-		assertFalse(result.isEmpty());
+		assertFalse(service.findByMetodoPago(METODO_VALIDO).isEmpty());
 	}
 }
