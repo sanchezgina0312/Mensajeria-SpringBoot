@@ -24,6 +24,7 @@ public abstract class Paquete {
 	private LocalDateTime fechaEstimadaEntrega;
 	private String ciudadDestino;
 	private String estadoPedido;
+	@jakarta.persistence.Column(name = "prioridad")
 	private boolean esPrioritario;
 	private double precioFinal;
 
