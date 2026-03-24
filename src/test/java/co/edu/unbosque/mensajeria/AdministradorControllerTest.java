@@ -3,6 +3,7 @@ package co.edu.unbosque.mensajeria;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -16,7 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest
+import org.springframework.transaction.annotation.Transactional;
+
+@SpringBootTest 
+@Transactional
 class AdministradorControllerTest {
 
 	@Autowired
@@ -32,16 +36,25 @@ class AdministradorControllerTest {
 	@Test
 	void crearAdministrador() throws Exception {
 
-	    mockMvc.perform(post("/administrador/crear")
-	            .param("nombre", "Admin Uno")
-	            .param("cedula", "123456")
-	            .param("correo", "admin@mail.com")
-	            .param("telefono", "3001234567")
-	            .param("turno", "N")
-	            .param("usuario", "admin")
-	            .param("contrasenia", "1234"))
-	            .andExpect(status().is2xxSuccessful()); 
+		String json = """
+		{
+		    "nombre": "Admin Uno",
+		    "cedula": "123456",
+		    "correo": "admin@mail.com",
+		    "telefono": "3001234567",
+		    "turno": "N",
+		    "usuario": "admin",
+		    "contrasenia": "1234"
+		}
+		""";
+
+		mockMvc.perform(post("/administrador/crear")
+		        .contentType("application/json")
+		        .content(json))
+		        .andExpect(status().isOk());
 	}
+	
+	
 	@Test
 	void mostrarTodo() throws Exception {
 
@@ -65,19 +78,28 @@ class AdministradorControllerTest {
 	@Test
 	void eliminarAdministrador() throws Exception {
 
-	    mockMvc.perform(post("/administrador/crear")
-	            .param("nombre", "Admin Uno")
-	            .param("cedula", "123456")
-	            .param("correo", "admin@mail.com")
-	            .param("telefono", "3001234567")
-	            .param("turno", "N")
-	            .param("usuario", "admin")
-	            .param("contrasenia", "1234"))
-	            .andExpect(status().is2xxSuccessful()); 
+		String json = """
+		{
+		    "nombre": "Admin Uno",
+		    "cedula": "123456",
+		    "correo": "admin@mail.com",
+		    "telefono": "3001234567",
+		    "turno": "N",
+		    "usuario": "admin",
+		    "contrasenia": "1234"
+		}
+		""";
 
-	    mockMvc.perform(delete("/administrador/eliminar")
-	            .param("id", "1"))
-	            .andExpect(status().is2xxSuccessful()); 
+		
+		mockMvc.perform(post("/administrador/crear")
+		        .contentType("application/json")
+		        .content(json))
+		        .andExpect(status().isOk());
+
+		
+		mockMvc.perform(delete("/administrador/eliminar")
+		        .param("id", "1"))
+		        .andExpect(status().isOk());
 	}
 
 	@Test

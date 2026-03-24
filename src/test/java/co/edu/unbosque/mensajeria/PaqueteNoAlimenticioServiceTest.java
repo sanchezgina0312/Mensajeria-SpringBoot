@@ -51,25 +51,28 @@ class PaqueteNoAlimenticioServiceTest {
 
 	@Test
 	void testCreateSuccess() {
-		int result = service.create(dto);
 
-		assertEquals(1, result);
+	    int result = service.create(dto);
 
-		verify(repository).save(any(PaqueteNoAlimenticio.class));
-		assertNotNull(dto.getFechaEstimadaEntrega());
-		assertEquals("EN_PROCESO", dto.getEstadoPedido());
+	    assertEquals(1, result);
+	    verify(repository).save(any(PaqueteNoAlimenticio.class));
+
+	    assertNotNull(dto.getFechaEstimadaEntrega());
+	    assertEquals("EN_PROCESO", dto.getEstadoPedido());
 	}
 
 	@Test
 	void testGetAll() {
-		List<PaqueteNoAlimenticio> list = Arrays.asList(entity);
 
-		when(repository.findAll()).thenReturn(list);
+	    entity.setDireccionDestino("Calle 123"); 
 
-		List<PaqueteNoAlimenticioDTO> result = service.getAll();
+	    when(repository.findAll()).thenReturn(Arrays.asList(entity));
 
-		assertFalse(result.isEmpty());
-		assertEquals(1, result.size());
+	    List<PaqueteNoAlimenticioDTO> result = service.getAll();
+
+	    assertNotNull(result);
+	    assertFalse(result.isEmpty());
+	    assertEquals(1, result.size());
 	}
 
 	@Test
@@ -93,21 +96,25 @@ class PaqueteNoAlimenticioServiceTest {
 
 	@Test
 	void testUpdateByIdExists() {
-		when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-		int result = service.updateById(1L, dto);
+	    entity.setDireccionDestino("Vieja");
 
-		assertEquals(0, result);
-		verify(repository).save(any(PaqueteNoAlimenticio.class));
+	    when(repository.findById(1L)).thenReturn(Optional.of(entity));
+
+	    int result = service.updateById(1L, dto);
+
+	    assertEquals(0, result);
+	    verify(repository).save(any(PaqueteNoAlimenticio.class));
 	}
 
 	@Test
 	void testUpdateByIdNotExists() {
-		when(repository.findById(1L)).thenReturn(Optional.empty());
 
-		int result = service.updateById(1L, dto);
+	    when(repository.findById(1L)).thenReturn(Optional.empty());
 
-		assertEquals(1, result);
+	    int result = service.updateById(1L, dto);
+
+	    assertEquals(1, result);
 	}
 
 	@Test

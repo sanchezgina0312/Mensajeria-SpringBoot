@@ -35,8 +35,8 @@ class AdministradorServiceTest {
 		mapper = new ModelMapper();
 
 		administradorService = new AdministradorService();
-		administradorService.setAdministradorRep(administradorRep); 
-		administradorService.setMapper(mapper);                     
+		administradorService.setAdministradorRep(administradorRep);
+		administradorService.setMapper(mapper);
 
 		dto = new AdministradorDTO();
 		dto.setNombre("admin");
@@ -48,6 +48,7 @@ class AdministradorServiceTest {
 		dto.setContrasenia("1234");
 
 		entity = new Administrador();
+		entity.setId(1L);
 		entity.setNombre(dto.getNombre());
 		entity.setCedula(dto.getCedula());
 		entity.setCorreo(dto.getCorreo());
@@ -57,6 +58,7 @@ class AdministradorServiceTest {
 		entity.setContrasenia(dto.getContrasenia());
 	}
 
+	
 	@Test
 	void testCreateSuccess() {
 		when(administradorRep.existsByCedula(dto.getCedula())).thenReturn(false);
@@ -74,11 +76,10 @@ class AdministradorServiceTest {
 		assertThrows(Exception.class, () -> administradorService.create(dto));
 	}
 
+	
 	@Test
 	void testGetAll() {
-		List<Administrador> lista = Arrays.asList(entity);
-
-		when(administradorRep.findAll()).thenReturn(lista);
+		when(administradorRep.findAll()).thenReturn(List.of(entity));
 
 		List<AdministradorDTO> result = administradorService.getAll();
 
@@ -86,6 +87,7 @@ class AdministradorServiceTest {
 		assertEquals(1, result.size());
 	}
 
+	
 	@Test
 	void testDeleteByIdSuccess() {
 		when(administradorRep.findById(1L)).thenReturn(Optional.of(entity));
@@ -105,9 +107,12 @@ class AdministradorServiceTest {
 		assertEquals(1, result);
 	}
 
+	
 	@Test
 	void testUpdateSuccess() {
 		when(administradorRep.findById(1L)).thenReturn(Optional.of(entity));
+
+		// 🔥 importante: no bloquear por cédula duplicada
 		when(administradorRep.existsByCedula(dto.getCedula())).thenReturn(false);
 
 		int result = administradorService.updateById(1L, dto);
@@ -125,43 +130,41 @@ class AdministradorServiceTest {
 		assertEquals(1, result);
 	}
 
+	
 	@Test
 	void testCount() {
 		when(administradorRep.count()).thenReturn(5L);
 
-		long result = administradorService.count();
-
-		assertEquals(5, result);
+		assertEquals(5, administradorService.count());
 	}
 
+	
 	@Test
 	void testExist() {
 		when(administradorRep.existsById(1L)).thenReturn(true);
 
-		boolean result = administradorService.exist(1L);
-
-		assertTrue(result);
+		assertTrue(administradorService.exist(1L));
 	}
 
+	
 	@Test
 	void testFindByNombre() {
-		List<Administrador> lista = Arrays.asList(entity);
-
-		when(administradorRep.findByNombre("admin")).thenReturn(Optional.of(lista));
+		when(administradorRep.findByNombre("admin")).thenReturn(Optional.of(List.of(entity)));
 
 		List<AdministradorDTO> result = administradorService.findByNombre("admin");
 
 		assertFalse(result.isEmpty());
+		assertEquals(1, result.size());
 	}
 
+	
 	@Test
 	void testFindByCedula() {
-		List<Administrador> lista = Arrays.asList(entity);
-
-		when(administradorRep.findByCedula("1234")).thenReturn(Optional.of(lista));
+		when(administradorRep.findByCedula("1234")).thenReturn(Optional.of(List.of(entity)));
 
 		List<AdministradorDTO> result = administradorService.findByCedula("1234");
 
 		assertFalse(result.isEmpty());
+		assertEquals(1, result.size());
 	}
 }
