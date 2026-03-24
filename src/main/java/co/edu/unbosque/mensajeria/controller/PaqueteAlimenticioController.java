@@ -1,6 +1,5 @@
 package co.edu.unbosque.mensajeria.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,6 +52,7 @@ public class PaqueteAlimenticioController {
 	 * Constructor por defecto de {@code PaqueteAlimenticioController}.
 	 */
 	public PaqueteAlimenticioController() {
+
 	}
 
 	/**
@@ -184,8 +184,7 @@ public class PaqueteAlimenticioController {
 			if (status == 1) {
 				return new ResponseEntity<>("Paquete alimenticio actualizado con éxito", HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>("Error: Paquete no encontrado o ya fue enviado hoy",
-						HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("No se encontró el paquete alimenticio", HttpStatus.NOT_FOUND);
 			}
 		} catch (DireccionInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

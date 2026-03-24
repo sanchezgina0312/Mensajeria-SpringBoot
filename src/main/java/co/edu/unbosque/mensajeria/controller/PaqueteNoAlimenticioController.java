@@ -1,6 +1,5 @@
 package co.edu.unbosque.mensajeria.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -190,7 +189,6 @@ public class PaqueteNoAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (MethodArgumentTypeMismatchException e) {
 			return new ResponseEntity<>("El formato del ID no es válido", HttpStatus.BAD_REQUEST);
-			return new ResponseEntity<>("El formato no corresponde con el requerido", HttpStatus.BAD_REQUEST);
 		}
 	}
 

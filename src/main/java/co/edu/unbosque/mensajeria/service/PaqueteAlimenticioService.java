@@ -29,37 +29,29 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 
 	@Override
 	public int create(PaqueteAlimenticioDTO data) {
-
 		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 		LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
 		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
-		data.setEstadoPedido("EN_PROCESO");
-		if (data.getFechaCreacionPedido() == null) {
-			data.setFechaCreacionPedido(LocalDateTime.now());
-		}
-
-		registrarPlazo6Horas(data);
-
-		double montoConRecargo = calcularPrecioPorTamaño(10000, data.getTamanio());
-		double montoFinal = aplicarDescuentoPorCliente(montoConRecargo, "CONCURRENTE");
-
-		data.setPrecioEnvio((int) montoConRecargo);
-		data.setPrecioFinal(montoFinal);
-
-		procesarEstadoYTiempoDTO(data);
-
 		PaqueteAlimenticio entity = mapper.map(data, PaqueteAlimenticio.class);
+		entity.setFechaCreacionPedido(LocalDateTime.now());
+		entity.setFechaEstimadaEntrega(LocalDateTime.now().plusDays(1));
+		entity.setEstadoPedido("EN_PROCESO");
+
+		double precioBase = 15000;
+		double precioFinal = calcularPrecioPorTamaño(precioBase, data.getTamanio());
+		entity.setPrecioFinal(precioFinal);
+
 		paqueteAlimenticioRep.save(entity);
-		return 0;
+		return 1;
 	}
 
 	@Override
 	public List<PaqueteAlimenticioDTO> getAll() {
 		List<PaqueteAlimenticio> listaEntidad = (List<PaqueteAlimenticio>) paqueteAlimenticioRep.findAll();
 		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
-		for (PaqueteAlimenticio p : listaEntidad) { 
+		for (PaqueteAlimenticio p : listaEntidad) {
 			PaqueteAlimenticioDTO dto = mapper.map(p, PaqueteAlimenticioDTO.class);
 			procesarEstadoYTiempoDTO(dto);
 			dtoList.add(dto);
@@ -79,34 +71,32 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		return 1;
 	}
 
-	@Override
 	public int updateById(Long id, PaqueteAlimenticioDTO data) {
-
-		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
-		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
-		LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
-		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
-		LanzadorDeException.verificarId(id);
-
 		Optional<PaqueteAlimenticio> encontrado = paqueteAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
-			PaqueteAlimenticio temp = encontrado.get();
-			temp.setPrecioEnvio(data.getPrecioEnvio());
-			temp.setDireccionDestino(data.getDireccionDestino());
-			temp.setTamanio(data.getTamanio());
-			temp.setFechaCreacionPedido(data.getFechaCreacionPedido());
-			temp.setFechaEstimadaEntrega(data.getFechaEstimadaEntrega());
-			temp.setSeEnviaHoy(data.isSeEnviaHoy());
-			temp.setTipoDeAlimento(data.getTipoDeAlimento());
-			
-			PaqueteAlimenticioDTO dtoParaActualizar = mapper.map(temp, PaqueteAlimenticioDTO.class);
-			procesarEstadoYTiempoDTO(dtoParaActualizar);
-			
-			paqueteAlimenticioRep.save(mapper.map(dtoParaActualizar, PaqueteAlimenticio.class));
-			return 0;
-		}
+			PaqueteAlimenticio entity = encontrado.get();
 
-		return 1;
+			LanzadorDeException.verificarDireccion(data.getDireccionDestino());
+			LanzadorDeException.verificarCiudad(data.getCiudadDestino());
+			LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+			LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
+
+			boolean valorPrevio = entity.isSeEnviaHoy();
+
+			entity.setDireccionDestino(data.getDireccionDestino());
+			entity.setCiudadDestino(data.getCiudadDestino());
+			entity.setTamanio(data.getTamanio());
+			entity.setTipoDeAlimento(data.getTipoDeAlimento());
+			entity.setSeEnviaHoy(valorPrevio);
+
+			double precioBase = 15000;
+			double precioFinal = calcularPrecioPorTamaño(precioBase, data.getTamanio());
+			entity.setPrecioFinal(precioFinal);
+
+			paqueteAlimenticioRep.save(entity);
+			return 1;
+		}
+		return 0;
 	}
 
 	@Override
@@ -254,14 +244,13 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(6));
 		return 0;
 	}
-	
+
 	public void setPaqueteAlimenticioRep(PaqueteAlimenticioRepository repo) {
-	    this.paqueteAlimenticioRep= repo;
+		this.paqueteAlimenticioRep = repo;
 	}
 
 	public void setMapper(ModelMapper mapper) {
-	    this.mapper = mapper;
+		this.mapper = mapper;
 	}
-	
 
 }

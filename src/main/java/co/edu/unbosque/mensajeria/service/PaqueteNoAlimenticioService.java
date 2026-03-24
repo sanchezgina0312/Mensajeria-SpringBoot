@@ -33,23 +33,17 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
-		data.setEstadoPedido("EN_PROCESO");
-		if (data.getFechaCreacionPedido() == null)
-			data.setFechaCreacionPedido(LocalDateTime.now());
-
-		registrarPlazo24Horas(data);
-
-		double precioBaseConRecargo = calcularPrecioPorTamaño(15000, data.getTamanio());
-		double precioConDescuento = aplicarDescuentoPorCliente(precioBaseConRecargo, "NORMAL");
-
-		data.setPrecioEnvio((int) precioBaseConRecargo);
-		data.setPrecioFinal(precioConDescuento);
-
-		procesarEstadoYTiempoDTO(data);
-
 		PaqueteNoAlimenticio entity = mapper.map(data, PaqueteNoAlimenticio.class);
+		entity.setFechaCreacionPedido(LocalDateTime.now());
+		entity.setFechaEstimadaEntrega(LocalDateTime.now().plusDays(3));
+		entity.setEstadoPedido("EN_PROCESO");
+
+		double precioBase = 20000;
+		double precioFinal = calcularPrecioPorTamaño(precioBase, data.getTamanio());
+		entity.setPrecioFinal(precioFinal);
+
 		paqueteNoAlimenticioRep.save(entity);
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -84,33 +78,30 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return 1;
 	}
 
-	@Override
 	public int updateById(Long id, PaqueteNoAlimenticioDTO data) {
-
-		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
-		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
-		LanzadorDeException.verificarId(id);
-
 		Optional<PaqueteNoAlimenticio> encontrado = paqueteNoAlimenticioRep.findById(id);
 		if (encontrado.isPresent()) {
-			PaqueteNoAlimenticio temp = encontrado.get();
-			temp.setPrecioEnvio(data.getPrecioEnvio());
-			temp.setDireccionDestino(data.getDireccionDestino());
-			temp.setTamanio(data.getTamanio());
-			temp.setFechaCreacionPedido(data.getFechaCreacionPedido());
-			temp.setFechaEstimadaEntrega(data.getFechaEstimadaEntrega());
-			temp.setEsFragil(data.isEsFragil());
+			PaqueteNoAlimenticio entity = encontrado.get();
+
+			LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 			LanzadorDeException.verificarCiudad(data.getCiudadDestino());
-			LanzadorDeException.verificarId(id);
+			LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 
-			PaqueteNoAlimenticioDTO dtoTemp = mapper.map(temp, PaqueteNoAlimenticioDTO.class);
-			procesarEstadoYTiempoDTO(dtoTemp);
+			boolean fragilPrevio = entity.isEsFragil();
 
-			paqueteNoAlimenticioRep.save(mapper.map(dtoTemp, PaqueteNoAlimenticio.class));
-			return 0;
+			entity.setDireccionDestino(data.getDireccionDestino());
+			entity.setCiudadDestino(data.getCiudadDestino());
+			entity.setTamanio(data.getTamanio());
+			entity.setEsFragil(fragilPrevio);
+
+			double precioBase = 20000;
+			double precioFinal = calcularPrecioPorTamaño(precioBase, data.getTamanio());
+			entity.setPrecioFinal(precioFinal);
+
+			paqueteNoAlimenticioRep.save(entity);
+			return 1;
 		}
-
-		return 1;
+		return 0;
 	}
 
 	@Override

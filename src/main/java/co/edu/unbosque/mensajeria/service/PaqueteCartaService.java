@@ -34,23 +34,17 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
 		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
-		data.setEstadoPedido("EN_PROCESO");
-		if (data.getFechaCreacionPedido() == null)
-			data.setFechaCreacionPedido(LocalDateTime.now());
-
-		registrarPlazo72Horas(data);
-
-		double baseConTamaño = calcularPrecioPorTamaño(5000, data.getTamanio());
-		double totalFinal = aplicarDescuentoPorCliente(baseConTamaño, "NORMAL");
-
-		data.setPrecioEnvio((int) baseConTamaño);
-		data.setPrecioFinal(totalFinal);
-
-		procesarEstadoYTiempoDTO(data);
-
 		PaqueteCarta entity = mapper.map(data, PaqueteCarta.class);
+		entity.setFechaCreacionPedido(LocalDateTime.now());
+		entity.setFechaEstimadaEntrega(LocalDateTime.now().plusDays(2));
+		entity.setEstadoPedido("EN_PROCESO");
+
+		double precioBase = 5000;
+		double precioFinal = calcularPrecioPorTamaño(precioBase, data.getTamanio());
+		entity.setPrecioFinal(precioFinal);
+
 		paqueteCartaRep.save(entity);
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -86,28 +80,32 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return 1;
 	}
 
-	@Override
 	public int updateById(Long id, PaqueteCartaDTO data) {
 		Optional<PaqueteCarta> encontrado = paqueteCartaRep.findById(id);
 		if (encontrado.isPresent()) {
-			PaqueteCarta temp = encontrado.get();
-			temp.setPrecioEnvio(data.getPrecioEnvio());
-			temp.setDireccionDestino(data.getDireccionDestino());
-			temp.setTamanio(data.getTamanio());
-			temp.setFechaCreacionPedido(data.getFechaCreacionPedido());
-			temp.setFechaEstimadaEntrega(data.getFechaEstimadaEntrega());
-			temp.setTipoCarta(data.getTipoCarta());
+			PaqueteCarta entity = encontrado.get();
+
+			LanzadorDeException.verificarDireccion(data.getDireccionDestino());
 			LanzadorDeException.verificarCiudad(data.getCiudadDestino());
-			LanzadorDeException.verificarId(id);
+			LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+			LanzadorDeException.verificarTipoCarta(data.getTipoCarta());
 
-			PaqueteCartaDTO dtoTemp = mapper.map(temp, PaqueteCartaDTO.class);
-			procesarEstadoYTiempoDTO(dtoTemp);
+			boolean priorPrevio = entity.isEsPrioritario();
 
-			paqueteCartaRep.save(mapper.map(dtoTemp, PaqueteCarta.class));
-			return 0;
+			entity.setDireccionDestino(data.getDireccionDestino());
+			entity.setCiudadDestino(data.getCiudadDestino());
+			entity.setTamanio(data.getTamanio());
+			entity.setTipoCarta(data.getTipoCarta());
+			entity.setEsPrioritario(priorPrevio);
+
+			double precioBase = 5000;
+			double precioFinal = calcularPrecioPorTamaño(precioBase, data.getTamanio());
+			entity.setPrecioFinal(precioFinal);
+
+			paqueteCartaRep.save(entity);
+			return 1;
 		}
-
-		return 1;
+		return 0;
 	}
 
 	@Override
@@ -235,13 +233,13 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(72));
 		return 0;
 	}
-	
+
 	public void setPaqueteCartaRep(PaqueteCartaRepository repo) {
-	    this.paqueteCartaRep= repo;
+		this.paqueteCartaRep = repo;
 	}
 
 	public void setMapper(ModelMapper mapper) {
-	    this.mapper = mapper;
+		this.mapper = mapper;
 	}
 
 }

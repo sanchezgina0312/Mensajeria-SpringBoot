@@ -1,6 +1,5 @@
 package co.edu.unbosque.mensajeria.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,7 +192,6 @@ public class PaqueteCartaController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (MethodArgumentTypeMismatchException e) {
 			return new ResponseEntity<>("El formato del ID no es válido", HttpStatus.BAD_REQUEST);
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
