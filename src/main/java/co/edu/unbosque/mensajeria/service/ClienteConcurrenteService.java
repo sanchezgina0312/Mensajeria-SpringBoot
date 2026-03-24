@@ -26,7 +26,7 @@ import co.edu.unbosque.mensajeria.util.LanzadorDeException;
  * entre entidades y DTOs, y LanzadorDeException para la validación de datos.
  * </p>
  * 
- * @author Angie Villarreal
+ * @author Jairo Esteban
  */
 @Service
 public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurrenteDTO> {

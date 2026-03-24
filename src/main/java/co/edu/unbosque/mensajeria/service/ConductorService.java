@@ -13,6 +13,17 @@ import co.edu.unbosque.mensajeria.entity.Conductor;
 import co.edu.unbosque.mensajeria.repository.ConductorRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
+/**
+ * Servicio encargado de gestionar las operaciones CRUD de los conductores.
+ * <p>
+ * Permite crear, consultar, actualizar y eliminar conductores, así como
+ * realizar búsquedas por diferentes atributos como nombre, cédula, correo,
+ * teléfono y placa del vehículo.
+ * Utiliza ModelMapper para la conversión entre entidades y DTOs.
+ * </p>
+ * 
+ * @author Angie Villarreal
+ */
 @Service
 public class ConductorService implements CRUDOperation<ConductorDTO> {
 
@@ -22,9 +33,18 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 	@Autowired
 	private ModelMapper mapper;
 
+	/**
+	 * Constructor por defecto.
+	 */
 	public ConductorService() {
 	}
 
+	/**
+	 * Crea un nuevo conductor.
+	 * 
+	 * @param data datos del conductor
+	 * @return 0 si se crea correctamente, 1 si ya existe
+	 */
 	@Override
 	public int create(ConductorDTO data) {
 		LanzadorDeException.verificarCedula(data.getCedula());
@@ -33,7 +53,9 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		LanzadorDeException.verificarTelefono(data.getTelefono());
 		LanzadorDeException.verificarPlaca(data.getPlacaVehiculo());
 
-		LanzadorDeException.verificarDuplicado(conductorRep.existsByCedula(data.getCedula()), "La cédula " + data.getCedula() + " ya se encuentra registrada para un conductor.");
+		LanzadorDeException.verificarDuplicado(
+				conductorRep.existsByCedula(data.getCedula()),
+				"La cédula " + data.getCedula() + " ya se encuentra registrada para un conductor.");
 
 		if (conductorRep.existsByCedula(data.getCedula())) {
 			return 1;
@@ -44,6 +66,11 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		}
 	}
 
+	/**
+	 * Obtiene todos los conductores.
+	 * 
+	 * @return lista de conductores
+	 */
 	@Override
 	public List<ConductorDTO> getAll() {
 		List<Conductor> entityList = (List<Conductor>) conductorRep.findAll();
@@ -55,6 +82,12 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Elimina un conductor por ID.
+	 * 
+	 * @param id identificador del conductor
+	 * @return 0 si se elimina, 1 si no existe
+	 */
 	@Override
 	public int deleteById(Long id) {
 		LanzadorDeException.verificarId(id);
@@ -68,6 +101,13 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		}
 	}
 
+	/**
+	 * Actualiza un conductor existente.
+	 * 
+	 * @param id identificador del conductor
+	 * @param data nuevos datos
+	 * @return 0 si se actualiza correctamente, 1 si hay error
+	 */
 	@Override
 	public int updateById(Long id, ConductorDTO data) {
 		LanzadorDeException.verificarId(id);
@@ -83,7 +123,11 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 			Conductor temp = encontrado.get();
 
 			if (!temp.getCedula().equals(data.getCedula())) {
-				LanzadorDeException.verificarDuplicado(conductorRep.existsByCedula(data.getCedula()),"No se puede actualizar: la cédula " + data.getCedula() + " ya pertenece a otro conductor.");
+				LanzadorDeException.verificarDuplicado(
+						conductorRep.existsByCedula(data.getCedula()),
+						"No se puede actualizar: la cédula " + data.getCedula()
+								+ " ya pertenece a otro conductor.");
+
 				if (conductorRep.existsByCedula(data.getCedula())) {
 					return 1;
 				}
@@ -102,17 +146,31 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		}
 	}
 
+	/**
+	 * Cuenta los conductores registrados.
+	 * 
+	 * @return total de conductores
+	 */
 	@Override
 	public long count() {
 		return conductorRep.count();
 	}
 
+	/**
+	 * Verifica si existe un conductor por ID.
+	 * 
+	 * @param id identificador
+	 * @return true si existe, false si no
+	 */
 	@Override
 	public boolean exist(Long id) {
 		LanzadorDeException.verificarId(id);
 		return conductorRep.existsById(id);
 	}
 
+	/**
+	 * Busca conductores por nombre.
+	 */
 	public List<ConductorDTO> findByNombre(String nombre) {
 		LanzadorDeException.verificarNombre(nombre);
 		Optional<List<Conductor>> encontrados = conductorRep.findByNombre(nombre);
@@ -123,6 +181,9 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca conductores por cédula.
+	 */
 	public List<ConductorDTO> findByCedula(String cedula) {
 		LanzadorDeException.verificarCedula(cedula);
 		Optional<List<Conductor>> encontrados = conductorRep.findByCedula(cedula);
@@ -133,6 +194,9 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca conductores por correo.
+	 */
 	public List<ConductorDTO> findByCorreo(String correo) {
 		LanzadorDeException.verificarCorreoElectronico(correo);
 		Optional<List<Conductor>> encontrados = conductorRep.findByCorreo(correo);
@@ -143,6 +207,9 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca conductores por teléfono.
+	 */
 	public List<ConductorDTO> findByTelefono(String telefono) {
 		LanzadorDeException.verificarTelefono(telefono);
 		Optional<List<Conductor>> encontrados = conductorRep.findByTelefono(telefono);
@@ -153,6 +220,9 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca conductores por placa del vehículo.
+	 */
 	public List<ConductorDTO> findByPlacaVehiculo(String placa) {
 		LanzadorDeException.verificarPlaca(placa);
 		Optional<List<Conductor>> encontrados = conductorRep.findByPlacaVehiculo(placa);
@@ -163,6 +233,9 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		return dtoList;
 	}
 
+	/**
+	 * Busca conductores por nombre y cédula.
+	 */
 	public List<ConductorDTO> findByNombreAndCedula(String nombre, String cedula) {
 		LanzadorDeException.verificarNombre(nombre);
 		LanzadorDeException.verificarCedula(cedula);
@@ -173,16 +246,18 @@ public class ConductorService implements CRUDOperation<ConductorDTO> {
 		}
 		return dtoList;
 	}
-	
+
+	/**
+	 * Permite inyectar el repositorio manualmente (testing).
+	 */
 	public void setConductorRep(ConductorRepository repo) {
-	    this.conductorRep= repo;
+		this.conductorRep = repo;
 	}
 
+	/**
+	 * Permite inyectar el mapper manualmente (testing).
+	 */
 	public void setMapper(ModelMapper mapper) {
-	    this.mapper = mapper;
+		this.mapper = mapper;
 	}
-	
-	
-
-
 }
