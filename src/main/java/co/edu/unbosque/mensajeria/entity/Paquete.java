@@ -24,7 +24,7 @@ public abstract class Paquete {
 	private LocalDateTime fechaEstimadaEntrega;
 	private String ciudadDestino;
 	private String estadoPedido;
-	private boolean esPrioritario;
+	private boolean esPrioritario = false;
 	private double precioFinal;
 
 	public Paquete() {

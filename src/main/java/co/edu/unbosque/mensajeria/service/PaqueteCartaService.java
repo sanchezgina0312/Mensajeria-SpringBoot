@@ -235,5 +235,13 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(72));
 		return 0;
 	}
+	
+	public void setPaqueteCartaRep(PaqueteCartaRepository repo) {
+	    this.paqueteCartaRep= repo;
+	}
+
+	public void setMapper(ModelMapper mapper) {
+	    this.mapper = mapper;
+	}
 
 }

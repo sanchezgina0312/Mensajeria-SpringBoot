@@ -205,5 +205,14 @@ public class AdministradorService implements CRUDOperation<AdministradorDTO> {
 			return new ArrayList<AdministradorDTO>();
 		}
 	}
+	
+	public void setAdministradorRep(AdministradorRepository repo) {
+	    this.administradorRep= repo;
+	}
+
+	public void setMapper(ModelMapper mapper) {
+	    this.mapper = mapper;
+	}
+	
 
 }

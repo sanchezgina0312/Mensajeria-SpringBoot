@@ -29,7 +29,7 @@ class ClienteConcurrenteControllerTest {
 
     @Test
     void crearClienteConcurrente() throws Exception {
-        // Usamos una cédula basada en el tiempo para que nunca se repita y no de error 409
+        
         String cedulaUnica = String.valueOf(System.currentTimeMillis()).substring(5);
 
         mockMvc.perform(post("/clienteconcurrente/crear")
@@ -40,7 +40,7 @@ class ClienteConcurrenteControllerTest {
                 .param("metodoPago", "Efectivo")
                 .param("tipoPedido", "Alimenticio")
                 .param("tarifaConcurrente", "5000.0"))
-                .andExpect(status().isCreated()); // Espera 201
+                .andExpect(status().isCreated()); 
     }
 
     @Test
@@ -51,7 +51,7 @@ class ClienteConcurrenteControllerTest {
 
     @Test
     void actualizarClienteConcurrente() throws Exception {
-        // IMPORTANTE: En tu Controller la ruta es /actualizarclienteconcurrente
+        
         mockMvc.perform(put("/clienteconcurrente/actualizarclienteconcurrente")
                 .param("id", "1")
                 .param("nombre", "Mariana Lopez")
@@ -61,12 +61,12 @@ class ClienteConcurrenteControllerTest {
                 .param("metodoPago", "Tarjeta")
                 .param("tipoPedido", "No Alimenticio")
                 .param("tarifaConcurrente", "6000.0"))
-                .andExpect(status().isAccepted()); // Tu controller devuelve ACCEPTED (202)
+                .andExpect(status().isAccepted()); 
     }
 
     @Test
     void eliminarClienteConcurrente() throws Exception {
-        // Primero creamos uno para asegurar que el ID 1 exista en la base de datos H2
+        
         mockMvc.perform(post("/clienteconcurrente/crear")
                 .param("nombre", "Test")
                 .param("cedula", "111222")
@@ -78,7 +78,7 @@ class ClienteConcurrenteControllerTest {
 
         mockMvc.perform(delete("/clienteconcurrente/eliminar")
                 .param("id", "1"))
-                .andExpect(status().isAccepted()); // Tu controller devuelve ACCEPTED
+                .andExpect(status().isAccepted()); 
     }
 
     @Test

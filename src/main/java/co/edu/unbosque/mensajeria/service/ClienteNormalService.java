@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.entity.ClienteNormal;
+import co.edu.unbosque.mensajeria.repository.ClienteConcurrenteRepository;
 import co.edu.unbosque.mensajeria.repository.ClienteNormalRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
@@ -194,4 +195,14 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 		}
 		return dtoList;
 	}
+	
+	public void setClienteNormalRep(ClienteNormalRepository repo) {
+	    this.clienteNormalRep = repo;
+	}
+
+	public void setMapper(ModelMapper mapper) {
+	    this.mapper = mapper;
+	}
+	
+	
 }

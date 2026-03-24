@@ -170,4 +170,13 @@ public class ManipuladorDePaqueteService implements CRUDOperation<ManipuladorDeP
 		}
 		return dtoList;
 	}
+	
+	public void setManipuladorDePaqueteRep(ManipuladorDePaqueteRepository repo) {
+	    this.manipuladorRep= repo;
+	}
+
+	public void setMapper(ModelMapper mapper) {
+	    this.mapper = mapper;
+	}
+	
 }
