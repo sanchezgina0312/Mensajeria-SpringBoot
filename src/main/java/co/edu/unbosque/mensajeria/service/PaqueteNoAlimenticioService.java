@@ -29,27 +29,38 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 
 	@Override
 	public int create(PaqueteNoAlimenticioDTO data) {
-		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
-		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
-		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
+	    LanzadorDeException.verificarDireccion(data.getDireccionDestino());
+	    LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+	    LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
-		data.setEstadoPedido("EN_PROCESO");
-		if (data.getFechaCreacionPedido() == null)
-			data.setFechaCreacionPedido(LocalDateTime.now());
+	    data.setEstadoPedido("EN_PROCESO");
+	    
+	    if (data.getFechaCreacionPedido() == null) {
+	        data.setFechaCreacionPedido(LocalDateTime.now());
+	    }
+	    
+	    if (data.getFechaEstimadaEntrega() == null) {
+	        data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusDays(5));
+	    }
 
-		registrarPlazo24Horas(data);
+	    double precioBaseConRecargo = calcularPrecioPorTamaño(15000, data.getTamanio());
+	    double precioConDescuento = aplicarDescuentoPorCliente(precioBaseConRecargo, "NORMAL");
 
-		double precioBaseConRecargo = calcularPrecioPorTamaño(15000, data.getTamanio());
-		double precioConDescuento = aplicarDescuentoPorCliente(precioBaseConRecargo, "NORMAL");
+	    data.setPrecioEnvio((int) precioBaseConRecargo);
+	    data.setPrecioFinal(precioConDescuento);
+	    data.setEsPrioritario(false);
 
-		data.setPrecioEnvio((int) precioBaseConRecargo);
-		data.setPrecioFinal(precioConDescuento);
+	    registrarPlazo24Horas(data);
+	    procesarEstadoYTiempoDTO(data);
 
-		procesarEstadoYTiempoDTO(data);
-
-		PaqueteNoAlimenticio entity = mapper.map(data, PaqueteNoAlimenticio.class);
-		paqueteNoAlimenticioRep.save(entity);
-		return 0;
+	    try {
+	        PaqueteNoAlimenticio entity = mapper.map(data, PaqueteNoAlimenticio.class);
+	        paqueteNoAlimenticioRep.save(entity);
+	        return 1;
+	    } catch (Exception e) {
+	        e.getMessage(); 
+	        return 0;
+	    }
 	}
 
 	@Override
