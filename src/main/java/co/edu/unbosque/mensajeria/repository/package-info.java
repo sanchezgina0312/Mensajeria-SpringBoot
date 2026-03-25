@@ -1,6 +1,6 @@
 /**
  * Contiene las **interfaces de repositorio** de la aplicación.
- * <p>
+ * 
  * Este paquete define los repositorios que extienden de org.springframework.data.repository.CrudRepository, 
  * proporcionando la abstracción necesaria para realizar operaciones de persistencia 
  * sobre las entidades del sistema. Incluye busquedas personalizadas 

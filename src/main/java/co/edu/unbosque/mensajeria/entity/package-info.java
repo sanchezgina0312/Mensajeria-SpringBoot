@@ -1,6 +1,6 @@
 /**
  * Contiene las entidades de persistencia de la aplicación.
- * <p>
+ * 
  * En este paquete se definen las clases que representan la estructura de la 
  * base de datos relacional. Utiliza anotaciones de JPA (Jakarta Persistence API) 
  * para el mapeo, permitiendo que la lógica del negocio 

@@ -1,6 +1,6 @@
 /**
  * Contiene las **Excepciones Personalizadas** de la aplicación.
- * <p>
+ * 
  * Define las clases de error específicas del dominio que permiten capturar
  * situaciones anómalas (como formatos inválidos o recursos no encontrados).
  * Proporciona una forma estructurada de comunicar errores de negocio a través
