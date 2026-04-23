@@ -1,7 +1,6 @@
 package co.edu.unbosque.mensajeria.dto;
 
 import java.util.Objects;
-
 import co.edu.unbosque.mensajeria.entity.Cliente;
 
 /**
@@ -10,6 +9,7 @@ import co.edu.unbosque.mensajeria.entity.Cliente;
  * Hereda de la clase base Cliente y añade una tarifa específica para los
  * clientes premium. Se utiliza para transferir datos de clientes con 
  * membresía premium de forma segura entre capas.
+ * </p>
  *
  * @version 1.0
  */
@@ -24,106 +24,18 @@ public class ClientePremiumDTO extends Cliente {
 	 * nulos o por defecto y una tarifa premium predeterminada de 0.15.
 	 */
 	public ClientePremiumDTO() {
-
-	}
-
-	/**
-	 * Constructor con tarifa premium. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium con la tarifa establecida y
-	 * los atributos heredados nulos o por defecto.
-	 * 
-	 * @param tarifaPremium La tarifa aplicada al cliente premium.
-	 */
-	public ClientePremiumDTO(double tarifaPremium) {
 		super();
-		this.tarifaPremium = tarifaPremium;
 	}
 
 	/**
-	 * Constructor con método de pago y tipo de pedido. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium inicializando datos del pedido
-	 * y manteniendo la tarifa por defecto.
-	 * 
-	 * @param metodoPago El método de pago preferido del cliente.
-	 * @param tipoPedido El tipo de pedido realizado por el cliente.
-	 */
-	public ClientePremiumDTO(String metodoPago, String tipoPedido) {
-		super(metodoPago, tipoPedido);
-	}
-
-	/**
-	 * Constructor con método de pago, tipo de pedido y tarifa. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium con los datos del pedido y
-	 * la tarifa premium inicializados.
-	 * 
-	 * @param metodoPago    El método de pago preferido del cliente.
-	 * @param tipoPedido    El tipo de pedido realizado por el cliente.
-	 * @param tarifaPremium La tarifa aplicada al cliente premium.
-	 */
-	public ClientePremiumDTO(String metodoPago, String tipoPedido, double tarifaPremium) {
-		super(metodoPago, tipoPedido);
-		this.tarifaPremium = tarifaPremium;
-	}
-
-	/**
-	 * Constructor con datos personales básicos. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium inicializando sus datos
-	 * básicos y manteniendo la tarifa por defecto.
-	 * 
-	 * @param nombre   El nombre del cliente.
-	 * @param cedula   La cédula del cliente.
-	 * @param correo   El correo del cliente.
-	 * @param telefono El teléfono del cliente.
-	 */
-	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono) {
-		super(nombre, cedula, correo, telefono);
-	}
-
-	/**
-	 * Constructor con datos personales básicos y tarifa. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium con sus datos personales y
-	 * tarifa inicializados.
-	 * 
-	 *  @param nombre        El nombre del cliente.
-	 * @param cedula        La cédula del cliente.
-	 * @param correo        El correo del cliente.
-	 * @param telefono      El teléfono del cliente.
-	 * @param tarifaPremium La tarifa aplicada al cliente premium.
-	 */
-	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono, double tarifaPremium) {
-		super(nombre, cedula, correo, telefono);
-		this.tarifaPremium = tarifaPremium;
-	}
-
-	/**
-	 * Constructor con datos personales, método de pago y tipo de pedido. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium completo respecto a los datos
-	 * del cliente y pedido, manteniendo la tarifa por defecto.
-	 * 
-	 * @param nombre     El nombre del cliente.
-	 * @param cedula     La cédula del cliente.
-	 * @param correo     El correo del cliente.
-	 * @param telefono   El teléfono del cliente.
-	 * @param metodoPago El método de pago preferido del cliente.
-	 * @param tipoPedido El tipo de pedido realizado por el cliente.
-	 */
-	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
-			String tipoPedido) {
-		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
-	}
-
-	/**
-	 * Constructor completo. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium con todos los atributos
-	 * (heredados y propios) inicializados.
-	 * 
-	 * @param nombre        El nombre del cliente.
-	 * @param cedula        La cédula del cliente.
-	 * @param correo        El correo del cliente.
-	 * @param telefono      El teléfono del cliente.
-	 * @param metodoPago    El método de pago preferido del cliente.
-	 * @param tipoPedido    El tipo de pedido realizado por el cliente.
-	 * @param tarifaPremium La tarifa aplicada al cliente premium.
+	 * Constructor completo con datos de identificación, contacto, logística y tarifa.
+	 * * @param nombre            Nombre completo del cliente.
+	 * @param cedula            Documento de identidad.
+	 * @param correo            Dirección de correo electrónico.
+	 * @param telefono          Número de contacto.
+	 * @param metodoPago        Medio de pago preferido.
+	 * @param tipoPedido        Categoría del servicio solicitado.
+	 * @param tarifaPremium     Valor de la tarifa premium personalizada.
 	 */
 	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
 			String tipoPedido, double tarifaPremium) {
@@ -132,9 +44,77 @@ public class ClientePremiumDTO extends Cliente {
 	}
 
 	/**
+	 * Constructor que inicializa únicamente la tarifa premium del cliente.
+	 * * @param tarifaPremium Valor decimal de la tarifa a asignar.
+	 */
+	public ClientePremiumDTO(double tarifaPremium) {
+		super();
+		this.tarifaPremium = tarifaPremium;
+	}
+
+	/**
+	 * Constructor para datos básicos de contacto e identificación junto con la tarifa.
+	 * * @param nombre            Nombre del cliente.
+	 * @param cedula            Cédula de ciudadanía.
+	 * @param correo            E-mail de contacto.
+	 * @param telefono          Número telefónico.
+	 * @param tarifaPremium     Valor de la tarifa premium.
+	 */
+	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono, double tarifaPremium) {
+		super(nombre, cedula, correo, telefono);
+		this.tarifaPremium = tarifaPremium;
+	}
+
+	/**
+	 * Constructor enfocado en seguridad y preferencias de pago con tarifa diferencial.
+	 * * @param metodoPago        Medio de pago.
+	 * @param tipoPedido        Tipo de servicio.
+	 * @param contrasenia       Clave de acceso al sistema.
+	 * @param tarifaPremium     Tarifa especial asignada.
+	 */
+	public ClientePremiumDTO(String metodoPago, String tipoPedido, String contrasenia, double tarifaPremium) {
+		super(metodoPago, tipoPedido, contrasenia);
+		this.tarifaPremium = tarifaPremium;
+	}
+
+	/**
+	 * Constructor para datos logísticos y personales sin tarifa personalizada.
+	 * * @param nombre     Nombre completo.
+	 * @param cedula     Identificación.
+	 * @param correo     E-mail.
+	 * @param telefono   Teléfono.
+	 * @param metodoPago Método de pago.
+	 * @param tipoPedido Tipo de pedido.
+	 */
+	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
+			String tipoPedido) {
+		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
+	}
+
+	/**
+	 * Constructor simplificado para registro rápido de identidad y contacto.
+	 * * @param nombre   Nombre del cliente.
+	 * @param cedula   Identificación oficial.
+	 * @param correo   Correo electrónico.
+	 * @param telefono Número de contacto.
+	 */
+	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono) {
+		super(nombre, cedula, correo, telefono);
+	}
+
+	/**
+	 * Constructor para gestión de credenciales y preferencias de servicio.
+	 * * @param metodoPago  Medio de pago preferido.
+	 * @param tipoPedido  Tipo de pedido habitual.
+	 * @param contrasenia Contraseña de seguridad.
+	 */
+	public ClientePremiumDTO(String metodoPago, String tipoPedido, String contrasenia) {
+		super(metodoPago, tipoPedido, contrasenia);
+	}
+
+	/**
 	 * Obtiene la tarifa del cliente premium.
-	 * 
-	 *  @return La tarifa asignada al cliente premium.
+	 * * @return La tarifa asignada al cliente premium.
 	 */
 	public double getTarifaPremium() {
 		return tarifaPremium;
@@ -142,8 +122,7 @@ public class ClientePremiumDTO extends Cliente {
 
 	/**
 	 * Establece la tarifa del cliente premium.
-	 * 
-	 *  @param tarifaPremium La nueva tarifa a asignar.
+	 * * @param tarifaPremium La nueva tarifa a asignar.
 	 */
 	public void setTarifaPremium(double tarifaPremium) {
 		this.tarifaPremium = tarifaPremium;
@@ -151,8 +130,7 @@ public class ClientePremiumDTO extends Cliente {
 
 	/**
 	 * Devuelve una representación en String del DTO del cliente premium.
-	 * 
-	 *  @return Una cadena que incluye los datos del cliente general junto con la tarifa premium.
+	 * * @return Una cadena que incluye los datos del cliente general junto con la tarifa premium.
 	 */
 	@Override
 	public String toString() {
@@ -161,8 +139,7 @@ public class ClientePremiumDTO extends Cliente {
 
 	/**
 	 * Genera un código hash para el objeto DTO.
-	 * 
-	 *  @return El código hash basado en los atributos del padre y la tarifa premium.
+	 * * @return El código hash basado en los atributos del padre y la tarifa premium.
 	 */
 	@Override
 	public int hashCode() {
@@ -174,8 +151,7 @@ public class ClientePremiumDTO extends Cliente {
 
 	/**
 	 * Compara este DTO con otro objeto para verificar si son iguales.
-	 * 
-	 * @param obj El objeto con el cual se va a comparar.
+	 * * @param obj El objeto con el cual se va a comparar.
 	 * @return true si los objetos son iguales en atributos e identidad, false en caso contrario.
 	 */
 	@Override

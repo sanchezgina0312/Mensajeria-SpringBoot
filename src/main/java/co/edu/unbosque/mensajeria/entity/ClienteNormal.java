@@ -1,7 +1,6 @@
 package co.edu.unbosque.mensajeria.entity;
 
 import java.util.Objects;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -11,6 +10,7 @@ import jakarta.persistence.Table;
  * Hereda de la clase base Cliente y añade una tarifa específica aplicada a 
  * los clientes estándar (usualmente 0). Esta clase está mapeada a la tabla 
  * "clientenormal" en la base de datos mediante JPA.
+ * </p>
  *
  * @version 1.0
  */
@@ -27,14 +27,12 @@ public class ClienteNormal extends Cliente {
 	 * o por defecto y una tarifa normal predeterminada de 0. Requerido por JPA.
 	 */
 	public ClienteNormal() {
-
+		super();
 	}
 
 	/**
-	 * Constructor con tarifa normal. <br>
-	 * <b>post</b>: Se crea una entidad ClienteNormal con la tarifa establecida y los 
-	 * atributos heredados nulos o por defecto.
-	 * * @param tarifaNormal La tarifa aplicada al cliente normal.
+	 * Constructor que inicializa únicamente la tarifa normal.
+	 * @param tarifaNormal Valor decimal de la tarifa base.
 	 */
 	public ClienteNormal(double tarifaNormal) {
 		super();
@@ -42,29 +40,14 @@ public class ClienteNormal extends Cliente {
 	}
 
 	/**
-	 * Constructor con método de pago, tipo de pedido y tarifa. <br>
-	 * <b>post</b>: Se crea una entidad ClienteNormal con los datos del pedido y
-	 * la tarifa normal inicializados.
-	 * * @param metodoPago   El método de pago preferido del cliente.
-	 * @param tipoPedido   El tipo de pedido realizado por el cliente.
-	 * @param tarifaNormal La tarifa aplicada al cliente normal.
-	 */
-	public ClienteNormal(String metodoPago, String tipoPedido, double tarifaNormal) {
-		super(metodoPago, tipoPedido);
-		this.tarifaNormal = tarifaNormal;
-	}
-
-	/**
-	 * Constructor completo. <br>
-	 * <b>post</b>: Se crea una entidad ClienteNormal con todos los atributos
-	 * (heredados y propios) inicializados.
-	 * * @param nombre       El nombre del cliente.
-	 * @param cedula       La cédula del cliente.
-	 * @param correo       El correo del cliente.
-	 * @param telefono     El teléfono del cliente.
-	 * @param metodoPago   El método de pago preferido del cliente.
-	 * @param tipoPedido   El tipo de pedido realizado por el cliente.
-	 * @param tarifaNormal La tarifa aplicada al cliente normal.
+	 * Constructor completo con datos personales, logísticos y tarifa.
+	 * @param nombre     Nombre completo del cliente.
+	 * @param cedula     Documento de identidad.
+	 * @param correo     Dirección de correo electrónico.
+	 * @param telefono   Número telefónico de contacto.
+	 * @param metodoPago Método de pago preferido.
+	 * @param tipoPedido Categoría del pedido realizado.
+	 * @param tarifaNormal Valor de la tarifa diferencial.
 	 */
 	public ClienteNormal(String nombre, String cedula, String correo, String telefono, String metodoPago,
 			String tipoPedido, double tarifaNormal) {
@@ -73,14 +56,12 @@ public class ClienteNormal extends Cliente {
 	}
 
 	/**
-	 * Constructor con datos personales básicos y tarifa. <br>
-	 * <b>post</b>: Se crea una entidad ClienteNormal con sus datos personales y
-	 * tarifa inicializados.
-	 * * @param nombre       El nombre del cliente.
-	 * @param cedula       La cédula del cliente.
-	 * @param correo       El correo del cliente.
-	 * @param telefono     El teléfono del cliente.
-	 * @param tarifaNormal La tarifa aplicada al cliente normal.
+	 * Constructor para datos personales e identificación con tarifa.
+	 * @param nombre       Nombre completo del cliente.
+	 * @param cedula       Identificación oficial.
+	 * @param correo       E-mail de contacto.
+	 * @param telefono     Número de teléfono.
+	 * @param tarifaNormal Valor de la tarifa normal.
 	 */
 	public ClienteNormal(String nombre, String cedula, String correo, String telefono, double tarifaNormal) {
 		super(nombre, cedula, correo, telefono);
@@ -88,48 +69,20 @@ public class ClienteNormal extends Cliente {
 	}
 
 	/**
-	 * Constructor con datos personales, método de pago y tipo de pedido. <br>
-	 * <b>post</b>: Se crea una entidad ClienteNormal completa respecto a los datos
-	 * del cliente y pedido, manteniendo la tarifa por defecto.
-	 * * @param nombre     El nombre del cliente.
-	 * @param cedula     La cédula del cliente.
-	 * @param correo     El correo del cliente.
-	 * @param telefono   El teléfono del cliente.
-	 * @param metodoPago El método de pago preferido del cliente.
-	 * @param tipoPedido El tipo de pedido realizado por el cliente.
+	 * Constructor para gestión de cuenta, logística y tarifa diferencial.
+	 * @param metodoPago   Medio de pago.
+	 * @param tipoPedido   Tipo de servicio.
+	 * @param contrasenia  Clave de acceso al sistema.
+	 * @param tarifaNormal Tarifa asignada.
 	 */
-	public ClienteNormal(String nombre, String cedula, String correo, String telefono, String metodoPago,
-			String tipoPedido) {
-		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
-	}
-
-	/**
-	 * Constructor con datos personales básicos. <br>
-	 * <b>post</b>: Se crea una entidad ClienteNormal inicializando sus datos
-	 * básicos y manteniendo la tarifa predeterminada.
-	 * * @param nombre   El nombre del cliente.
-	 * @param cedula   La cédula del cliente.
-	 * @param correo   El correo del cliente.
-	 * @param telefono El teléfono del cliente.
-	 */
-	public ClienteNormal(String nombre, String cedula, String correo, String telefono) {
-		super(nombre, cedula, correo, telefono);
-	}
-
-	/**
-	 * Constructor con método de pago y tipo de pedido. <br>
-	 * <b>post</b>: Se crea una entidad ClienteNormal inicializando datos del pedido
-	 * y manteniendo la tarifa predeterminada.
-	 * * @param metodoPago El método de pago preferido del cliente.
-	 * @param tipoPedido El tipo de pedido realizado por el cliente.
-	 */
-	public ClienteNormal(String metodoPago, String tipoPedido) {
-		super(metodoPago, tipoPedido);
+	public ClienteNormal(String metodoPago, String tipoPedido, String contrasenia, double tarifaNormal) {
+		super(metodoPago, tipoPedido, contrasenia);
+		this.tarifaNormal = tarifaNormal;
 	}
 
 	/**
 	 * Obtiene la tarifa normal del cliente.
-	 * * @return La tarifa asignada al cliente normal.
+	 * @return La tarifa asignada al cliente normal.
 	 */
 	public double getTarifaNormal() {
 		return tarifaNormal;
@@ -137,7 +90,7 @@ public class ClienteNormal extends Cliente {
 
 	/**
 	 * Establece la tarifa normal del cliente.
-	 * * @param tarifaNormal La nueva tarifa a asignar.
+	 * @param tarifaNormal La nueva tarifa a asignar.
 	 */
 	public void setTarifaNormal(double tarifaNormal) {
 		this.tarifaNormal = tarifaNormal;
@@ -145,7 +98,7 @@ public class ClienteNormal extends Cliente {
 
 	/**
 	 * Devuelve una representación en String de la entidad ClienteNormal.
-	 * * @return Una cadena que incluye los datos del cliente general junto con la tarifa normal.
+	 * @return Una cadena que incluye los datos del cliente general junto con la tarifa normal.
 	 */
 	@Override
 	public String toString() {
@@ -154,7 +107,7 @@ public class ClienteNormal extends Cliente {
 
 	/**
 	 * Genera un código hash para la entidad ClienteNormal.
-	 * * @return El código hash basado en los atributos del padre y la tarifa normal.
+	 * @return El código hash basado en los atributos del padre y la tarifa normal.
 	 */
 	@Override
 	public int hashCode() {
@@ -166,8 +119,8 @@ public class ClienteNormal extends Cliente {
 
 	/**
 	 * Compara esta entidad con otro objeto para verificar si son iguales.
-	 * * @param obj El objeto con el cual se va a comparar.
-	 * @return true si los objetos son iguales en atributos e identidad, false en caso contrario.
+	 * @param obj El objeto con el cual se va a comparar.
+	 * @return true si los objetos coinciden en atributos e identidad, false en caso contrario.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -182,5 +135,4 @@ public class ClienteNormal extends Cliente {
 		ClienteNormal other = (ClienteNormal) obj;
 		return Double.doubleToLongBits(tarifaNormal) == Double.doubleToLongBits(other.tarifaNormal);
 	}
-
 }

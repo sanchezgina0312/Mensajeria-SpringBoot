@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.mensajeria.dto.ClientePremiumDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
+import co.edu.unbosque.mensajeria.exception.ContraseniaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
@@ -85,7 +86,7 @@ public class ClientePremiumController {
     @PostMapping("/crear")
     public ResponseEntity<String> crearClientePremium(@RequestParam String nombre, @RequestParam String cedula,
             @RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
-            @RequestParam String tipoPedido, @RequestParam double tarifaPremium) {
+            @RequestParam String tipoPedido, @RequestParam double tarifaPremium, @RequestParam String contrasenia) {
 
         try {
             ClientePremiumDTO nuevoClientePremium = new ClientePremiumDTO();
@@ -96,6 +97,7 @@ public class ClientePremiumController {
             nuevoClientePremium.setMetodoPago(metodoPago);
             nuevoClientePremium.setTipoPedido(tipoPedido);
             nuevoClientePremium.setTarifaPremium(tarifaPremium);
+            nuevoClientePremium.setContrasenia(contrasenia);
 
             int status = clientePremiumService.create(nuevoClientePremium);
 
@@ -117,6 +119,8 @@ public class ClientePremiumController {
         } catch (MetodoDePagoInvalidoException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (TipoPedidoInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (ContraseniaInvalidaException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Error interno del servidor", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -205,7 +209,7 @@ public class ClientePremiumController {
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarClientePremium(@RequestParam Long id, @RequestParam String nombre,
             @RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
-            @RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaPremium) {
+            @RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaPremium, @RequestParam String contrasenia) {
 
         try {
             ClientePremiumDTO clientePremiumNuevo = new ClientePremiumDTO();
@@ -216,6 +220,7 @@ public class ClientePremiumController {
             clientePremiumNuevo.setMetodoPago(metodoPago);
             clientePremiumNuevo.setTipoPedido(tipoPedido);
             clientePremiumNuevo.setTarifaPremium(tarifaPremium);
+            clientePremiumNuevo.setContrasenia(contrasenia);
 
             int status = clientePremiumService.updateById(id, clientePremiumNuevo);
 
@@ -237,6 +242,8 @@ public class ClientePremiumController {
         } catch (TipoPedidoInvalidoException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (IdInvalidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (ContraseniaInvalidaException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Error inesperado", HttpStatus.INTERNAL_SERVER_ERROR);
