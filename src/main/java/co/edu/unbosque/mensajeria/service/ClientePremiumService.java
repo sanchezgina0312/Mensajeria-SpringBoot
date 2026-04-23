@@ -46,6 +46,7 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		LanzadorDeException.verificarTelefono(data.getTelefono());
 		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
 		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
+		LanzadorDeException.verificarContrasena(data.getContrasenia());
 
 		LanzadorDeException.verificarDuplicado(
 				clientePremiumRep.existsByCedula(data.getCedula()),
@@ -109,6 +110,7 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		LanzadorDeException.verificarTelefono(data.getTelefono());
 		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
 		LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
+		LanzadorDeException.verificarContrasena(data.getContrasenia());
 
 		Optional<ClientePremium> encontrado = clientePremiumRep.findById(id);
 
@@ -132,6 +134,7 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 			temp.setTelefono(data.getTelefono());
 			temp.setMetodoPago(data.getMetodoPago());
 			temp.setTipoPedido(data.getTipoPedido());
+			temp.setContrasenia(data.getContrasenia());
 
 			clientePremiumRep.save(temp);
 			return 0;

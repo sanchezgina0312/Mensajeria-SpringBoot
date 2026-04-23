@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CiudadInvalidaException;
+import co.edu.unbosque.mensajeria.exception.ContraseniaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.DireccionInvalidaException;
 import co.edu.unbosque.mensajeria.exception.EstadoPedidoInvalidoException;
@@ -560,5 +561,24 @@ public class LanzadorDeException {
 		if (existe) {
 			throw new CedulaInvalidaException(mensaje);
 		}
+	}
+	
+	public static void verificarContrasena(String contrasena) {
+
+	    if (contrasena == null || contrasena.isEmpty()) {
+	        throw new ContraseniaInvalidaException("La contraseña no puede estar vacía");
+	    }
+
+	    if (contrasena.contains(" ")) {
+	        throw new ContraseniaInvalidaException("La contraseña no debe contener espacios");
+	    }
+
+	    if (contrasena.length() < 8) {
+	        throw new ContraseniaInvalidaException("La contraseña debe tener al menos 8 caracteres");
+	    }
+
+	    if (!contrasena.matches("^(?=.*[A-Z])(?=.*[0-9]).+$")) {
+	        throw new ContraseniaInvalidaException("La contraseña debe contener al menos una mayúscula y un número");
+	    }
 	}
 }
