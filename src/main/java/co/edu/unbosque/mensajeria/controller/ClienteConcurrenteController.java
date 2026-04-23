@@ -85,7 +85,7 @@ public class ClienteConcurrenteController {
     @PostMapping("/crear")
     public ResponseEntity<String> crearClienteConcurrente(@RequestParam String nombre, @RequestParam String cedula,
             @RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
-            @RequestParam String tipoPedido, @RequestParam double tarifaConcurrente) {
+            @RequestParam String tipoPedido, @RequestParam String contrasenia, @RequestParam double tarifaConcurrente) {
 
         try {
             ClienteConcurrenteDTO nuevoClienteConcurrente = new ClienteConcurrenteDTO();
@@ -95,6 +95,7 @@ public class ClienteConcurrenteController {
             nuevoClienteConcurrente.setTelefono(telefono);
             nuevoClienteConcurrente.setMetodoPago(metodoPago);
             nuevoClienteConcurrente.setTipoPedido(tipoPedido);
+            nuevoClienteConcurrente.setContrasenia(contrasenia);
             nuevoClienteConcurrente.setTarifaConcurrente(tarifaConcurrente);
 
             int status = clienteConcurrenteService.create(nuevoClienteConcurrente);
@@ -205,7 +206,7 @@ public class ClienteConcurrenteController {
     @PutMapping("/actualizarclienteconcurrente")
     public ResponseEntity<String> actualizarClienteConcurrente(@RequestParam Long id, @RequestParam String nombre,
             @RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
-            @RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaConcurrente) {
+            @RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam String contrasenia, @RequestParam double tarifaConcurrente) {
         try {
             ClienteConcurrenteDTO clienteConcurrenteNuevo = new ClienteConcurrenteDTO();
             clienteConcurrenteNuevo.setNombre(nombre);
@@ -214,6 +215,7 @@ public class ClienteConcurrenteController {
             clienteConcurrenteNuevo.setTelefono(telefono);
             clienteConcurrenteNuevo.setMetodoPago(metodoPago);
             clienteConcurrenteNuevo.setTipoPedido(tipoPedido);
+            clienteConcurrenteNuevo.setContrasenia(contrasenia);
             clienteConcurrenteNuevo.setTarifaConcurrente(tarifaConcurrente);
 
             int status = clienteConcurrenteService.updateById(id, clienteConcurrenteNuevo);
