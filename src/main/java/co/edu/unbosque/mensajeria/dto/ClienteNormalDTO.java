@@ -27,108 +27,38 @@ public class ClienteNormalDTO extends Cliente {
 		
 	}
 
-	/**
-	 * Constructor con tarifa normal. <br>
-	 * <b>post</b>: Se crea un DTO ClienteNormal con la tarifa establecida y
-	 * los atributos heredados nulos o por defecto.
-	 * 
-	 * @param tarifaNormal La tarifa aplicada al cliente normal.
-	 */
 	public ClienteNormalDTO(double tarifaNormal) {
 		super();
 		this.tarifaNormal = tarifaNormal;
 	}
 
-	/**
-	 * Constructor con método de pago y tipo de pedido. <br>
-	 * <b>post</b>: Se crea un DTO ClienteNormal inicializando datos del pedido
-	 * y manteniendo la tarifa por defecto.
-	 * 
-	 * @param metodoPago El método de pago preferido del cliente.
-	 * @param tipoPedido El tipo de pedido realizado por el cliente.
-	 */
-	public ClienteNormalDTO(String metodoPago, String tipoPedido) {
-		super(metodoPago, tipoPedido);
-	}
-
-	/**
-	 * Constructor con método de pago, tipo de pedido y tarifa. <br>
-	 * <b>post</b>: Se crea un DTO ClienteNormal con los datos del pedido y
-	 * la tarifa normal inicializados.
-	 * 
-	 * @param metodoPago   El método de pago preferido del cliente.
-	 * @param tipoPedido   El tipo de pedido realizado por el cliente.
-	 * @param tarifaNormal La tarifa aplicada al cliente normal.
-	 */
-	public ClienteNormalDTO(String metodoPago, String tipoPedido, double tarifaNormal) {
-		super(metodoPago, tipoPedido);
+	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
+			String tipoPedido, double tarifaNormal) {
+		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
 		this.tarifaNormal = tarifaNormal;
 	}
 
-	/**
-	 * Constructor con datos personales básicos. <br>
-	 * <b>post</b>: Se crea un DTO ClienteNormal inicializando sus datos
-	 * básicos y manteniendo la tarifa por defecto.
-	 * 
-	 * @param nombre   El nombre del cliente.
-	 * @param cedula   La cédula del cliente.
-	 * @param correo   El correo del cliente.
-	 * @param telefono El teléfono del cliente.
-	 */
-	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono) {
-		super(nombre, cedula, correo, telefono);
-	}
-
-	/**
-	 * Constructor con datos personales básicos y tarifa. <br>
-	 * <b>post</b>: Se crea un DTO ClienteNormal con sus datos personales y
-	 * tarifa inicializados.
-	 * 
-	 * @param nombre       El nombre del cliente.
-	 * @param cedula       La cédula del cliente.
-	 * @param correo       El correo del cliente.
-	 * @param telefono     El teléfono del cliente.
-	 * @param tarifaNormal La tarifa aplicada al cliente normal.
-	 */
 	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono, double tarifaNormal) {
 		super(nombre, cedula, correo, telefono);
 		this.tarifaNormal = tarifaNormal;
 	}
 
-	/**
-	 * Constructor con datos personales, método de pago y tipo de pedido. <br>
-	 * <b>post</b>: Se crea un DTO ClienteNormal completo respecto a los datos
-	 * del cliente y pedido, manteniendo la tarifa por defecto.
-	 *
-	 * @param nombre     El nombre del cliente.
-	 * @param cedula     La cédula del cliente.
-	 * @param correo     El correo del cliente.
-	 * @param telefono   El teléfono del cliente.
-	 * @param metodoPago El método de pago preferido del cliente.
-	 * @param tipoPedido El tipo de pedido realizado por el cliente.
-	 */
+	public ClienteNormalDTO(String metodoPago, String tipoPedido, String contrasenia, double tarifaNormal) {
+		super(metodoPago, tipoPedido, contrasenia);
+		this.tarifaNormal = tarifaNormal;
+	}
+
 	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
 			String tipoPedido) {
 		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
 	}
 
-	/**
-	 * Constructor completo. <br>
-	 * <b>post</b>: Se crea un DTO ClienteNormal con todos los atributos
-	 * (heredados y propios) inicializados.
-	 * 
-	 *  @param nombre       El nombre del cliente.
-	 * @param cedula       La cédula del cliente.
-	 * @param correo       El correo del cliente.
-	 * @param telefono     El teléfono del cliente.
-	 * @param metodoPago   El método de pago preferido del cliente.
-	 * @param tipoPedido   El tipo de pedido realizado por el cliente.
-	 * @param tarifaNormal La tarifa aplicada al cliente normal.
-	 */
-	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
-			String tipoPedido, double tarifaNormal) {
-		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
-		this.tarifaNormal = tarifaNormal;
+	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono) {
+		super(nombre, cedula, correo, telefono);
+	}
+
+	public ClienteNormalDTO(String metodoPago, String tipoPedido, String contrasenia) {
+		super(metodoPago, tipoPedido, contrasenia);
 	}
 
 	/**

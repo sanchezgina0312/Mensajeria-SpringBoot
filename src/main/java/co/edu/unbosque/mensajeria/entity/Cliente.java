@@ -24,6 +24,8 @@ public abstract class Cliente extends Usuario {
 	
 	/** Tipo de pedido que realiza el cliente. */
 	private String tipoPedido;
+	
+	private String contrasenia;
 
 	/**
 	 * Constructor vacío. <br>
@@ -41,8 +43,8 @@ public abstract class Cliente extends Usuario {
 	 * * @param metodoPago El método de pago preferido por el cliente.
 	 * @param tipoPedido El tipo de pedido asociado al cliente.
 	 */
-	public Cliente(String metodoPago, String tipoPedido) {
-		super();
+	public Cliente(String nombre, String cedula, String correo, String telefono, String metodoPago, String tipoPedido) {
+		super(nombre, cedula, correo, telefono);
 		this.metodoPago = metodoPago;
 		this.tipoPedido = tipoPedido;
 	}
@@ -58,10 +60,9 @@ public abstract class Cliente extends Usuario {
 	 * @param metodoPago El método de pago preferido por el cliente.
 	 * @param tipoPedido El tipo de pedido asociado al cliente.
 	 */
-	public Cliente(String nombre, String cedula, String correo, String telefono, String metodoPago, String tipoPedido) {
+	public Cliente(String nombre, String cedula, String correo, String telefono) {
 		super(nombre, cedula, correo, telefono);
-		this.metodoPago = metodoPago;
-		this.tipoPedido = tipoPedido;
+
 	}
 
 	/**
@@ -73,9 +74,12 @@ public abstract class Cliente extends Usuario {
 	 * @param correo   El correo electrónico del cliente.
 	 * @param telefono El teléfono de contacto del cliente.
 	 */
-	public Cliente(String nombre, String cedula, String correo, String telefono) {
-		super(nombre, cedula, correo, telefono);
 
+	public Cliente(String metodoPago, String tipoPedido, String contrasenia) {
+		super();
+		this.metodoPago = metodoPago;
+		this.tipoPedido = tipoPedido;
+		this.contrasenia = contrasenia;
 	}
 
 	/**
@@ -85,6 +89,7 @@ public abstract class Cliente extends Usuario {
 	public String getMetodoPago() {
 		return metodoPago;
 	}
+
 
 	/**
 	 * Establece el método de pago del cliente.
@@ -110,16 +115,20 @@ public abstract class Cliente extends Usuario {
 		this.tipoPedido = tipoPedido;
 	}
 
+	public String getContrasenia() {
+		return contrasenia;
+	}
+
+	public void setContrasenia(String contrasenia) {
+		this.contrasenia = contrasenia;
+	}
+
 	/**
 	 * Devuelve una representación en String de la entidad Cliente.
 	 * * @return Una cadena que incluye los datos del usuario junto con su 
 	 * método de pago y tipo de pedido.
 	 */
-	@Override
-	public String toString() {
-		return super.toString() + "Cliente \n Método de pago:" + metodoPago + "\n" + "Tipo de pedido:" + tipoPedido
-				+ "\n";
-	}
+	
 
 	/**
 	 * Genera un código hash para la entidad Cliente.
@@ -128,6 +137,12 @@ public abstract class Cliente extends Usuario {
 	@Override
 	public int hashCode() {
 		return Objects.hash(metodoPago, tipoPedido);
+	}
+
+	@Override
+	public String toString() {
+		return "Cliente [metodoPago=" + metodoPago + ", tipoPedido=" + tipoPedido + ", contrasenia=" + contrasenia
+				+ "]";
 	}
 
 	/**

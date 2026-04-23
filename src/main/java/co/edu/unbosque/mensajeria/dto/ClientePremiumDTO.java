@@ -27,108 +27,38 @@ public class ClientePremiumDTO extends Cliente {
 
 	}
 
-	/**
-	 * Constructor con tarifa premium. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium con la tarifa establecida y
-	 * los atributos heredados nulos o por defecto.
-	 * 
-	 * @param tarifaPremium La tarifa aplicada al cliente premium.
-	 */
+	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
+			String tipoPedido, double tarifaPremium) {
+		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
+		this.tarifaPremium = tarifaPremium;
+	}
+
 	public ClientePremiumDTO(double tarifaPremium) {
 		super();
 		this.tarifaPremium = tarifaPremium;
 	}
 
-	/**
-	 * Constructor con método de pago y tipo de pedido. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium inicializando datos del pedido
-	 * y manteniendo la tarifa por defecto.
-	 * 
-	 * @param metodoPago El método de pago preferido del cliente.
-	 * @param tipoPedido El tipo de pedido realizado por el cliente.
-	 */
-	public ClientePremiumDTO(String metodoPago, String tipoPedido) {
-		super(metodoPago, tipoPedido);
-	}
-
-	/**
-	 * Constructor con método de pago, tipo de pedido y tarifa. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium con los datos del pedido y
-	 * la tarifa premium inicializados.
-	 * 
-	 * @param metodoPago    El método de pago preferido del cliente.
-	 * @param tipoPedido    El tipo de pedido realizado por el cliente.
-	 * @param tarifaPremium La tarifa aplicada al cliente premium.
-	 */
-	public ClientePremiumDTO(String metodoPago, String tipoPedido, double tarifaPremium) {
-		super(metodoPago, tipoPedido);
-		this.tarifaPremium = tarifaPremium;
-	}
-
-	/**
-	 * Constructor con datos personales básicos. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium inicializando sus datos
-	 * básicos y manteniendo la tarifa por defecto.
-	 * 
-	 * @param nombre   El nombre del cliente.
-	 * @param cedula   La cédula del cliente.
-	 * @param correo   El correo del cliente.
-	 * @param telefono El teléfono del cliente.
-	 */
-	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono) {
-		super(nombre, cedula, correo, telefono);
-	}
-
-	/**
-	 * Constructor con datos personales básicos y tarifa. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium con sus datos personales y
-	 * tarifa inicializados.
-	 * 
-	 *  @param nombre        El nombre del cliente.
-	 * @param cedula        La cédula del cliente.
-	 * @param correo        El correo del cliente.
-	 * @param telefono      El teléfono del cliente.
-	 * @param tarifaPremium La tarifa aplicada al cliente premium.
-	 */
 	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono, double tarifaPremium) {
 		super(nombre, cedula, correo, telefono);
 		this.tarifaPremium = tarifaPremium;
 	}
 
-	/**
-	 * Constructor con datos personales, método de pago y tipo de pedido. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium completo respecto a los datos
-	 * del cliente y pedido, manteniendo la tarifa por defecto.
-	 * 
-	 * @param nombre     El nombre del cliente.
-	 * @param cedula     La cédula del cliente.
-	 * @param correo     El correo del cliente.
-	 * @param telefono   El teléfono del cliente.
-	 * @param metodoPago El método de pago preferido del cliente.
-	 * @param tipoPedido El tipo de pedido realizado por el cliente.
-	 */
+	public ClientePremiumDTO(String metodoPago, String tipoPedido, String contrasenia, double tarifaPremium) {
+		super(metodoPago, tipoPedido, contrasenia);
+		this.tarifaPremium = tarifaPremium;
+	}
+
 	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
 			String tipoPedido) {
 		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
 	}
 
-	/**
-	 * Constructor completo. <br>
-	 * <b>post</b>: Se crea un DTO ClientePremium con todos los atributos
-	 * (heredados y propios) inicializados.
-	 * 
-	 * @param nombre        El nombre del cliente.
-	 * @param cedula        La cédula del cliente.
-	 * @param correo        El correo del cliente.
-	 * @param telefono      El teléfono del cliente.
-	 * @param metodoPago    El método de pago preferido del cliente.
-	 * @param tipoPedido    El tipo de pedido realizado por el cliente.
-	 * @param tarifaPremium La tarifa aplicada al cliente premium.
-	 */
-	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
-			String tipoPedido, double tarifaPremium) {
-		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
-		this.tarifaPremium = tarifaPremium;
+	public ClientePremiumDTO(String nombre, String cedula, String correo, String telefono) {
+		super(nombre, cedula, correo, telefono);
+	}
+
+	public ClientePremiumDTO(String metodoPago, String tipoPedido, String contrasenia) {
+		super(metodoPago, tipoPedido, contrasenia);
 	}
 
 	/**
