@@ -1,30 +1,30 @@
 package co.edu.unbosque.mensajeria.exception;
 
 /**
- * Excepción personalizada que se lanza cuando se detecta una cédula con formato
- * o valor inválido dentro del sistema de mensajería.
+ * Excepción personalizada que se lanza cuando se detecta una contraseña que no cumple
+ * con los criterios de seguridad o formato establecidos en el sistema de mensajería.
  *
  * <p>Esta excepción extiende {@link RuntimeException}, por lo que es una excepción
- * no verificada (<i>unchecked exception</i>) y no requiere ser declarada
- * explícitamente en la firma de los métodos que la lancen.</p>
+ * no verificada (unchecked exception).</p>
  *
  * @version 1.0
- * @since 1.0
  * @see RuntimeException
  */
 public class ContraseniaInvalidaException extends RuntimeException {
 
-    /**
-     * Construye una nueva instancia de {@code CedulaInvalidaException} con el
-     * mensaje de detalle especificado.
-     *
-     * <p>El mensaje puede ser recuperado posteriormente mediante el método
-     * {@link Throwable#getMessage()}.</p>
-     *
-     * @param mensaje descripción detallada del motivo por el cual la cédula
-     *                se considera inválida; no debe ser {@code null}.
-     */
-    public ContraseniaInvalidaException(String mensaje) {
-        super(mensaje);
-    }
+	/**
+	 * Identificador único de serialización para la clase.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Construye una nueva instancia de {@code ContraseniaInvalidaException} con el
+	 * mensaje de detalle especificado.
+	 *
+	 * @param mensaje descripción detallada del motivo por el cual la contraseña
+	 * se considera inválida.
+	 */
+	public ContraseniaInvalidaException(String mensaje) {
+		super(mensaje);
+	}
 }
