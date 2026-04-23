@@ -85,7 +85,7 @@ public class ClientePremiumController {
     @PostMapping("/crear")
     public ResponseEntity<String> crearClientePremium(@RequestParam String nombre, @RequestParam String cedula,
             @RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
-            @RequestParam String tipoPedido, @RequestParam double tarifaPremium) {
+            @RequestParam String tipoPedido, @RequestParam double tarifaPremium, @RequestParam String contrasenia) {
 
         try {
             ClientePremiumDTO nuevoClientePremium = new ClientePremiumDTO();
@@ -96,6 +96,7 @@ public class ClientePremiumController {
             nuevoClientePremium.setMetodoPago(metodoPago);
             nuevoClientePremium.setTipoPedido(tipoPedido);
             nuevoClientePremium.setTarifaPremium(tarifaPremium);
+            nuevoClientePremium.setContrasenia(contrasenia);
 
             int status = clientePremiumService.create(nuevoClientePremium);
 
@@ -205,7 +206,7 @@ public class ClientePremiumController {
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarClientePremium(@RequestParam Long id, @RequestParam String nombre,
             @RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
-            @RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaPremium) {
+            @RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaPremium, @RequestParam String contrasenia) {
 
         try {
             ClientePremiumDTO clientePremiumNuevo = new ClientePremiumDTO();
@@ -216,6 +217,7 @@ public class ClientePremiumController {
             clientePremiumNuevo.setMetodoPago(metodoPago);
             clientePremiumNuevo.setTipoPedido(tipoPedido);
             clientePremiumNuevo.setTarifaPremium(tarifaPremium);
+            clientePremiumNuevo.setContrasenia(contrasenia);
 
             int status = clientePremiumService.updateById(id, clientePremiumNuevo);
 

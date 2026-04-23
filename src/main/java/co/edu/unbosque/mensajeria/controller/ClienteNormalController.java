@@ -84,7 +84,7 @@ public class ClienteNormalController {
     @PostMapping("/crear")
     public ResponseEntity<String> crearClienteNormal(@RequestParam String nombre, @RequestParam String cedula,
             @RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
-            @RequestParam String tipoPedido) {
+            @RequestParam String tipoPedido, @RequestParam String contrasenia) {
 
         try {
             ClienteNormalDTO nuevoClienteNormal = new ClienteNormalDTO();
@@ -94,6 +94,7 @@ public class ClienteNormalController {
             nuevoClienteNormal.setTelefono(telefono);
             nuevoClienteNormal.setMetodoPago(metodoPago);
             nuevoClienteNormal.setTipoPedido(tipoPedido);
+            nuevoClienteNormal.setContrasenia(contrasenia);
 
             int status = clienteNormalService.create(nuevoClienteNormal);
 
@@ -202,7 +203,7 @@ public class ClienteNormalController {
     @PutMapping("/actualizarclientenormal")
     public ResponseEntity<String> actualizarClienteNormal(@RequestParam Long id, @RequestParam String nombre,
             @RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
-            @RequestParam String metodoPago, @RequestParam String tipoPedido) {
+            @RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam String contrasenia) {
         try {
             ClienteNormalDTO clienteNormalNuevo = new ClienteNormalDTO();
             clienteNormalNuevo.setNombre(nombre);
@@ -211,6 +212,7 @@ public class ClienteNormalController {
             clienteNormalNuevo.setTelefono(telefono);
             clienteNormalNuevo.setMetodoPago(metodoPago);
             clienteNormalNuevo.setTipoPedido(tipoPedido);
+            clienteNormalNuevo.setContrasenia(contrasenia);
 
             int status = clienteNormalService.updateById(id, clienteNormalNuevo);
 
