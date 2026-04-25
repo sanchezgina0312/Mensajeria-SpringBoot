@@ -267,6 +267,20 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		return dtoList;
 	}
 
+	public List<PaqueteAlimenticioDTO> findByIdCLiente(long idCliente) {
+		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByIdCliente(idCliente);
+		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
+		
+		if(encontrados.isPresent()) {
+			for(PaqueteAlimenticio p : encontrados.get()) {//no requiere lista aparte
+				PaqueteAlimenticioDTO dto = mapper.map(p, PaqueteAlimenticioDTO.class);
+				dtoList.add(dto);
+			}
+		}
+		
+        return dtoList;
+    }
+	
 	/**
 	 * Calcula el precio basado en el tamaño del paquete.
 	 */
@@ -330,4 +344,5 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	public void setMapper(ModelMapper mapper) {
 		this.mapper = mapper;
 	}
+	
 }

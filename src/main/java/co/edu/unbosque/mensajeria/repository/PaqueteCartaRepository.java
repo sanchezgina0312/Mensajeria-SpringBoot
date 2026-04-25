@@ -49,5 +49,6 @@ public interface PaqueteCartaRepository extends CrudRepository<PaqueteCarta, Lon
 	 * @return Un  Optional con la lista de paquetes que coinciden con la ubicación proporcionada.
 	 */
 	public Optional<List<PaqueteCarta>> findByDireccionDestinoAndCiudadDestino(String direccionDestino, String ciudadDestino);
-
+	
+	public Optional<List<PaqueteCarta>> findByIdCliente(long idCliente);
 }

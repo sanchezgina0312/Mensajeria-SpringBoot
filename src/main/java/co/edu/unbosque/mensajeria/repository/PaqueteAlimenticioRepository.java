@@ -55,5 +55,6 @@ public interface PaqueteAlimenticioRepository extends CrudRepository<PaqueteAlim
 	 * @return Un  Optional con la lista de paquetes que coinciden con la ubicación proporcionada.
 	 */
 	public Optional<List<PaqueteAlimenticio>> findByDireccionDestinoAndCiudadDestino(String direccionDestino, String ciudadDestino);
-
+	
+	public Optional<List<PaqueteAlimenticio>> findByIdCliente(long idCliente);
 }

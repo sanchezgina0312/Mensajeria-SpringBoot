@@ -9,7 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.edu.unbosque.mensajeria.dto.PaqueteAlimenticioDTO;
 import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
+import co.edu.unbosque.mensajeria.entity.PaqueteAlimenticio;
 import co.edu.unbosque.mensajeria.entity.PaqueteCarta;
 import co.edu.unbosque.mensajeria.repository.PaqueteCartaRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
@@ -254,6 +256,20 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		}
 		return dtoList;
 	}
+	
+	public List<PaqueteCartaDTO> findByIdCLiente(long idCliente) {
+		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByIdCliente(idCliente);
+		List<PaqueteCartaDTO> dtoList = new ArrayList<>();
+		
+		if(encontrados.isPresent()) {
+			for(PaqueteCarta p : encontrados.get()) {//no requiere lista aparte
+				PaqueteCartaDTO dto = mapper.map(p, PaqueteCartaDTO.class);
+				dtoList.add(dto);
+			}
+		}
+		
+        return dtoList;
+    }
 
 	/**
 	 * Calcula el precio basado en el tamaño del paquete de carta.
