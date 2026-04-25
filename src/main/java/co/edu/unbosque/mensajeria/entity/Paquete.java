@@ -55,6 +55,9 @@ public abstract class Paquete {
 	
 	/** Monto total a pagar, calculado tras aplicar reglas de negocio sobre el precio base. */
 	private double precioFinal;
+	
+	/** Identificador único del cliente asociado al paquete. */
+	private long idCliente;
 
 	/**
 	 * Constructor vacío. <br>
@@ -66,11 +69,11 @@ public abstract class Paquete {
 	}
 	
 	/**
-	 * Constructor con todos los campos. <br>
-	 * <b>post</b>: Se crea una instancia de Paquete con cada uno de los atributos 
-	 * inicializados según los parámetros proporcionados.
-	 * * @param id                   Identificador único.
-	 * @param precioEnvio          Precio inicial de envío.
+	 * Constructor con parámetros de negocio e identificador de cliente. <br>
+	 * <b>post</b>: Se crea una instancia de Paquete inicializando todos los campos base 
+	 * y vinculándola a un cliente específico. No incluye el ID propio del paquete 
+	 * para permitir la generación automática por JPA.
+	 * * @param precioEnvio          Precio inicial de envío.
 	 * @param direccionDestino     Dirección del destinatario.
 	 * @param tamanio              Dimensiones del paquete.
 	 * @param fechaCreacionPedido  Fecha de registro.
@@ -79,12 +82,12 @@ public abstract class Paquete {
 	 * @param estadoPedido         Estado del envío.
 	 * @param esPrioritario        Nivel de prioridad.
 	 * @param precioFinal          Costo total calculado.
+	 * @param idCliente            Identificador único del cliente.
 	 */
-	public Paquete(long id, int precioEnvio, String direccionDestino, String tamanio, LocalDateTime fechaCreacionPedido,
+	public Paquete(int precioEnvio, String direccionDestino, String tamanio, LocalDateTime fechaCreacionPedido,
 			LocalDateTime fechaEstimadaEntrega, String ciudadDestino, String estadoPedido, boolean esPrioritario,
-			double precioFinal) {
+			double precioFinal, long idCliente) {
 		super();
-		this.id = id;
 		this.precioEnvio = precioEnvio;
 		this.direccionDestino = direccionDestino;
 		this.tamanio = tamanio;
@@ -94,8 +97,8 @@ public abstract class Paquete {
 		this.estadoPedido = estadoPedido;
 		this.esPrioritario = esPrioritario;
 		this.precioFinal = precioFinal;
+		this.idCliente = idCliente;
 	}
-	
 
 	/**
 	 * Obtiene el ID del paquete.
@@ -258,6 +261,24 @@ public abstract class Paquete {
 	}
 
 	/**
+	 * Obtiene el ID del cliente asociado al paquete.
+	 * @return El identificador único del cliente.
+	 */
+	public long getIdCliente() {
+		return idCliente;
+	}
+
+
+	/**
+	 * Establece el ID del cliente asociado al paquete.
+	 * @param idCliente El nuevo identificador del cliente.
+	 */
+	public void setIdCliente(long idCliente) {
+		this.idCliente = idCliente;
+	}
+
+
+	/**
 	 * Genera una representación textual detallada del paquete.
 	 * @return Cadena con toda la información del paquete.
 	 */
@@ -267,17 +288,18 @@ public abstract class Paquete {
 				+ "\n Tamaño:" + tamanio + "\n Fecha Creación Pedido:" + fechaCreacionPedido
 				+ "\n Fecha Estimada Entrega:" + fechaEstimadaEntrega + "\n Ciudad Destino:" + ciudadDestino
 				+ "\n Estado Pedido:" + estadoPedido + "\n Prioridad:" + esPrioritario + "\n Precio Final:" + precioFinal
-				+ ".";
+				+ "\n idCliente:" + idCliente + ".";
 	}
 
 	/**
 	 * Calcula el código hash basado en los atributos del paquete.
 	 * @return El valor del hash.
 	 */
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(ciudadDestino, direccionDestino, esPrioritario, estadoPedido, fechaCreacionPedido,
-				fechaEstimadaEntrega, id, precioEnvio, precioFinal, tamanio);
+				fechaEstimadaEntrega, id, idCliente, precioEnvio, precioFinal, tamanio);
 	}
 
 	/**
@@ -285,6 +307,7 @@ public abstract class Paquete {
 	 * @param obj Objeto a comparar.
 	 * @return true si coinciden todos los atributos, false de lo contrario.
 	 */
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -299,9 +322,10 @@ public abstract class Paquete {
 				&& Objects.equals(estadoPedido, other.estadoPedido)
 				&& Objects.equals(fechaCreacionPedido, other.fechaCreacionPedido)
 				&& Objects.equals(fechaEstimadaEntrega, other.fechaEstimadaEntrega) && id == other.id
-				&& precioEnvio == other.precioEnvio
+				&& idCliente == other.idCliente && precioEnvio == other.precioEnvio
 				&& Double.doubleToLongBits(precioFinal) == Double.doubleToLongBits(other.precioFinal)
 				&& Objects.equals(tamanio, other.tamanio);
 	}
+	
 
 }
