@@ -9,15 +9,17 @@ import co.edu.unbosque.mensajeria.entity.Paquete;
  * DTO (Data Transfer Object) para PaqueteNoAlimenticio.
  * <p>
  * Hereda de la clase base Paquete y añade un atributo específico para indicar
- * si el paquete requiere un manejo cuidadoso debido a su fragilidad. Se utiliza 
- * para transferir datos de paquetes que no contienen alimentos de forma segura 
+ * si el paquete requiere un manejo cuidadoso debido a su fragilidad. Se utiliza
+ * para transferir datos de paquetes que no contienen alimentos de forma segura
  * entre las distintas capas de la aplicación.
  *
  * @version 1.0
  */
 public class PaqueteNoAlimenticioDTO extends Paquete {
 
-	/** Indica si el paquete no alimenticio es frágil y requiere manejo cuidadoso. */
+	/**
+	 * Indica si el paquete no alimenticio es frágil y requiere manejo cuidadoso.
+	 */
 	private boolean esFragil;
 
 	/**
@@ -31,9 +33,9 @@ public class PaqueteNoAlimenticioDTO extends Paquete {
 
 	/**
 	 * Constructor con indicador de fragilidad. <br>
-	 * <b>post</b>: Se crea un DTO PaqueteNoAlimenticio estableciendo si es frágil 
-	 * y manteniendo los atributos heredados nulos o por defecto.
-	 * * @param esFragil Indica si el paquete es frágil.
+	 * <b>post</b>: Se crea un DTO PaqueteNoAlimenticio estableciendo si es frágil y
+	 * manteniendo los atributos heredados nulos o por defecto. * @param esFragil
+	 * Indica si el paquete es frágil.
 	 */
 	public PaqueteNoAlimenticioDTO(boolean esFragil) {
 		super();
@@ -41,62 +43,68 @@ public class PaqueteNoAlimenticioDTO extends Paquete {
 	}
 
 	/**
-	 * Constructor completo con atributos heredados y el indicador de fragilidad. <br>
-	 * <b>post</b>: Se crea un DTO PaqueteNoAlimenticio con todos los atributos
-	 * (heredados del Paquete general y el propio de fragilidad) inicializados.
-	 * * @param id                   El identificador único del paquete.
-	 * @param precioEnvio          El precio base del envío.
-	 * @param direccionDestino     La dirección a la que se envía el paquete.
-	 * @param tamanio              El tamaño del paquete.
-	 * @param fechaCreacionPedido  La fecha y hora en que se creó el pedido.
-	 * @param fechaEstimadaEntrega La fecha y hora estimadas para la entrega.
-	 * @param ciudadDestino        La ciudad de destino del paquete.
-	 * @param estadoPedido         El estado actual del pedido.
-	 * @param esPrioritario        Indica si el paquete tiene prioridad de entrega.
-	 * @param precioFinal          El precio final calculado del envío.
-	 * @param esFragil             Indica si el paquete es frágil.
+	 * Constructor completo para la transferencia de datos de un paquete no
+	 * alimenticio. <br>
+	 * <b>post</b>: Se crea un objeto DTO que centraliza la información logística,
+	 * los datos del cliente y las condiciones especiales de manejo (fragilidad)
+	 * para su transporte entre capas. * @param precioEnvio Precio inicial de envío.
+	 * 
+	 * @param direccionDestino     Dirección del destinatario.
+	 * @param tamanio              Dimensiones del paquete.
+	 * @param fechaCreacionPedido  Fecha de registro.
+	 * @param fechaEstimadaEntrega Fecha tentativa de entrega.
+	 * @param ciudadDestino        Ciudad del destinatario.
+	 * @param estadoPedido         Estado del envío.
+	 * @param esPrioritario        Nivel de prioridad.
+	 * @param precioFinal          Costo total calculado.
+	 * @param idCliente            Identificador único del cliente.
+	 * @param esFragil             Indica si el contenido requiere trato especial
+	 *                             por fragilidad.
 	 */
-	public PaqueteNoAlimenticioDTO(long id, int precioEnvio, String direccionDestino, String tamanio,
+	public PaqueteNoAlimenticioDTO(int precioEnvio, String direccionDestino, String tamanio,
 			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
-			String estadoPedido, boolean esPrioritario, double precioFinal, boolean esFragil) {
-		super(id, precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
-				estadoPedido, esPrioritario, precioFinal);
+			String estadoPedido, boolean esPrioritario, double precioFinal, long idCliente, boolean esFragil) {
+		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, esPrioritario, precioFinal, idCliente);
 		this.esFragil = esFragil;
-	}
-	
-	/**
-	 * Constructor con atributos heredados de Paquete. <br>
-	 * <b>post</b>: Se crea un DTO PaqueteNoAlimenticio inicializando todos los
-	 * atributos generales de un paquete, manteniendo la fragilidad por defecto.
-	 * * @param id                   El identificador único del paquete.
-	 * @param precioEnvio          El precio base del envío.
-	 * @param direccionDestino     La dirección a la que se envía el paquete.
-	 * @param tamanio              El tamaño del paquete.
-	 * @param fechaCreacionPedido  La fecha y hora en que se creó el pedido.
-	 * @param fechaEstimadaEntrega La fecha y hora estimadas para la entrega.
-	 * @param ciudadDestino        La ciudad de destino del paquete.
-	 * @param estadoPedido         El estado actual del pedido.
-	 * @param esPrioritario        Indica si el paquete tiene prioridad de entrega.
-	 * @param precioFinal          El precio final calculado del envío.
-	 */
-	public PaqueteNoAlimenticioDTO(long id, int precioEnvio, String direccionDestino, String tamanio,
-			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
-			String estadoPedido, boolean esPrioritario, double precioFinal) {
-		super(id, precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
-				estadoPedido, esPrioritario, precioFinal);
 	}
 
 	/**
-	 * Verifica si el paquete es frágil.
-	 * * @return true si el paquete es frágil, false en caso contrario.
+	 * Constructor de transferencia para datos base de un paquete no alimenticio.
+	 * <br>
+	 * <b>post</b>: Se crea una instancia de PaqueteNoAlimenticioDTO que contiene
+	 * los datos generales de envío y cliente, dejando la especificación de
+	 * fragilidad para ser definida luego. * @param precioEnvio Precio inicial de
+	 * envío.
+	 * 
+	 * @param direccionDestino     Dirección del destinatario.
+	 * @param tamanio              Dimensiones del paquete.
+	 * @param fechaCreacionPedido  Fecha de registro.
+	 * @param fechaEstimadaEntrega Fecha tentativa de entrega.
+	 * @param ciudadDestino        Ciudad del destinatario.
+	 * @param estadoPedido         Estado del envío.
+	 * @param esPrioritario        Nivel de prioridad.
+	 * @param precioFinal          Costo total calculado.
+	 * @param idCliente            Identificador único del cliente.
+	 */
+	public PaqueteNoAlimenticioDTO(int precioEnvio, String direccionDestino, String tamanio,
+			LocalDateTime fechaCreacionPedido, LocalDateTime fechaEstimadaEntrega, String ciudadDestino,
+			String estadoPedido, boolean esPrioritario, double precioFinal, long idCliente) {
+		super(precioEnvio, direccionDestino, tamanio, fechaCreacionPedido, fechaEstimadaEntrega, ciudadDestino,
+				estadoPedido, esPrioritario, precioFinal, idCliente);
+	}
+
+	/**
+	 * Verifica si el paquete es frágil. * @return true si el paquete es frágil,
+	 * false en caso contrario.
 	 */
 	public boolean isEsFragil() {
 		return esFragil;
 	}
 
 	/**
-	 * Establece si el paquete es frágil.
-	 * * @param esFragil true para indicar que es frágil, false en caso contrario.
+	 * Establece si el paquete es frágil. * @param esFragil true para indicar que es
+	 * frágil, false en caso contrario.
 	 */
 	public void setEsFragil(boolean esFragil) {
 		this.esFragil = esFragil;
@@ -104,7 +112,8 @@ public class PaqueteNoAlimenticioDTO extends Paquete {
 
 	/**
 	 * Devuelve una representación en String del DTO del paquete no alimenticio.
-	 * * @return Una cadena que incluye los datos generales del paquete junto con la confirmación de su fragilidad.
+	 * * @return Una cadena que incluye los datos generales del paquete junto con la
+	 * confirmación de su fragilidad.
 	 */
 	@Override
 	public String toString() {
@@ -112,8 +121,8 @@ public class PaqueteNoAlimenticioDTO extends Paquete {
 	}
 
 	/**
-	 * Genera un código hash para el objeto DTO.
-	 * * @return El código hash basado en los atributos heredados y si es frágil o no.
+	 * Genera un código hash para el objeto DTO. * @return El código hash basado en
+	 * los atributos heredados y si es frágil o no.
 	 */
 	@Override
 	public int hashCode() {
@@ -124,9 +133,11 @@ public class PaqueteNoAlimenticioDTO extends Paquete {
 	}
 
 	/**
-	 * Compara este DTO con otro objeto para verificar si son iguales.
-	 * * @param obj El objeto con el cual se va a comparar.
-	 * @return true si los objetos son iguales en atributos e identidad, false en caso contrario.
+	 * Compara este DTO con otro objeto para verificar si son iguales. * @param obj
+	 * El objeto con el cual se va a comparar.
+	 * 
+	 * @return true si los objetos son iguales en atributos e identidad, false en
+	 *         caso contrario.
 	 */
 	@Override
 	public boolean equals(Object obj) {
