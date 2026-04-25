@@ -7,7 +7,7 @@ import co.edu.unbosque.mensajeria.entity.Cliente;
  * DTO (Data Transfer Object) para ClienteNormal.
  * <p>
  * Hereda de la clase base Cliente y añade una tarifa específica para los
- * clientes normales. Se utiliza para transferir datos de clientes estándar de 
+ * clientes normales. Se utiliza para transferir datos de clientes estándar de
  * forma segura entre capas.
  * </p>
  *
@@ -19,17 +19,16 @@ public class ClienteNormalDTO extends Cliente {
 	private double tarifaNormal; // 0%
 
 	/**
-	 * Constructor vacío. <br>
-	 * <b>post</b>: Se crea un DTO ClienteNormal con atributos heredados
-	 * nulos o por defecto y una tarifa normal inicializada en 0.
+	 * Constructor vacío.
 	 */
 	public ClienteNormalDTO() {
-		super();
+
 	}
 
 	/**
-	 * Constructor que inicializa únicamente la tarifa del cliente normal.
-	 * @param tarifaNormal Valor decimal de la tarifa base.
+	 * Constructor con tarifa premium.
+	 * 
+	 * @param tarifaPremium Valor de la tarifa premium.
 	 */
 	public ClienteNormalDTO(double tarifaNormal) {
 		super();
@@ -37,28 +36,25 @@ public class ClienteNormalDTO extends Cliente {
 	}
 
 	/**
-	 * Constructor completo con datos de identificación, contacto, logística y tarifa.
-	 * @param nombre Nombre completo del cliente.
-	 * @param cedula Documento de identidad.
-	 * @param correo Dirección de correo electrónico.
-	 * @param telefono Número de contacto.
-	 * @param metodoPago Medio de pago preferido.
-	 * @param tipoPedido Categoría o clase de pedido.
-	 * @param tarifaNormal Valor de la tarifa asignada.
+	 * Constructor con credenciales y tarifa premium.
+	 * 
+	 * @param metodoPago    Medio de pago preferido.
+	 * @param contrasenia   Contraseña del sistema.
+	 * @param tarifaPremium Valor de la tarifa premium.
 	 */
-	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
-			String tipoPedido, double tarifaNormal) {
-		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
+	public ClienteNormalDTO(String metodoPago, String contrasenia, double tarifaNormal) {
+		super(metodoPago, contrasenia);
 		this.tarifaNormal = tarifaNormal;
 	}
 
 	/**
-	 * Constructor para inicialización de datos personales y tarifa.
-	 * @param nombre Nombre del cliente.
-	 * @param cedula Identificación oficial.
-	 * @param correo E-mail de contacto.
-	 * @param telefono Número telefónico.
-	 * @param tarifaNormal Valor de la tarifa normal.
+	 * Constructor con datos personales y tarifa premium.
+	 * 
+	 * @param nombre        Nombre completo del cliente.
+	 * @param cedula        Documento de identidad.
+	 * @param correo        Dirección de correo electrónico.
+	 * @param telefono      Número de contacto.
+	 * @param tarifaPremium Valor de la tarifa premium.
 	 */
 	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono, double tarifaNormal) {
 		super(nombre, cedula, correo, telefono);
@@ -66,71 +62,79 @@ public class ClienteNormalDTO extends Cliente {
 	}
 
 	/**
-	 * Constructor para la gestión de seguridad y preferencias tarifarias.
-	 * @param metodoPago Medio de pago.
-	 * @param tipoPedido Tipo de servicio.
-	 * @param contrasenia Clave de acceso al sistema.
-	 * @param tarifaNormal Tarifa asignada.
+	 * Constructor completo con datos de identificación, contacto y tarifa.
+	 * 
+	 * @param nombre        Nombre completo del cliente.
+	 * @param cedula        Documento de identidad.
+	 * @param correo        Dirección de correo electrónico.
+	 * @param telefono      Número de contacto.
+	 * @param metodoPago    Medio de pago preferido.
+	 * @param contrasenia   Contraseña del sistema.
+	 * @param tarifaPremium Valor de la tarifa premium.
 	 */
-	public ClienteNormalDTO(String metodoPago, String tipoPedido, String contrasenia, double tarifaNormal) {
-		super(metodoPago, tipoPedido, contrasenia);
+	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
+			String contrasenia, double tarifaNormal) {
+		super(nombre, cedula, correo, telefono, metodoPago, contrasenia);
 		this.tarifaNormal = tarifaNormal;
 	}
 
 	/**
-	 * Constructor para datos logísticos y personales sin tarifa personalizada.
-	 * @param nombre Nombre completo.
-	 * @param cedula Cédula.
-	 * @param correo E-mail.
-	 * @param telefono Teléfono.
-	 * @param metodoPago Método de pago.
-	 * @param tipoPedido Tipo de pedido.
+	 * Constructor con datos personales y credenciales.
+	 * 
+	 * @param nombre      Nombre completo del cliente.
+	 * @param cedula      Documento de identidad.
+	 * @param correo      Dirección de correo electrónico.
+	 * @param telefono    Número de contacto.
+	 * @param metodoPago  Medio de pago preferido.
+	 * @param contrasenia Contraseña del sistema.
 	 */
 	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
-			String tipoPedido) {
-		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
+			String contrasenia) {
+		super(nombre, cedula, correo, telefono, metodoPago, contrasenia);
 	}
 
 	/**
-	 * Constructor simplificado para registro de identidad y contacto.
-	 * @param nombre Nombre del cliente.
-	 * @param cedula Identificación.
-	 * @param correo Correo electrónico.
-	 * @param telefono Teléfono de contacto.
+	 * Constructor con datos de identificación y contacto.
+	 * 
+	 * @param nombre   Nombre completo del cliente.
+	 * @param cedula   Documento de identidad.
+	 * @param correo   Dirección de correo electrónico.
+	 * @param telefono Número de contacto.
 	 */
 	public ClienteNormalDTO(String nombre, String cedula, String correo, String telefono) {
 		super(nombre, cedula, correo, telefono);
 	}
 
 	/**
-	 * Constructor para gestión de credenciales y preferencias de servicio.
-	 * @param metodoPago Medio de pago.
-	 * @param tipoPedido Tipo de pedido.
-	 * @param contrasenia Contraseña del usuario.
+	 * Constructor con credenciales de acceso.
+	 * 
+	 * @param metodoPago  Medio de pago preferido.
+	 * @param contrasenia Contraseña del sistema.
 	 */
-	public ClienteNormalDTO(String metodoPago, String tipoPedido, String contrasenia) {
-		super(metodoPago, tipoPedido, contrasenia);
+	public ClienteNormalDTO(String metodoPago, String contrasenia) {
+		super(metodoPago, contrasenia);
 	}
 
 	/**
-	 * Obtiene la tarifa del cliente normal.
-	 * * @return La tarifa asignada al cliente normal.
+	 * Obtiene la tarifa del cliente normal. * @return La tarifa asignada al cliente
+	 * normal.
 	 */
 	public double getTarifaNormal() {
 		return tarifaNormal;
 	}
 
 	/**
-	 * Establece la tarifa del cliente normal.
-	 * * @param tarifaNormal La nueva tarifa a asignar.
+	 * Establece la tarifa del cliente normal. * @param tarifaNormal La nueva tarifa
+	 * a asignar.
 	 */
 	public void setTarifaNormal(double tarifaNormal) {
 		this.tarifaNormal = tarifaNormal;
 	}
 
 	/**
-	 * Devuelve una representación en String del DTO del cliente normal.
-	 * * @return Una cadena que incluye los datos del cliente general junto con la tarifa normal.
+	 * Devuelve una representación en String del DTO del cliente normal. * @return
+	 * Una cadena que incluye los datos del cliente general junto con la tarifa
+	 * normal.
 	 */
 	@Override
 	public String toString() {
@@ -138,8 +142,8 @@ public class ClienteNormalDTO extends Cliente {
 	}
 
 	/**
-	 * Genera un código hash para el objeto DTO.
-	 * * @return El código hash basado en los atributos del padre y la tarifa normal.
+	 * Genera un código hash para el objeto DTO. * @return El código hash basado en
+	 * los atributos del padre y la tarifa normal.
 	 */
 	@Override
 	public int hashCode() {
@@ -150,9 +154,11 @@ public class ClienteNormalDTO extends Cliente {
 	}
 
 	/**
-	 * Compara este DTO con otro objeto para verificar si son iguales.
-	 * * @param obj El objeto con el cual se va a comparar.
-	 * @return true si los objetos son iguales en atributos e identidad, false en caso contrario.
+	 * Compara este DTO con otro objeto para verificar si son iguales. * @param obj
+	 * El objeto con el cual se va a comparar.
+	 * 
+	 * @return true si los objetos son iguales en atributos e identidad, false en
+	 *         caso contrario.
 	 */
 	@Override
 	public boolean equals(Object obj) {
