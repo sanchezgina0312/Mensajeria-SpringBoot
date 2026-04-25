@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.mensajeria.dto.ClienteConcurrenteDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
-import co.edu.unbosque.mensajeria.exception.ContraseniaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.IdInvalidoException;
 import co.edu.unbosque.mensajeria.exception.MetodoDePagoInvalidoException;
@@ -86,7 +85,7 @@ public class ClienteConcurrenteController {
     @PostMapping("/crear")
     public ResponseEntity<String> crearClienteConcurrente(@RequestParam String nombre, @RequestParam String cedula,
             @RequestParam String correo, @RequestParam String telefono, @RequestParam String metodoPago,
-            @RequestParam String tipoPedido, @RequestParam String contrasenia, @RequestParam double tarifaConcurrente) {
+            @RequestParam String tipoPedido, @RequestParam double tarifaConcurrente) {
 
         try {
             ClienteConcurrenteDTO nuevoClienteConcurrente = new ClienteConcurrenteDTO();
@@ -96,7 +95,6 @@ public class ClienteConcurrenteController {
             nuevoClienteConcurrente.setTelefono(telefono);
             nuevoClienteConcurrente.setMetodoPago(metodoPago);
             nuevoClienteConcurrente.setTipoPedido(tipoPedido);
-            nuevoClienteConcurrente.setContrasenia(contrasenia);
             nuevoClienteConcurrente.setTarifaConcurrente(tarifaConcurrente);
 
             int status = clienteConcurrenteService.create(nuevoClienteConcurrente);
@@ -119,8 +117,6 @@ public class ClienteConcurrenteController {
         } catch (MetodoDePagoInvalidoException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (TipoPedidoInvalidoException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (ContraseniaInvalidaException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Error interno del servidor", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -209,7 +205,7 @@ public class ClienteConcurrenteController {
     @PutMapping("/actualizarclienteconcurrente")
     public ResponseEntity<String> actualizarClienteConcurrente(@RequestParam Long id, @RequestParam String nombre,
             @RequestParam String cedula, @RequestParam String correo, @RequestParam String telefono,
-            @RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam String contrasenia, @RequestParam double tarifaConcurrente) {
+            @RequestParam String metodoPago, @RequestParam String tipoPedido, @RequestParam double tarifaConcurrente) {
         try {
             ClienteConcurrenteDTO clienteConcurrenteNuevo = new ClienteConcurrenteDTO();
             clienteConcurrenteNuevo.setNombre(nombre);
@@ -218,7 +214,6 @@ public class ClienteConcurrenteController {
             clienteConcurrenteNuevo.setTelefono(telefono);
             clienteConcurrenteNuevo.setMetodoPago(metodoPago);
             clienteConcurrenteNuevo.setTipoPedido(tipoPedido);
-            clienteConcurrenteNuevo.setContrasenia(contrasenia);
             clienteConcurrenteNuevo.setTarifaConcurrente(tarifaConcurrente);
 
             int status = clienteConcurrenteService.updateById(id, clienteConcurrenteNuevo);
@@ -242,10 +237,8 @@ public class ClienteConcurrenteController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (IdInvalidoException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (ContraseniaInvalidaException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-           return new ResponseEntity<>("Error inesperado", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error inesperado", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -56,7 +56,6 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
         LanzadorDeException.verificarTelefono(data.getTelefono());
         LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
         LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
-        LanzadorDeException.verificarContrasena(data.getContrasenia());
 
         LanzadorDeException.verificarDuplicado(
                 clienteConcurrenteRep.existsByCedula(data.getCedula()),
@@ -122,7 +121,6 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
         LanzadorDeException.verificarTelefono(data.getTelefono());
         LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
         LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
-        LanzadorDeException.verificarContrasena(data.getContrasenia());
 
         Optional<ClienteConcurrente> encontrado = clienteConcurrenteRep.findById(id);
 
@@ -145,7 +143,6 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
             temp.setTelefono(data.getTelefono());
             temp.setMetodoPago(data.getMetodoPago());
             temp.setTipoPedido(data.getTipoPedido());
-            temp.setContrasenia(data.getContrasenia());
 
             clienteConcurrenteRep.save(temp);
             return 0;

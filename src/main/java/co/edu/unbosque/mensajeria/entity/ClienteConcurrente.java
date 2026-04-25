@@ -1,16 +1,16 @@
 package co.edu.unbosque.mensajeria.entity;
 
 import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 /**
  * Entidad que representa a un Cliente Concurrente (frecuente) en el sistema.
  * <p>
- * Hereda de la clase base Cliente y añade una tarifa específica aplicada a 
+ * Hereda de la clase base  Cliente y añade una tarifa específica aplicada a 
  * los clientes que realizan pedidos de forma concurrente o recurrente. Esta clase 
  * está mapeada a la tabla "clienteconcurrente" en la base de datos mediante JPA.
- * </p>
  *
  * @version 1.0
  */
@@ -27,63 +27,65 @@ public class ClienteConcurrente extends Cliente {
 	 * o por defecto y una tarifa concurrente predeterminada de 0.5. Requerido por JPA.
 	 */
 	public ClienteConcurrente() {
+	}
+
+	/**
+	 * Constructor con tarifa concurrente. <br>
+	 * <b>post</b>: Se crea una entidad ClienteConcurrente con la tarifa establecida y los 
+	 * atributos heredados nulos o por defecto.
+	 * * @param tarifaConcurrente La tarifa aplicada al cliente concurrente.
+	 */
+	public ClienteConcurrente(double tarifaConcurrente) {
 		super();
-	}
-
-	/**
-	 * Constructor con información de contacto y logística.
-	 * @param nombre     Nombre del cliente.
-	 * @param cedula     Cédula de identidad.
-	 * @param correo     Correo electrónico.
-	 * @param telefono   Número telefónico.
-	 * @param metodoPago Método de pago preferido.
-	 * @param tipoPedido Categoría del pedido.
-	 */
-	public ClienteConcurrente(String nombre, String cedula, String correo, String telefono, String metodoPago,
-			String tipoPedido) {
-		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
-	}
-	
-	/**
-	 * Constructor con datos de contacto básicos.
-	 * @param nombre   Nombre del cliente.
-	 * @param cedula   Identificación.
-	 * @param correo   E-mail.
-	 * @param telefono Teléfono.
-	 */
-	public ClienteConcurrente(String nombre, String cedula, String correo, String telefono) {
-		super(nombre, cedula, correo, telefono);
-	}
-	
-	/**
-	 * Constructor orientado a la seguridad y logística de pedidos.
-	 * @param metodoPago  Medio de pago.
-	 * @param tipoPedido  Tipo de pedido.
-	 * @param contrasenia Clave de acceso.
-	 */
-	public ClienteConcurrente(String metodoPago, String tipoPedido, String contrasenia) {
-		super(metodoPago, tipoPedido, contrasenia);
-	}
-
-	/**
-	 * Constructor con configuración de cuenta y tarifa diferencial.
-	 * @param metodoPago        Método de pago.
-	 * @param tipoPedido        Tipo de pedido.
-	 * @param contrasenia       Contraseña de usuario.
-	 * @param tarifaConcurrente Tarifa aplicada por concurrencia.
-	 */
-	public ClienteConcurrente(String metodoPago, String tipoPedido, String contrasenia, double tarifaConcurrente) {
-		super(metodoPago, tipoPedido, contrasenia);
 		this.tarifaConcurrente = tarifaConcurrente;
 	}
 
 	/**
-	 * Constructor con datos de identidad y tarifa personalizada.
-	 * @param nombre            Nombre del cliente.
-	 * @param cedula            Cédula.
-	 * @param correo            Correo electrónico.
-	 * @param telefono          Teléfono.
-	 * @param tarifaConcurrente Valor de la tarifa.
+	 * Constructor con método de pago y tipo de pedido. <br>
+	 * <b>post</b>: Se crea una entidad ClienteConcurrente inicializando datos del pedido
+	 * y manteniendo la tarifa predeterminada.
+	 * * @param metodoPago El método de pago preferido del cliente.
+	 * @param tipoPedido El tipo de pedido realizado por el cliente.
+	 */
+	public ClienteConcurrente(String metodoPago, String tipoPedido) {
+		super(metodoPago, tipoPedido);
+	}
+
+	/**
+	 * Constructor con método de pago, tipo de pedido y tarifa. <br>
+	 * <b>post</b>: Se crea una entidad ClienteConcurrente con los datos del pedido y
+	 * la tarifa concurrente inicializados.
+	 * * @param metodoPago        El método de pago preferido del cliente.
+	 * @param tipoPedido        El tipo de pedido realizado por el cliente.
+	 * @param tarifaConcurrente La tarifa aplicada al cliente concurrente.
+	 */
+	public ClienteConcurrente(String metodoPago, String tipoPedido, double tarifaConcurrente) {
+		super(metodoPago, tipoPedido);
+		this.tarifaConcurrente = tarifaConcurrente;
+	}
+
+	/**
+	 * Constructor con datos personales básicos. <br>
+	 * <b>post</b>: Se crea una entidad ClienteConcurrente inicializando sus datos
+	 * básicos y manteniendo la tarifa predeterminada.
+	 * * @param nombre   El nombre del cliente.
+	 * @param cedula   La cédula del cliente.
+	 * @param correo   El correo del cliente.
+	 * @param telefono El teléfono del cliente.
+	 */
+	public ClienteConcurrente(String nombre, String cedula, String correo, String telefono) {
+		super(nombre, cedula, correo, telefono);
+	}
+
+	/**
+	 * Constructor con datos personales básicos y tarifa. <br>
+	 * <b>post</b>: Se crea una entidad ClienteConcurrente con sus datos personales y
+	 * tarifa inicializados.
+	 * * @param nombre            El nombre del cliente.
+	 * @param cedula            La cédula del cliente.
+	 * @param correo            El correo del cliente.
+	 * @param telefono          El teléfono del cliente.
+	 * @param tarifaConcurrente La tarifa aplicada al cliente concurrente.
 	 */
 	public ClienteConcurrente(String nombre, String cedula, String correo, String telefono, double tarifaConcurrente) {
 		super(nombre, cedula, correo, telefono);
@@ -91,14 +93,32 @@ public class ClienteConcurrente extends Cliente {
 	}
 
 	/**
-	 * Constructor completo con datos personales, de negocio y tarifa.
-	 * @param nombre            Nombre completo.
-	 * @param cedula            Identificación oficial.
-	 * @param correo            E-mail.
-	 * @param telefono          Número telefónico.
-	 * @param metodoPago        Forma de pago.
-	 * @param tipoPedido        Clasificación de pedido.
-	 * @param tarifaConcurrente Tarifa especial asignada.
+	 * Constructor con datos personales, método de pago y tipo de pedido. <br>
+	 * <b>post</b>: Se crea una entidad ClienteConcurrente completa respecto a los datos
+	 * del cliente y pedido, manteniendo la tarifa por defecto.
+	 * * @param nombre     El nombre del cliente.
+	 * @param cedula     La cédula del cliente.
+	 * @param correo     El correo del cliente.
+	 * @param telefono   El teléfono del cliente.
+	 * @param metodoPago El método de pago preferido del cliente.
+	 * @param tipoPedido El tipo de pedido realizado por el cliente.
+	 */
+	public ClienteConcurrente(String nombre, String cedula, String correo, String telefono, String metodoPago,
+			String tipoPedido) {
+		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
+	}
+
+	/**
+	 * Constructor completo. <br>
+	 * <b>post</b>: Se crea una entidad ClienteConcurrente con todos los atributos
+	 * (heredados y propios) inicializados.
+	 * * @param nombre            El nombre del cliente.
+	 * @param cedula            La cédula del cliente.
+	 * @param correo            El correo del cliente.
+	 * @param telefono          El teléfono del cliente.
+	 * @param metodoPago        El método de pago preferido del cliente.
+	 * @param tipoPedido        El tipo de pedido realizado por el cliente.
+	 * @param tarifaConcurrente La tarifa aplicada al cliente concurrente.
 	 */
 	public ClienteConcurrente(String nombre, String cedula, String correo, String telefono, String metodoPago,
 			String tipoPedido, double tarifaConcurrente) {
@@ -107,17 +127,8 @@ public class ClienteConcurrente extends Cliente {
 	}
 
 	/**
-	 * Constructor que inicializa únicamente la tarifa concurrente.
-	 * @param tarifaConcurrente Valor decimal de la tarifa.
-	 */
-	public ClienteConcurrente(double tarifaConcurrente) {
-		super();
-		this.tarifaConcurrente = tarifaConcurrente;
-	}
-
-	/**
 	 * Obtiene la tarifa concurrente del cliente.
-	 * @return La tarifa asignada al cliente concurrente.
+	 * * @return La tarifa asignada al cliente concurrente.
 	 */
 	public double getTarifaConcurrente() {
 		return tarifaConcurrente;
@@ -125,7 +136,7 @@ public class ClienteConcurrente extends Cliente {
 
 	/**
 	 * Establece la tarifa concurrente del cliente.
-	 * @param tarifaConcurrente La nueva tarifa a asignar.
+	 * * @param tarifaConcurrente La nueva tarifa a asignar.
 	 */
 	public void setTarifaConcurrente(double tarifaConcurrente) {
 		this.tarifaConcurrente = tarifaConcurrente;
@@ -133,7 +144,7 @@ public class ClienteConcurrente extends Cliente {
 
 	/**
 	 * Devuelve una representación en String de la entidad ClienteConcurrente.
-	 * @return Una cadena que incluye los datos del cliente general junto con la tarifa de concurrencia.
+	 * * @return Una cadena que incluye los datos del cliente general junto con la tarifa de concurrencia.
 	 */
 	@Override
 	public String toString() {
@@ -141,8 +152,8 @@ public class ClienteConcurrente extends Cliente {
 	}
 
 	/**
-	 * Genera un código hash para la entidad.
-	 * @return El código hash basado en los atributos heredados y la tarifa concurrente.
+	 * Genera un código hash para la entidad ClienteConcurrente.
+	 * * @return El código hash basado en los atributos del padre y la tarifa concurrente.
 	 */
 	@Override
 	public int hashCode() {
@@ -153,8 +164,8 @@ public class ClienteConcurrente extends Cliente {
 	}
 
 	/**
-	 * Compara esta entidad con otro objeto para verificar igualdad funcional.
-	 * @param obj El objeto con el cual se va a comparar.
+	 * Compara esta entidad con otro objeto para verificar si son iguales.
+	 * * @param obj El objeto con el cual se va a comparar.
 	 * @return true si los objetos son iguales en atributos e identidad, false en caso contrario.
 	 */
 	@Override
@@ -170,4 +181,5 @@ public class ClienteConcurrente extends Cliente {
 		ClienteConcurrente other = (ClienteConcurrente) obj;
 		return Double.doubleToLongBits(tarifaConcurrente) == Double.doubleToLongBits(other.tarifaConcurrente);
 	}
+
 }

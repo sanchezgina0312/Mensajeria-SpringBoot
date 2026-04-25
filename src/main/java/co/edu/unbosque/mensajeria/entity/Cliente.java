@@ -1,6 +1,7 @@
 package co.edu.unbosque.mensajeria.entity;
 
 import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -11,7 +12,6 @@ import jakarta.persistence.Table;
  * de los clientes, como su método de pago y tipo de pedido. Sirve como clase 
  * base para tipos más específicos de clientes (Normal, Premium, Concurrente).
  * Esta clase está mapeada a la tabla "cliente" en la base de datos mediante JPA.
- * </p>
  *
  * @version 1.0
  */
@@ -24,9 +24,6 @@ public abstract class Cliente extends Usuario {
 	
 	/** Tipo de pedido que realiza el cliente. */
 	private String tipoPedido;
-	
-	/** Contraseña de acceso al sistema para el cliente. */
-	private String contrasenia;
 
 	/**
 	 * Constructor vacío. <br>
@@ -34,14 +31,27 @@ public abstract class Cliente extends Usuario {
 	 * nulos o por defecto y los atributos propios sin inicializar. Requerido por JPA.
 	 */
 	public Cliente() {
-		super();
+		
 	}
 
 	/**
-	 * Constructor con información de contacto y atributos de negocio. <br>
-	 * <b>post</b>: Se crea una entidad Cliente con todos sus datos personales 
-	 * y preferencias de servicio inicializados.
-	 * @param nombre     El nombre del cliente.
+	 * Constructor con método de pago y tipo de pedido. <br>
+	 * <b>post</b>: Se crea una entidad Cliente con su método de pago y tipo de 
+	 * pedido establecidos, manteniendo los atributos de Usuario nulos.
+	 * * @param metodoPago El método de pago preferido por el cliente.
+	 * @param tipoPedido El tipo de pedido asociado al cliente.
+	 */
+	public Cliente(String metodoPago, String tipoPedido) {
+		super();
+		this.metodoPago = metodoPago;
+		this.tipoPedido = tipoPedido;
+	}
+
+	/**
+	 * Constructor completo con atributos heredados y propios. <br>
+	 * <b>post</b>: Se crea una entidad Cliente con todos los atributos
+	 * (heredados de Usuario y específicos de Cliente) inicializados.
+	 * * @param nombre     El nombre del cliente.
 	 * @param cedula     La cédula del cliente.
 	 * @param correo     El correo electrónico del cliente.
 	 * @param telefono   El teléfono de contacto del cliente.
@@ -58,32 +68,19 @@ public abstract class Cliente extends Usuario {
 	 * Constructor con atributos heredados de Usuario. <br>
 	 * <b>post</b>: Se crea una entidad Cliente inicializando únicamente sus 
 	 * datos personales y de contacto básicos.
-	 * @param nombre   El nombre del cliente.
+	 * * @param nombre   El nombre del cliente.
 	 * @param cedula   La cédula del cliente.
 	 * @param correo   El correo electrónico del cliente.
 	 * @param telefono El teléfono de contacto del cliente.
 	 */
 	public Cliente(String nombre, String cedula, String correo, String telefono) {
 		super(nombre, cedula, correo, telefono);
-	}
 
-	/**
-	 * Constructor orientado a credenciales y logística. <br>
-	 * <b>post</b>: Se inicializan las preferencias de pago, tipo de pedido y seguridad.
-	 * @param metodoPago  El método de pago preferido por el cliente.
-	 * @param tipoPedido  El tipo de pedido asociado al cliente.
-	 * @param contrasenia La contraseña de acceso.
-	 */
-	public Cliente(String metodoPago, String tipoPedido, String contrasenia) {
-		super();
-		this.metodoPago = metodoPago;
-		this.tipoPedido = tipoPedido;
-		this.contrasenia = contrasenia;
 	}
 
 	/**
 	 * Obtiene el método de pago del cliente.
-	 * @return El método de pago actual.
+	 * * @return El método de pago.
 	 */
 	public String getMetodoPago() {
 		return metodoPago;
@@ -91,7 +88,7 @@ public abstract class Cliente extends Usuario {
 
 	/**
 	 * Establece el método de pago del cliente.
-	 * @param metodoPago El nuevo método de pago a asignar.
+	 * * @param metodoPago El nuevo método de pago a asignar.
 	 */
 	public void setMetodoPago(String metodoPago) {
 		this.metodoPago = metodoPago;
@@ -99,7 +96,7 @@ public abstract class Cliente extends Usuario {
 
 	/**
 	 * Obtiene el tipo de pedido asociado al cliente.
-	 * @return El tipo de pedido actual.
+	 * * @return El tipo de pedido.
 	 */
 	public String getTipoPedido() {
 		return tipoPedido;
@@ -107,31 +104,26 @@ public abstract class Cliente extends Usuario {
 
 	/**
 	 * Establece el tipo de pedido asociado al cliente.
-	 * @param tipoPedido El nuevo tipo de pedido a asignar.
+	 * * @param tipoPedido El nuevo tipo de pedido a asignar.
 	 */
 	public void setTipoPedido(String tipoPedido) {
 		this.tipoPedido = tipoPedido;
 	}
 
 	/**
-	 * Obtiene la contraseña de acceso del cliente.
-	 * @return La contraseña almacenada.
+	 * Devuelve una representación en String de la entidad Cliente.
+	 * * @return Una cadena que incluye los datos del usuario junto con su 
+	 * método de pago y tipo de pedido.
 	 */
-	public String getContrasenia() {
-		return contrasenia;
-	}
-
-	/**
-	 * Establece la contraseña de acceso del cliente.
-	 * @param contrasenia La nueva contraseña a asignar.
-	 */
-	public void setContrasenia(String contrasenia) {
-		this.contrasenia = contrasenia;
+	@Override
+	public String toString() {
+		return super.toString() + "Cliente \n Método de pago:" + metodoPago + "\n" + "Tipo de pedido:" + tipoPedido
+				+ "\n";
 	}
 
 	/**
 	 * Genera un código hash para la entidad Cliente.
-	 * @return El código hash basado en el método de pago y el tipo de pedido.
+	 * * @return El código hash basado en el método de pago y el tipo de pedido.
 	 */
 	@Override
 	public int hashCode() {
@@ -139,19 +131,9 @@ public abstract class Cliente extends Usuario {
 	}
 
 	/**
-	 * Devuelve una representación en String de la entidad Cliente.
-	 * @return Una cadena con los datos de pago, pedido y contraseña.
-	 */
-	@Override
-	public String toString() {
-		return "Cliente [metodoPago=" + metodoPago + ", tipoPedido=" + tipoPedido + ", contrasenia=" + contrasenia
-				+ "]";
-	}
-
-	/**
 	 * Compara esta entidad con otro objeto para verificar si son iguales.
-	 * @param obj El objeto con el cual se va a comparar.
-	 * @return true si los objetos comparten el mismo método de pago y tipo de pedido.
+	 * * @param obj El objeto con el cual se va a comparar.
+	 * @return true si los objetos son iguales en atributos e identidad, false en caso contrario.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -164,4 +146,5 @@ public abstract class Cliente extends Usuario {
 		Cliente other = (Cliente) obj;
 		return Objects.equals(metodoPago, other.metodoPago) && Objects.equals(tipoPedido, other.tipoPedido);
 	}
+
 }
