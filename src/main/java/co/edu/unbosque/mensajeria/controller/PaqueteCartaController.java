@@ -415,4 +415,15 @@ public class PaqueteCartaController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/historialporid")
+    public ResponseEntity<List<PaqueteCartaDTO>> verHistorial(@RequestParam long idCliente) {
+        List<PaqueteCartaDTO> lista = paqueteCartaSer.findByIdCLiente(idCliente);
+        
+        if(lista.isEmpty()) {
+        	return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
+        } else {
+        	return new ResponseEntity<>(lista, HttpStatus.OK);
+        }
+    }
 }
