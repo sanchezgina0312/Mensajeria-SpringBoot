@@ -54,18 +54,18 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
         LanzadorDeException.verificarNombre(data.getNombre());
         LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
         LanzadorDeException.verificarTelefono(data.getTelefono());
-        LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
-        LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
         LanzadorDeException.verificarContrasena(data.getContrasenia());
 
-        LanzadorDeException.verificarDuplicado(
-                clienteConcurrenteRep.existsByCedula(data.getCedula()),
+        LanzadorDeException.verificarDuplicado(clienteConcurrenteRep.existsByCedula(data.getCedula()),
                 "La cédula " + data.getCedula() + " ya se encuentra registrada para un cliente concurrente.");
+        
+        ClienteConcurrente entity = mapper.map(data, ClienteConcurrente.class);
+		entity.setMetodoPago("Tarjeta De Crédito");
+		entity.setTarifaConcurrente(entity.getTarifaConcurrente());
 
         if (clienteConcurrenteRep.existsByCedula(data.getCedula())) {
             return 1;
         } else {
-            ClienteConcurrente entity = mapper.map(data, ClienteConcurrente.class);
             clienteConcurrenteRep.save(entity);
             return 0;
         }
@@ -121,7 +121,6 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
         LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
         LanzadorDeException.verificarTelefono(data.getTelefono());
         LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
-        LanzadorDeException.verificarTipoPedido(data.getTipoPedido());
         LanzadorDeException.verificarContrasena(data.getContrasenia());
 
         Optional<ClienteConcurrente> encontrado = clienteConcurrenteRep.findById(id);
@@ -144,7 +143,6 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
             temp.setCorreo(data.getCorreo());
             temp.setTelefono(data.getTelefono());
             temp.setMetodoPago(data.getMetodoPago());
-            temp.setTipoPedido(data.getTipoPedido());
             temp.setContrasenia(data.getContrasenia());
 
             clienteConcurrenteRep.save(temp);
@@ -257,47 +255,12 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
     }
 
     /**
-     * Busca por tipo de pedido.
-     */
-    public List<ClienteConcurrenteDTO> findByTipoPedido(String tipoPedido) {
-        LanzadorDeException.verificarTipoPedido(tipoPedido);
-        Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByTipoPedido(tipoPedido);
-        List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
-
-        if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-            encontrados.get().forEach(entity ->
-                    dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class)));
-        }
-
-        return dtoList;
-    }
-
-    /**
      * Busca por nombre y cédula.
      */
     public List<ClienteConcurrenteDTO> findByNombreAndCedula(String nombre, String cedula) {
         LanzadorDeException.verificarNombre(nombre);
         LanzadorDeException.verificarCedula(cedula);
         Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByNombreAndCedula(nombre, cedula);
-        List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
-
-        if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
-            encontrados.get().forEach(entity ->
-                    dtoList.add(mapper.map(entity, ClienteConcurrenteDTO.class)));
-        }
-
-        return dtoList;
-    }
-
-    /**
-     * Busca por tipo de pedido y método de pago.
-     */
-    public List<ClienteConcurrenteDTO> findByTipoPedidoAndMetodoPago(String tipoPedido, String metodoPago) {
-        LanzadorDeException.verificarTipoPedido(tipoPedido);
-        LanzadorDeException.verificarMetodoPago(metodoPago);
-        Optional<List<ClienteConcurrente>> encontrados =
-                clienteConcurrenteRep.findByTipoPedidoAndMetodoPago(tipoPedido, metodoPago);
-
         List<ClienteConcurrenteDTO> dtoList = new ArrayList<>();
 
         if (encontrados.isPresent() && !encontrados.get().isEmpty()) {

@@ -20,16 +20,18 @@ public class ClienteConcurrenteDTO extends Cliente {
 
 	/**
 	 * Constructor vacío. <br>
-	 * <b>post</b>: Se crea un DTO ClienteConcurrente con atributos heredados
-	 * nulos o por defecto y una tarifa concurrente predeterminada de 0.5.
+	 * <b>post</b>: Se crea un objeto DTO de ClienteConcurrente con sus atributos 
+	 * inicializados por defecto. Útil para procesos de serialización y frameworks de mapeo.
 	 */
 	public ClienteConcurrenteDTO() {
-		super();
+
 	}
-	
+
 	/**
-	 * Constructor que inicializa únicamente la tarifa concurrente.
-	 * * @param tarifaConcurrente Tarifa específica para clientes recurrentes.
+	 * Constructor con tarifa de recurrencia. <br>
+	 * <b>post</b>: Se crea un DTO de ClienteConcurrente inicializando el valor 
+	 * de la tarifa específica para la transferencia de este dato.
+	 * @param tarifaConcurrente Valor de la tarifa por frecuencia.
 	 */
 	public ClienteConcurrenteDTO(double tarifaConcurrente) {
 		super();
@@ -37,28 +39,27 @@ public class ClienteConcurrenteDTO extends Cliente {
 	}
 
 	/**
-	 * Constructor con datos personales, logísticos y tarifa.
-	 * * @param nombre Nombre del cliente.
-	 * @param cedula Cédula de ciudadanía.
-	 * @param correo Correo electrónico.
-	 * @param telefono Número telefónico.
-	 * @param metodoPago Medio de pago preferido.
-	 * @param tipoPedido Categoría del pedido.
-	 * @param tarifaConcurrente Tarifa diferencial aplicada.
+	 * Constructor con credenciales y tarifa de recurrencia. <br>
+	 * <b>post</b>: Se crea un DTO que encapsula los datos de acceso y la 
+	 * tarifa asignada para su transporte entre capas.
+	 * @param metodoPago        Sistema de pago registrado.
+	 * @param contrasenia       Clave de seguridad.
+	 * @param tarifaConcurrente Valor de la tarifa por frecuencia.
 	 */
-	public ClienteConcurrenteDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
-			String tipoPedido, double tarifaConcurrente) {
-		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
+	public ClienteConcurrenteDTO(String metodoPago, String contrasenia, double tarifaConcurrente) {
+		super(metodoPago, contrasenia);
 		this.tarifaConcurrente = tarifaConcurrente;
 	}
 
 	/**
-	 * Constructor con datos personales y tarifa.
-	 * * @param nombre Nombre del cliente.
-	 * @param cedula Documento de identidad.
-	 * @param correo E-mail de contacto.
-	 * @param telefono Teléfono.
-	 * @param tarifaConcurrente Tarifa asignada.
+	 * Constructor con datos personales y tarifa de recurrencia. <br>
+	 * <b>post</b>: Se crea un DTO vinculando la información de contacto personal 
+	 * con el valor de la tarifa de cliente frecuente.
+	 * @param nombre            Nombre completo del cliente.
+	 * @param cedula            Documento de identidad.
+	 * @param correo            Dirección de correo electrónico.
+	 * @param telefono          Número de contacto.
+	 * @param tarifaConcurrente Valor de la tarifa por frecuencia.
 	 */
 	public ClienteConcurrenteDTO(String nombre, String cedula, String correo, String telefono,
 			double tarifaConcurrente) {
@@ -67,63 +68,74 @@ public class ClienteConcurrenteDTO extends Cliente {
 	}
 
 	/**
-	 * Constructor con datos logísticos, seguridad y tarifa.
-	 * * @param metodoPago Método de pago.
-	 * @param tipoPedido Tipo de servicio.
-	 * @param contrasenia Clave de acceso.
-	 * @param tarifaConcurrente Tarifa aplicada.
+	 * Constructor completo de transferencia. <br>
+	 * <b>post</b>: Se crea una instancia DTO con la totalidad de la información 
+	 * personal, credenciales y tarifa para una transferencia de datos exhaustiva.
+	 * @param nombre            Nombre completo.
+	 * @param cedula            Cédula de ciudadanía.
+	 * @param correo            Correo electrónico.
+	 * @param telefono          Teléfono de contacto.
+	 * @param metodoPago        Medio de pago registrado.
+	 * @param contrasenia       Contraseña de la cuenta.
+	 * @param tarifaConcurrente Valor de la tarifa por frecuencia.
 	 */
-	public ClienteConcurrenteDTO(String metodoPago, String tipoPedido, String contrasenia, double tarifaConcurrente) {
-		super(metodoPago, tipoPedido, contrasenia);
+	public ClienteConcurrenteDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
+			String contrasenia, double tarifaConcurrente) {
+		super(nombre, cedula, correo, telefono, metodoPago, contrasenia);
 		this.tarifaConcurrente = tarifaConcurrente;
 	}
 
 	/**
-	 * Constructor con datos personales y de logística.
-	 * * @param nombre Nombre del cliente.
-	 * @param cedula Identificación.
-	 * @param correo Correo electrónico.
-	 * @param telefono Teléfono de contacto.
-	 * @param metodoPago Forma de pago.
-	 * @param tipoPedido Tipo de pedido.
+	 * Constructor con datos personales y credenciales. <br>
+	 * <b>post</b>: Se crea un DTO que agrupa la información básica y de acceso, 
+	 * delegando la estructura a la jerarquía superior de DTOs.
+	 * @param nombre      Nombre completo.
+	 * @param cedula      Documento de identidad.
+	 * @param correo      Correo electrónico.
+	 * @param telefono    Teléfono de contacto.
+	 * @param metodoPago  Medio de pago.
+	 * @param contrasenia Contraseña del sistema.
 	 */
 	public ClienteConcurrenteDTO(String nombre, String cedula, String correo, String telefono, String metodoPago,
-			String tipoPedido) {
-		super(nombre, cedula, correo, telefono, metodoPago, tipoPedido);
+			String contrasenia) {
+		super(nombre, cedula, correo, telefono, metodoPago, contrasenia);
 	}
 
 	/**
-	 * Constructor simple para registro de identidad.
-	 * * @param nombre Nombre del cliente.
-	 * @param cedula Cédula.
-	 * @param correo Correo electrónico.
-	 * @param telefono Teléfono.
+	 * Constructor orientado a transferencia de datos personales. <br>
+	 * <b>post</b>: Se crea un DTO inicializando únicamente la información de 
+	 * contacto heredada para su envío entre servicios.
+	 * @param nombre   Nombre completo.
+	 * @param cedula   Documento de identidad.
+	 * @param correo   Correo electrónico.
+	 * @param telefono Teléfono de contacto.
 	 */
 	public ClienteConcurrenteDTO(String nombre, String cedula, String correo, String telefono) {
 		super(nombre, cedula, correo, telefono);
 	}
 
 	/**
-	 * Constructor para gestión de acceso y preferencias.
-	 * * @param metodoPago Método de pago.
-	 * @param tipoPedido Tipo de pedido.
-	 * @param contrasenia Contraseña de usuario.
+	 * Constructor orientado a transferencia de credenciales. <br>
+	 * <b>post</b>: Se crea un DTO con los datos de acceso requeridos para 
+	 * validaciones o procesos de autenticación.
+	 * @param metodoPago  Medio de pago preferido.
+	 * @param contrasenia Contraseña del sistema.
 	 */
-	public ClienteConcurrenteDTO(String metodoPago, String tipoPedido, String contrasenia) {
-		super(metodoPago, tipoPedido, contrasenia);
+	public ClienteConcurrenteDTO(String metodoPago, String contrasenia) {
+		super(metodoPago, contrasenia);
 	}
 
 	/**
-	 * Obtiene la tarifa concurrente del cliente.
-	 * * @return La tarifa asignada al cliente concurrente.
+	 * Obtiene la tarifa concurrente del cliente. * @return La tarifa asignada al
+	 * cliente concurrente.
 	 */
 	public double getTarifaConcurrente() {
 		return tarifaConcurrente;
 	}
 
 	/**
-	 * Establece la tarifa concurrente del cliente.
-	 * * @param tarifaConcurrente La nueva tarifa a asignar.
+	 * Establece la tarifa concurrente del cliente. * @param tarifaConcurrente La
+	 * nueva tarifa a asignar.
 	 */
 	public void setTarifaConcurrente(double tarifaConcurrente) {
 		this.tarifaConcurrente = tarifaConcurrente;
@@ -131,7 +143,8 @@ public class ClienteConcurrenteDTO extends Cliente {
 
 	/**
 	 * Devuelve una representación en String del DTO del cliente concurrente.
-	 * * @return Una cadena que incluye los datos del cliente general junto con la tarifa de concurrencia.
+	 * * @return Una cadena que incluye los datos del cliente general junto con la
+	 * tarifa de concurrencia.
 	 */
 	@Override
 	public String toString() {
@@ -139,8 +152,8 @@ public class ClienteConcurrenteDTO extends Cliente {
 	}
 
 	/**
-	 * Genera un código hash para el objeto DTO.
-	 * * @return El código hash basado en los atributos del padre y la tarifa concurrente.
+	 * Genera un código hash para el objeto DTO. * @return El código hash basado en
+	 * los atributos del padre y la tarifa concurrente.
 	 */
 	@Override
 	public int hashCode() {
@@ -151,9 +164,11 @@ public class ClienteConcurrenteDTO extends Cliente {
 	}
 
 	/**
-	 * Compara este DTO con otro objeto para verificar si son iguales.
-	 * * @param obj El objeto con el cual se va a comparar.
-	 * @return true si los objetos son iguales en atributos e identidad, false en caso contrario.
+	 * Compara este DTO con otro objeto para verificar si son iguales. * @param obj
+	 * El objeto con el cual se va a comparar.
+	 * 
+	 * @return true si los objetos son iguales en atributos e identidad, false en
+	 *         caso contrario.
 	 */
 	@Override
 	public boolean equals(Object obj) {

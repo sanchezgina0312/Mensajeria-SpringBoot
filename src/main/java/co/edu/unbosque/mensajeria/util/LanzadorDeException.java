@@ -126,7 +126,7 @@ public class LanzadorDeException {
 			throw new MetodoDePagoInvalidoException("El método de pago no puede estar vacío");
 		}
 		metodoPago = metodoPago.toUpperCase().trim();
-		if (!metodoPago.matches("EFECTIVO|TARJETA_CREDITO|TARJETA_DEBITO|NEQUI|DAVIPLATA|TRANSFERENCIA")) {
+		if (!metodoPago.matches("Tarjeta De Crédito|Tarjeta Debito|PSE")) {
 			throw new MetodoDePagoInvalidoException("Método de pago no válido");
 		}
 	}
@@ -207,19 +207,6 @@ public class LanzadorDeException {
 		tipo = tipo.toUpperCase().trim();
 		if (!tipo.matches("PAQUETES_ALIMENTICIOS|PAQUETES_NO_ALIMENTICIOS|CARTAS")) {
 			throw new TipoManipuladorInvalidoException("Tipo de manipulador no válido");
-		}
-	}
-
-	/**
-	 * Valida categorías generales de pedido.
-	 */
-	public static void verificarTipoPedido(String tipo) {
-		if (tipo == null || tipo.isEmpty()) {
-			throw new TipoPedidoInvalidoException("El tipo de pedido no puede estar vacío");
-		}
-		tipo = tipo.toUpperCase().trim();
-		if (!tipo.matches("ALIMENTICIO|NO_ALIMENTICIO|CARTA")) {
-			throw new TipoPedidoInvalidoException("Tipo de pedido no válido");
 		}
 	}
 
