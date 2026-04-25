@@ -83,14 +83,13 @@ public class PaqueteAlimenticioController {
 	// http://localhost:8080/paquetealimenticio/crear?remitente=Juan&destinatario=Ana&direccionDestino=Calle+10&ciudadDestino=Bogota&fechaEntrega=2024-05-20T14:30:00&tamanio=Grande&tipoAlimento=Perecedero
 	@PostMapping("/crear")
 	public ResponseEntity<String> crear(@RequestParam String direccionDestino, @RequestParam String tamanio,
-			@RequestParam String ciudadDestino, @RequestParam boolean seEnviaHoy, @RequestParam String tipoDeAlimento) {
+			@RequestParam String ciudadDestino, @RequestParam String tipoDeAlimento) {
 
 		try {
 			PaqueteAlimenticioDTO dto = new PaqueteAlimenticioDTO();
 			dto.setDireccionDestino(direccionDestino);
 			dto.setTamanio(tamanio);
 			dto.setCiudadDestino(ciudadDestino);
-			dto.setSeEnviaHoy(seEnviaHoy);
 			dto.setTipoDeAlimento(tipoDeAlimento);
 
 			int resultado = paqueteAlimenticioSer.create(dto);
@@ -109,8 +108,6 @@ public class PaqueteAlimenticioController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (CiudadInvalidaException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (MethodArgumentTypeMismatchException e) {
-			return new ResponseEntity<>("El valor de debe ser true o false", HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -228,7 +225,8 @@ public class PaqueteAlimenticioController {
 			if (status == 0) {
 				return new ResponseEntity<>("Paquete alimenticio eliminado con éxito", HttpStatus.ACCEPTED);
 			} else {
-				return new ResponseEntity<>("No se encontró el paquete alimenticio con el ID ingresado: " + id, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("No se encontró el paquete alimenticio con el ID ingresado: " + id,
+						HttpStatus.BAD_REQUEST);
 			}
 		} catch (IdInvalidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -46,22 +46,27 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	 */
 	@Override
 	public int create(PaqueteAlimenticioDTO data) {
-		LanzadorDeException.verificarDireccion(data.getDireccionDestino());
-		LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
-		LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
-		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
+	    LanzadorDeException.verificarDireccion(data.getDireccionDestino());
+	    LanzadorDeException.verificarTamanoPaquete(data.getTamanio());
+	    LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
+	    LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
-		PaqueteAlimenticio entity = mapper.map(data, PaqueteAlimenticio.class);
-		entity.setFechaCreacionPedido(LocalDateTime.now());
-		entity.setFechaEstimadaEntrega(LocalDateTime.now().plusDays(1));
-		entity.setEstadoPedido("EN_PROCESO");
+	    PaqueteAlimenticio entity = mapper.map(data, PaqueteAlimenticio.class);
 
-		double precioBase = 15000;
-		double precioFinal = calcularPrecioPorTamaño(precioBase, data.getTamanio());
-		entity.setPrecioFinal(precioFinal);
+	    LocalDateTime ahora = LocalDateTime.now();
+	    LocalDateTime fechaEstimada = ahora.plusHours(6);
 
-		paqueteAlimenticioRep.save(entity);
-		return 1;
+	    entity.setFechaCreacionPedido(ahora);
+	    entity.setFechaEstimadaEntrega(fechaEstimada);
+	    entity.setEstadoPedido("EN_PROCESO");
+	    entity.setSeEnviaHoy(calcularSeEnviaHoy(fechaEstimada));
+
+	    double precioBase = 15000;
+	    double precioFinal = calcularPrecioPorTamaño(precioBase, data.getTamanio());
+	    entity.setPrecioFinal(precioFinal);
+
+	    paqueteAlimenticioRep.save(entity);
+	    return 1;
 	}
 
 	/**
@@ -324,11 +329,14 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 	}
 
 	/**
-	 * Registra un plazo de entrega de 6 horas.
+	 * Determina si el paquete debe enviarse hoy, comparando la fecha estimada
+	 * de entrega con el fin del día actual (medianoche).
 	 */
-	public int registrarPlazo6Horas(PaqueteAlimenticioDTO data) {
-		data.setFechaEstimadaEntrega(data.getFechaCreacionPedido().plusHours(6));
-		return 0;
+	public boolean calcularSeEnviaHoy(LocalDateTime fechaEstimadaEntrega) {
+	    LocalDateTime finDelDia = LocalDateTime.now()
+	                                .toLocalDate()
+	                                .atTime(23, 59, 59);
+	    return !fechaEstimadaEntrega.isAfter(finDelDia);
 	}
 
 	/**
