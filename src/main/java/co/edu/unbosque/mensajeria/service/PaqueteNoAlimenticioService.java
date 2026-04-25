@@ -9,7 +9,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.edu.unbosque.mensajeria.dto.PaqueteAlimenticioDTO;
+import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
+import co.edu.unbosque.mensajeria.entity.PaqueteAlimenticio;
+import co.edu.unbosque.mensajeria.entity.PaqueteCarta;
 import co.edu.unbosque.mensajeria.entity.PaqueteNoAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteNoAlimenticioRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
@@ -250,6 +254,20 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		}
 		return dtoList;
 	}
+	
+	public List<PaqueteNoAlimenticioDTO> findByIdCLiente(long idCliente) {
+		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByIdCliente(idCliente);
+		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
+		
+		if(encontrados.isPresent()) {
+			for(PaqueteNoAlimenticio p : encontrados.get()) {//no requiere lista aparte
+				PaqueteNoAlimenticioDTO dto = mapper.map(p, PaqueteNoAlimenticioDTO.class);
+				dtoList.add(dto);
+			}
+		}
+		
+        return dtoList;
+    }
 
 	/**
 	 * Calcula el precio basado en el tamaño del paquete no alimenticio.

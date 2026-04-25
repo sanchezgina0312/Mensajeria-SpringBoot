@@ -50,4 +50,5 @@ public interface PaqueteNoAlimenticioRepository extends CrudRepository<PaqueteNo
 	 */
 	public Optional<List<PaqueteNoAlimenticio>> findByDireccionDestinoAndCiudadDestino(String direccionDestino, String ciudadDestino);
 
+	public Optional<List<PaqueteNoAlimenticio>> findByIdCliente(long idCliente);
 }
