@@ -121,7 +121,7 @@ public class ClienteNormalController {
 	 *
 	 * @return ResponseEntity con la lista de clientes.
 	 */
-	@GetMapping("/mostrar")
+	@GetMapping("/mostrartodo")
 	public ResponseEntity<List<ClienteNormalDTO>> mostrarTodo() {
 		List<ClienteNormalDTO> clientes = clienteNormalService.getAll();
 		if (!clientes.isEmpty()) {
