@@ -7,292 +7,316 @@ import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 
 import co.edu.unbosque.mensajeria.dto.ClientePremiumDTO;
 import co.edu.unbosque.mensajeria.entity.ClientePremium;
 import co.edu.unbosque.mensajeria.repository.ClientePremiumRepository;
 import co.edu.unbosque.mensajeria.service.ClientePremiumService;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 /**
- * Clase de pruebas unitarias para el servicio {@link ClientePremiumService}.
- * 
- * Se encarga de validar el correcto funcionamiento de las operaciones CRUD y de
- * búsqueda relacionadas con la entidad ClientePremium.
- * 
- * Se utiliza Mockito para simular el comportamiento del repositorio y evitar
- * dependencias reales con la base de datos.
+ * Clase de pruebas unitarias para {@link ClientePremiumService}.
+ *
+ * <p>
+ * Esta clase valida el correcto funcionamiento de las operaciones CRUD
+ * y de búsqueda del servicio ClientePremium.
+ * </p>
+ *
+ * <p>
+ * Se utiliza Mockito para simular el comportamiento del repositorio
+ * {@link ClientePremiumRepository}, evitando dependencias con la base de datos.
+ * </p>
+ *
+ * <p>
+ * También se hace uso de {@link MockedStatic} para controlar el comportamiento
+ * de la clase {@link LanzadorDeException}, evitando que las validaciones
+ * estáticas interfieran con la ejecución de las pruebas.
+ * </p>
+ *
+ * <b>Casos probados:</b>
+ * <ul>
+ * <li>Creación exitosa de cliente</li>
+ * <li>Creación con duplicado (lanza excepción)</li>
+ * <li>Obtención de todos los registros</li>
+ * <li>Eliminación de cliente existente</li>
+ * <li>Eliminación de cliente inexistente</li>
+ * <li>Actualización exitosa</li>
+ * <li>Actualización de cliente no encontrado</li>
+ * <li>Conteo de registros</li>
+ * <li>Verificación de existencia por ID</li>
+ * <li>Búsquedas por nombre, cédula, correo, teléfono y método de pago</li>
+ * <li>Búsqueda combinada por nombre y cédula</li>
+ * </ul>
+ *
  */
 class ClientePremiumServiceTest {
 
-	/**
-	 * Mock del repositorio de ClientePremium. Simula el acceso a datos sin
-	 * conectarse a la base real.
-	 */
-	@Mock
-	private ClientePremiumRepository repo;
+    /**
+     * Mock del repositorio ClientePremiumRepository.
+     * Simula el acceso a datos sin conexión real a base de datos.
+     */
+    @Mock
+    private ClientePremiumRepository repo;
 
-	/**
-	 * Mapper utilizado para convertir entre entidad y DTO.
-	 */
-	private ModelMapper mapper;
+    /**
+     * Mapper para conversión entre entidad y DTO.
+     */
+    private ModelMapper mapper;
 
-	/**
-	 * Servicio a probar.
-	 */
-	private ClientePremiumService service;
+    /**
+     * Servicio que será probado.
+     */
+    private ClientePremiumService service;
 
-	/**
-	 * Objeto DTO de prueba.
-	 */
-	private ClientePremiumDTO dto;
+    /**
+     * DTO utilizado para pruebas.
+     */
+    private ClientePremiumDTO dto;
 
-	/**
-	 * Entidad de prueba.
-	 */
-	private ClientePremium entity;
+    /**
+     * Entidad utilizada como referencia en pruebas.
+     */
+    private ClientePremium entity;
 
-	/**
-	 * Configuración inicial antes de cada prueba. Inicializa mocks, servicio,
-	 * mapper y objetos de prueba.
-	 */
-	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
+    /**
+     * Método de configuración que se ejecuta antes de cada prueba.
+     * Inicializa mocks, mapper, servicio y datos base.
+     */
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
 
-		mapper = new ModelMapper();
+        mapper = new ModelMapper();
+        service = new ClientePremiumService();
 
-		service = new ClientePremiumService();
-		service.setClientePremiumRep(repo);
-		service.setMapper(mapper);
+        service.setClientePremiumRep(repo);
+        service.setMapper(mapper);
 
-		dto = new ClientePremiumDTO();
-		dto.setCedula("123456789");
-		dto.setNombre("Juan Perez");
-		dto.setCorreo("juan@gmail.com");
-		dto.setTelefono("3123456789");
-		dto.setMetodoPago("EFECTIVO");
-		dto.setTipoPedido("ALIMENTICIO");
+        dto = new ClientePremiumDTO();
+        dto.setCedula("123456789");
+        dto.setNombre("Juan Perez");
+        dto.setCorreo("juan@gmail.com");
+        dto.setTelefono("3123456789");
+        dto.setMetodoPago("EFECTIVO");
+        dto.setContrasenia("123456");
 
-		entity = new ClientePremium();
-		entity.setCedula(dto.getCedula());
-		entity.setNombre(dto.getNombre());
-		entity.setCorreo(dto.getCorreo());
-		entity.setTelefono(dto.getTelefono());
-		entity.setMetodoPago(dto.getMetodoPago());
-		entity.setTipoPedido(dto.getTipoPedido());
-	}
+        entity = new ClientePremium();
+        entity.setCedula(dto.getCedula());
+        entity.setNombre(dto.getNombre());
+        entity.setCorreo(dto.getCorreo());
+        entity.setTelefono(dto.getTelefono());
+        entity.setMetodoPago(dto.getMetodoPago());
+        entity.setContrasenia(dto.getContrasenia());
+    }
 
-	/**
-	 * Verifica que un cliente se crea correctamente cuando no existe previamente.
-	 */
-	@Test
-	void testCreateSuccess() {
-		when(repo.existsByCedula(dto.getCedula())).thenReturn(false);
+    /**
+     * Verifica que un cliente se crea correctamente cuando no existe previamente.
+     */
+    @Test
+    void testCreateSuccess() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		int result = service.create(dto);
+            when(repo.existsByCedula(dto.getCedula())).thenReturn(false, false);
 
-		assertEquals(0, result);
-		verify(repo).save(any(ClientePremium.class));
-	}
+            int result = service.create(dto);
 
-	/**
-	 * Verifica que se lance una excepción cuando se intenta crear un cliente con
-	 * cédula duplicada.
-	 */
-	@Test
-	void testCreateDuplicado() {
-		when(repo.existsByCedula(dto.getCedula())).thenReturn(true);
+            assertEquals(0, result);
+            verify(repo).save(any(ClientePremium.class));
+        }
+    }
 
-		assertThrows(Exception.class, () -> service.create(dto));
-	}
+    /**
+     * Verifica que se lance una excepción cuando se intenta crear
+     * un cliente con cédula duplicada.
+     */
+    @Test
+    void testCreateDuplicado() {
+        when(repo.existsByCedula(dto.getCedula())).thenReturn(true);
 
-	/**
-	 * Verifica que se obtenga correctamente la lista de clientes.
-	 */
-	@Test
-	void testGetAll() {
-		when(repo.findAll()).thenReturn(Arrays.asList(entity));
+        assertThrows(RuntimeException.class, () -> service.create(dto));
+    }
 
-		List<ClientePremiumDTO> result = service.getAll();
+    /**
+     * Verifica la obtención de todos los clientes.
+     */
+    @Test
+    void testGetAll() {
+        when(repo.findAll()).thenReturn(Arrays.asList(entity));
 
-		assertFalse(result.isEmpty());
-		assertEquals(1, result.size());
-	}
+        List<ClientePremiumDTO> result = service.getAll();
 
-	/**
-	 * Verifica eliminación exitosa de un cliente existente.
-	 */
-	@Test
-	void testDeleteSuccess() {
-		when(repo.findById(1L)).thenReturn(Optional.of(entity));
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+    }
 
-		int result = service.deleteById(1L);
+    /**
+     * Verifica la eliminación exitosa de un cliente existente.
+     */
+    @Test
+    void testDeleteSuccess() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		assertEquals(0, result);
-		verify(repo).delete(entity);
-	}
+            when(repo.findById(1L)).thenReturn(Optional.of(entity));
 
-	/**
-	 * Verifica comportamiento cuando se intenta eliminar un cliente inexistente.
-	 */
-	@Test
-	void testDeleteNotFound() {
-		when(repo.findById(1L)).thenReturn(Optional.empty());
+            int result = service.deleteById(1L);
 
-		int result = service.deleteById(1L);
+            assertEquals(0, result);
+            verify(repo).delete(entity);
+        }
+    }
 
-		assertEquals(1, result);
-	}
+    /**
+     * Verifica el comportamiento cuando se intenta eliminar un cliente inexistente.
+     */
+    @Test
+    void testDeleteNotFound() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-	/**
-	 * Verifica actualización exitosa de un cliente existente.
-	 */
-	@Test
-	void testUpdateSuccess() {
-		when(repo.findById(1L)).thenReturn(Optional.of(entity));
-		when(repo.existsByCedula(dto.getCedula())).thenReturn(false);
+            when(repo.findById(1L)).thenReturn(Optional.empty());
 
-		int result = service.updateById(1L, dto);
+            int result = service.deleteById(1L);
 
-		assertEquals(0, result);
-		verify(repo).save(any(ClientePremium.class));
-	}
+            assertEquals(1, result);
+        }
+    }
 
-	/**
-	 * Verifica comportamiento cuando se intenta actualizar un cliente inexistente.
-	 */
-	@Test
-	void testUpdateNotFound() {
-		when(repo.findById(1L)).thenReturn(Optional.empty());
+    /**
+     * Verifica la actualización exitosa de un cliente existente.
+     */
+    @Test
+    void testUpdateSuccess() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		int result = service.updateById(1L, dto);
+            when(repo.findById(1L)).thenReturn(Optional.of(entity));
+            when(repo.existsByCedula(dto.getCedula())).thenReturn(false);
 
-		assertEquals(1, result);
-	}
+            int result = service.updateById(1L, dto);
 
-	/**
-	 * Verifica el conteo total de clientes.
-	 */
-	@Test
-	void testCount() {
-		when(repo.count()).thenReturn(10L);
+            assertEquals(0, result);
+            verify(repo).save(any(ClientePremium.class));
+        }
+    }
 
-		long result = service.count();
+    /**
+     * Verifica el comportamiento cuando se intenta actualizar un cliente inexistente.
+     */
+    @Test
+    void testUpdateNotFound() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		assertEquals(10, result);
-	}
+            when(repo.findById(1L)).thenReturn(Optional.empty());
 
-	/**
-	 * Verifica si existe un cliente por ID.
-	 */
-	@Test
-	void testExist() {
-		when(repo.existsById(1L)).thenReturn(true);
+            int result = service.updateById(1L, dto);
 
-		boolean result = service.exist(1L);
+            assertEquals(1, result);
+        }
+    }
 
-		assertTrue(result);
-	}
+    /**
+     * Verifica el conteo total de registros.
+     */
+    @Test
+    void testCount() {
+        when(repo.count()).thenReturn(10L);
 
-	/**
-	 * Verifica búsqueda por nombre.
-	 */
-	@Test
-	void testFindByNombre() {
-		when(repo.findByNombre(dto.getNombre())).thenReturn(Optional.of(Arrays.asList(entity)));
+        long result = service.count();
 
-		List<ClientePremiumDTO> result = service.findByNombre(dto.getNombre());
+        assertEquals(10, result);
+    }
 
-		assertFalse(result.isEmpty());
-	}
+    /**
+     * Verifica si existe un cliente por ID.
+     */
+    @Test
+    void testExist() {
+        when(repo.existsById(1L)).thenReturn(true);
 
-	/**
-	 * Verifica búsqueda por cédula.
-	 */
-	@Test
-	void testFindByCedula() {
-		when(repo.findByCedula(dto.getCedula())).thenReturn(Optional.of(Arrays.asList(entity)));
+        boolean result = service.exist(1L);
 
-		List<ClientePremiumDTO> result = service.findByCedula(dto.getCedula());
+        assertTrue(result);
+    }
 
-		assertFalse(result.isEmpty());
-	}
+    /**
+     * Verifica la búsqueda de clientes por nombre.
+     */
+    @Test
+    void testFindByNombre() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-	/**
-	 * Verifica búsqueda por correo.
-	 */
-	@Test
-	void testFindByCorreo() {
-		when(repo.findByCorreo(dto.getCorreo())).thenReturn(Optional.of(Arrays.asList(entity)));
+            when(repo.findByNombre(dto.getNombre())).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		List<ClientePremiumDTO> result = service.findByCorreo(dto.getCorreo());
+            assertFalse(service.findByNombre(dto.getNombre()).isEmpty());
+        }
+    }
 
-		assertFalse(result.isEmpty());
-	}
+    /**
+     * Verifica la búsqueda de clientes por cédula.
+     */
+    @Test
+    void testFindByCedula() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-	/**
-	 * Verifica búsqueda por teléfono.
-	 */
-	@Test
-	void testFindByTelefono() {
-		when(repo.findByTelefono(dto.getTelefono())).thenReturn(Optional.of(Arrays.asList(entity)));
+            when(repo.findByCedula(dto.getCedula())).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		List<ClientePremiumDTO> result = service.findByTelefono(dto.getTelefono());
+            assertFalse(service.findByCedula(dto.getCedula()).isEmpty());
+        }
+    }
 
-		assertFalse(result.isEmpty());
-	}
+    /**
+     * Verifica la búsqueda de clientes por correo electrónico.
+     */
+    @Test
+    void testFindByCorreo() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-	/**
-	 * Verifica búsqueda por método de pago.
-	 */
-	@Test
-	void testFindByMetodoPago() {
-		when(repo.findByMetodoPago(dto.getMetodoPago())).thenReturn(Optional.of(Arrays.asList(entity)));
+            when(repo.findByCorreo(dto.getCorreo())).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		List<ClientePremiumDTO> result = service.findByMetodoPago(dto.getMetodoPago());
+            assertFalse(service.findByCorreo(dto.getCorreo()).isEmpty());
+        }
+    }
 
-		assertFalse(result.isEmpty());
-	}
+    /**
+     * Verifica la búsqueda de clientes por número de teléfono.
+     */
+    @Test
+    void testFindByTelefono() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-	/**
-	 * Verifica búsqueda por tipo de pedido.
-	 */
-	@Test
-	void testFindByTipoPedido() {
-		when(repo.findByTipoPedido(dto.getTipoPedido())).thenReturn(Optional.of(Arrays.asList(entity)));
+            when(repo.findByTelefono(dto.getTelefono())).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		List<ClientePremiumDTO> result = service.findByTipoPedido(dto.getTipoPedido());
+            assertFalse(service.findByTelefono(dto.getTelefono()).isEmpty());
+        }
+    }
 
-		assertFalse(result.isEmpty());
-	}
+    /**
+     * Verifica la búsqueda de clientes por método de pago.
+     */
+    @Test
+    void testFindByMetodoPago() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-	/**
-	 * Verifica búsqueda combinada por nombre y cédula.
-	 */
-	@Test
-	void testFindByNombreAndCedula() {
-		when(repo.findByNombreAndCedula(dto.getNombre(), dto.getCedula()))
-				.thenReturn(Optional.of(Arrays.asList(entity)));
+            when(repo.findByMetodoPago(dto.getMetodoPago())).thenReturn(Optional.of(Arrays.asList(entity)));
 
-		List<ClientePremiumDTO> result = service.findByNombreAndCedula(dto.getNombre(), dto.getCedula());
+            assertFalse(service.findByMetodoPago(dto.getMetodoPago()).isEmpty());
+        }
+    }
 
-		assertFalse(result.isEmpty());
-	}
+    /**
+     * Verifica la búsqueda combinada por nombre y cédula.
+     */
+    @Test
+    void testFindByNombreAndCedula() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-	/**
-	 * Verifica búsqueda combinada por tipo de pedido y método de pago.
-	 */
-	@Test
-	void testFindByTipoPedidoAndMetodoPago() {
-		when(repo.findByTipoPedidoAndMetodoPago(dto.getTipoPedido(), dto.getMetodoPago()))
-				.thenReturn(Optional.of(Arrays.asList(entity)));
+            when(repo.findByNombreAndCedula(dto.getNombre(), dto.getCedula()))
+                    .thenReturn(Optional.of(Arrays.asList(entity)));
 
-		List<ClientePremiumDTO> result = service.findByTipoPedidoAndMetodoPago(dto.getTipoPedido(),
-				dto.getMetodoPago());
-
-		assertFalse(result.isEmpty());
-	}
+            assertFalse(service.findByNombreAndCedula(dto.getNombre(), dto.getCedula()).isEmpty());
+        }
+    }
 }

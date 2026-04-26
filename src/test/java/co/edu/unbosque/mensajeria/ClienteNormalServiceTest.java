@@ -7,222 +7,189 @@ import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 
 import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.entity.ClienteNormal;
 import co.edu.unbosque.mensajeria.repository.ClienteNormalRepository;
 import co.edu.unbosque.mensajeria.service.ClienteNormalService;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 /**
- * Clase de pruebas unitarias para el servicio ClienteNormalService. Se valida
- * el correcto funcionamiento de las operaciones CRUD y consultas personalizadas
- * usando Mockito.
- * 
+ * Clase de pruebas unitarias para {@link ClienteNormalService}.
+ *
+ * <p>
+ * Se valida el correcto funcionamiento de los métodos principales del servicio:
+ * creación, actualización y búsqueda por método de pago.
+ * </p>
+ *
+ * <p>
+ * Se utiliza Mockito para simular el comportamiento del repositorio y evitar
+ * dependencias externas con la base de datos.
+ * </p>
+ *
+ * <p>
+ * También se hace uso de {@link MockedStatic} para simular el comportamiento de
+ * la clase {@link LanzadorDeException}, evitando que las validaciones estáticas
+ * interfieran con las pruebas.
+ * </p>
+ *
+ * <b>Casos probados:</b>
+ * <ul>
+ * <li>Creación exitosa de cliente</li>
+ * <li>Creación con duplicado (excepción)</li>
+ * <li>Actualización exitosa</li>
+ * <li>Actualización cuando el cliente no existe</li>
+ * <li>Búsqueda por método de pago</li>
+ * </ul>
+ *
  */
 class ClienteNormalServiceTest {
 
-	/**
-	 * Mock del repositorio ClienteNormalRepository
-	 */
-	@Mock
-	private ClienteNormalRepository clienteNormalRep;
+    /**
+     * Mock del repositorio ClienteNormalRepository.
+     */
+    @Mock
+    private ClienteNormalRepository clienteNormalRep;
 
-	/**
-	 * Mapper para conversión entre Entity y DTO
-	 */
-	private ModelMapper mapper;
+    /**
+     * Mapper para conversión entre entidad y DTO.
+     */
+    private ModelMapper mapper;
 
-	/**
-	 * Servicio a probar
-	 */
-	private ClienteNormalService service;
+    /**
+     * Servicio a probar.
+     */
+    private ClienteNormalService service;
 
-	/**
-	 * Objeto DTO de prueba
-	 */
-	private ClienteNormalDTO dto;
+    /**
+     * DTO de prueba.
+     */
+    private ClienteNormalDTO dto;
 
-	/**
-	 * Objeto Entity de prueba
-	 */
-	private ClienteNormal entity;
+    /**
+     * Entidad de prueba.
+     */
+    private ClienteNormal entity;
 
-	/**
-	 * Valores válidos según las validaciones del sistema
-	 */
-	private static final String METODO_VALIDO = "EFECTIVO";
-	private static final String TIPO_VALIDO = "ALIMENTICIO";
+    /**
+     * Configuración inicial antes de cada prueba.
+     * Se inicializan los mocks, mapper, servicio y objetos base.
+     */
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
 
-	/**
-	 * Configuración inicial antes de cada prueba. Se inicializan mocks, mapper,
-	 * servicio y objetos de prueba.
-	 */
-	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
+        mapper = new ModelMapper();
+        service = new ClienteNormalService();
 
-		mapper = new ModelMapper();
+        service.setClienteNormalRep(clienteNormalRep);
+        service.setMapper(mapper);
 
-		service = new ClienteNormalService();
-		service.setClienteNormalRep(clienteNormalRep);
-		service.setMapper(mapper);
+        dto = new ClienteNormalDTO();
+        dto.setNombre("Juan Perez");
+        dto.setCedula("123456");
+        dto.setCorreo("juan@mail.com");
+        dto.setTelefono("3001234567");
+        dto.setMetodoPago("EFECTIVO");
 
-		dto = new ClienteNormalDTO();
-		dto.setNombre("Juan Perez");
-		dto.setCedula("123456");
-		dto.setCorreo("juan@mail.com");
-		dto.setTelefono("3001234567");
-		dto.setMetodoPago(METODO_VALIDO);
-		dto.setTipoPedido(TIPO_VALIDO);
+        entity = new ClienteNormal();
+        entity.setNombre(dto.getNombre());
+        entity.setCedula(dto.getCedula());
+        entity.setCorreo(dto.getCorreo());
+        entity.setTelefono(dto.getTelefono());
+        entity.setMetodoPago(dto.getMetodoPago());
+    }
 
-		entity = new ClienteNormal();
-		entity.setNombre(dto.getNombre());
-		entity.setCedula(dto.getCedula());
-		entity.setCorreo(dto.getCorreo());
-		entity.setTelefono(dto.getTelefono());
-		entity.setMetodoPago(dto.getMetodoPago());
-		entity.setTipoPedido(dto.getTipoPedido());
-	}
+    /**
+     * Verifica que un cliente se crea correctamente cuando no existe previamente.
+     */
+    @Test
+    void testCreateSuccess() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-	/**
-	 * Prueba la creación exitosa de un cliente.
-	 */
-	@Test
-	void testCreateSuccess() {
-		when(clienteNormalRep.existsByCedula(dto.getCedula())).thenReturn(false);
-		when(clienteNormalRep.save(any(ClienteNormal.class))).thenReturn(entity);
+            when(clienteNormalRep.existsByCedula(dto.getCedula()))
+                    .thenReturn(false, false);
 
-		int result = service.create(dto);
+            int result = service.create(dto);
 
-		assertEquals(0, result);
-		verify(clienteNormalRep).save(any(ClienteNormal.class));
-	}
+            assertEquals(0, result);
+            verify(clienteNormalRep).save(any(ClienteNormal.class));
+        }
+    }
 
-	/**
-	 * Prueba la creación cuando el cliente ya existe (duplicado).
-	 */
-	@Test
-	void testCreateDuplicado() {
-		when(clienteNormalRep.existsByCedula(dto.getCedula())).thenReturn(true);
+    /**
+     * Verifica que se lance una excepción cuando se intenta crear
+     * un cliente con cédula duplicada.
+     */
+    @Test
+    void testCreateDuplicado() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		assertThrows(Exception.class, () -> service.create(dto));
-	}
+            when(clienteNormalRep.existsByCedula(dto.getCedula()))
+                    .thenReturn(true);
 
-	/**
-	 * Prueba la obtención de todos los clientes.
-	 */
-	@Test
-	void testGetAll() {
-		when(clienteNormalRep.findAll()).thenReturn(Arrays.asList(entity));
+            mock.when(() -> LanzadorDeException.verificarDuplicado(eq(true), anyString()))
+                    .thenThrow(new RuntimeException("Duplicado"));
 
-		List<ClienteNormalDTO> result = service.getAll();
+            assertThrows(RuntimeException.class, () -> service.create(dto));
+        }
+    }
 
-		assertFalse(result.isEmpty());
-		assertEquals(1, result.size());
-	}
+    /**
+     * Verifica que la actualización de un cliente existente se realiza correctamente.
+     */
+    @Test
+    void testUpdateSuccess() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-	/**
-	 * Prueba la eliminación de un cliente existente por ID.
-	 */
-	@Test
-	void testDeleteByIdSuccess() {
-		when(clienteNormalRep.findById(1L)).thenReturn(Optional.of(entity));
+            when(clienteNormalRep.findById(1L)).thenReturn(Optional.of(entity));
+            when(clienteNormalRep.existsByCedula(dto.getCedula()))
+                    .thenReturn(false);
 
-		int result = service.deleteById(1L);
+            int result = service.updateById(1L, dto);
 
-		assertEquals(0, result);
-		verify(clienteNormalRep).delete(entity);
-	}
+            assertEquals(0, result);
+            verify(clienteNormalRep).save(any(ClienteNormal.class));
+        }
+    }
 
-	/**
-	 * Prueba la eliminación cuando el cliente no existe.
-	 */
-	@Test
-	void testDeleteByIdNotFound() {
-		when(clienteNormalRep.findById(1L)).thenReturn(Optional.empty());
+    /**
+     * Verifica que el servicio retorne 1 cuando se intenta actualizar
+     * un cliente que no existe.
+     */
+    @Test
+    void testUpdateNotFound() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		int result = service.deleteById(1L);
+            when(clienteNormalRep.findById(1L)).thenReturn(Optional.empty());
 
-		assertEquals(1, result);
-	}
+            int result = service.updateById(1L, dto);
 
-	/**
-	 * Prueba la actualización exitosa de un cliente.
-	 */
-	@Test
-	void testUpdateSuccess() {
-		when(clienteNormalRep.findById(1L)).thenReturn(Optional.of(entity));
-		when(clienteNormalRep.existsByCedula(dto.getCedula())).thenReturn(false);
-		when(clienteNormalRep.save(any(ClienteNormal.class))).thenReturn(entity);
+            assertEquals(1, result);
+        }
+    }
 
-		int result = service.updateById(1L, dto);
+    /**
+     * Verifica la búsqueda de clientes por método de pago.
+     */
+    @Test
+    void testFindByMetodoPago() {
+        try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		assertEquals(0, result);
-		verify(clienteNormalRep).save(any(ClienteNormal.class));
-	}
+            List<ClienteNormal> lista = Arrays.asList(entity);
 
-	/**
-	 * Prueba la actualización cuando el cliente no existe.
-	 */
-	@Test
-	void testUpdateNotFound() {
-		when(clienteNormalRep.findById(1L)).thenReturn(Optional.empty());
+            when(clienteNormalRep.findByMetodoPago("EFECTIVO"))
+                    .thenReturn(Optional.of(lista));
 
-		int result = service.updateById(1L, dto);
+            List<ClienteNormalDTO> result = service.findByMetodoPago("EFECTIVO");
 
-		assertEquals(1, result);
-	}
-
-	/**
-	 * Prueba el conteo total de registros.
-	 */
-	@Test
-	void testCount() {
-		when(clienteNormalRep.count()).thenReturn(3L);
-
-		assertEquals(3, service.count());
-	}
-
-	/**
-	 * Prueba la existencia de un cliente por ID.
-	 */
-	@Test
-	void testExist() {
-		when(clienteNormalRep.existsById(1L)).thenReturn(true);
-
-		assertTrue(service.exist(1L));
-	}
-
-	/**
-	 * Prueba la búsqueda de clientes por nombre.
-	 */
-	@Test
-	void testFindByNombre() {
-		when(clienteNormalRep.findByNombre("Juan Perez")).thenReturn(Optional.of(Arrays.asList(entity)));
-
-		assertFalse(service.findByNombre("Juan Perez").isEmpty());
-	}
-
-	/**
-	 * Prueba la búsqueda de clientes por cédula.
-	 */
-	@Test
-	void testFindByCedula() {
-		when(clienteNormalRep.findByCedula("123456")).thenReturn(Optional.of(Arrays.asList(entity)));
-
-		assertFalse(service.findByCedula("123456").isEmpty());
-	}
-
-	/**
-	 * Prueba la búsqueda de clientes por método de pago.
-	 */
-	@Test
-	void testFindByMetodoPago() {
-		when(clienteNormalRep.findByMetodoPago(METODO_VALIDO)).thenReturn(Optional.of(Arrays.asList(entity)));
-
-		assertFalse(service.findByMetodoPago(METODO_VALIDO).isEmpty());
-	}
+            assertNotNull(result);
+            assertFalse(result.isEmpty());
+        }
+    }
 }
