@@ -153,7 +153,7 @@ public class LanzadorDeException {
 			throw new TamanioInvalidoException("El tamaño del paquete no puede estar vacío");
 		}
 		tamano = tamano.toUpperCase().trim();
-		if (!tamano.matches("PEQUENO|MEDIANO|GRANDE")) {
+		if (!tamano.matches("PEQUEÑO|MEDIANO|GRANDE")) {
 			throw new TamanioInvalidoException("Tamaño de paquete no válido");
 		}
 	}
