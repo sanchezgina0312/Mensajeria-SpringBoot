@@ -64,19 +64,21 @@ public class ClienteConcurrenteController {
 	 * @return El objeto ClienteNormalDTO si es válido, o un error de autorización.
 	 */
 	@PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String cedula, @RequestParam String contrasenia) {
-        List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByCedula(cedula);
-        
-        if (lista.isEmpty()) {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
-        }
-        ClienteConcurrenteDTO clienteConcurrente = lista.get(0);
-        if (clienteConcurrente.getContrasenia().equals(contrasenia)) {
-            return new ResponseEntity<>("Bienvenido " + clienteConcurrente.getNombre(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
-        }
-    }
+	public ResponseEntity<?> login(@RequestParam String cedula, @RequestParam String contrasenia) {
+	    List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByCedula(cedula);
+	    
+	    if (lista.isEmpty()) {
+	        return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+	    }
+
+	    ClienteConcurrenteDTO cliente = lista.get(0); 
+
+	    if (cliente.getContrasenia().equals(contrasenia)) {
+	        return new ResponseEntity<>(cliente, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
+	    }
+	}
 	
 	/**
 	 * Crea un nuevo cliente concurrente en el sistema.

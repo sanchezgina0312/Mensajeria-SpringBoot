@@ -62,19 +62,20 @@ public class ClientePremiumController {
 	 * @return El objeto ClienteNormalDTO si es válido, o un error de autorización.
 	 */
 	@PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String cedula, @RequestParam String contrasenia) {
-        List<ClientePremiumDTO> lista = clientePremiumService.findByCedula(cedula);
-        
-        if (lista.isEmpty()) {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
-        }
-        ClientePremiumDTO clientePremium= lista.get(0);
-        if (clientePremium.getContrasenia().equals(contrasenia)) {
-            return new ResponseEntity<>("Bienvenido " + clientePremium.getNombre(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
-        }
-    }
+	public ResponseEntity<?> login(@RequestParam String cedula, @RequestParam String contrasenia) {
+	    List<ClientePremiumDTO> lista = clientePremiumService.findByCedula(cedula);
+	    
+	    if (lista.isEmpty()) {
+	        return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+	    }
+	    ClientePremiumDTO cliente = lista.get(0); 
+
+	    if (cliente.getContrasenia().equals(contrasenia)) {
+	        return new ResponseEntity<>(cliente, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
+	    }
+	}
 
 	/**
 	 * Crea un nuevo cliente premium en el sistema.

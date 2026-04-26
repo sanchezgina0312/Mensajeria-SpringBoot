@@ -56,19 +56,21 @@ public class ClienteNormalController {
 	 */
 
 	@PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String cedula, @RequestParam String contrasenia) {
-        List<ClienteNormalDTO> lista = clienteNormalService.findByCedula(cedula);
-        
-        if (lista.isEmpty()) {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
-        }
-        ClienteNormalDTO clienteNormal= lista.get(0);
-        if (clienteNormal.getContrasenia().equals(contrasenia)) {
-            return new ResponseEntity<>("Bienvenido " + clienteNormal.getNombre(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
-        }
-    }
+	public ResponseEntity<?> login(@RequestParam String cedula, @RequestParam String contrasenia) {
+	    List<ClienteNormalDTO> lista = clienteNormalService.findByCedula(cedula);
+	    
+	    if (lista.isEmpty()) {
+	        return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+	    }
+
+	    ClienteNormalDTO cliente = lista.get(0); 
+
+	    if (cliente.getContrasenia().equals(contrasenia)) {
+	        return new ResponseEntity<>(cliente, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
+	    }
+	}
 
 	/**
 	 * Crea un nuevo cliente normal en el sistema.
