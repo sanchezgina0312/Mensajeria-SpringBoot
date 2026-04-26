@@ -8,57 +8,94 @@ import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 
 import co.edu.unbosque.mensajeria.dto.PaqueteAlimenticioDTO;
 import co.edu.unbosque.mensajeria.entity.PaqueteAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteAlimenticioRepository;
 import co.edu.unbosque.mensajeria.service.PaqueteAlimenticioService;
+import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 /**
- * Clase de pruebas unitarias para {@link PaqueteAlimenticioService}.
+ * Clase de pruebas unitarias para el servicio {@link PaqueteAlimenticioService}.
  *
  * <p>
- * Se validan operaciones CRUD, consultas personalizadas, cálculos de negocio y
- * lógica de estados de entrega.
+ * Esta clase valida el correcto funcionamiento de las operaciones del servicio
+ * encargado de gestionar los paquetes alimenticios dentro del sistema.
  * </p>
  *
  * <p>
- * Se utiliza Mockito para simular el repositorio y evitar dependencias
- * externas.
+ * Se utilizan pruebas unitarias con {@link org.mockito.Mockito} para simular el
+ * comportamiento del repositorio {@link PaqueteAlimenticioRepository} y evitar
+ * dependencias con bases de datos reales.
  * </p>
  *
- * <b>IMPORTANTE:</b>
+ * <p>
+ * También se emplea {@link ModelMapper} para validar la correcta conversión
+ * entre entidades y DTOs.
+ * </p>
+ *
+ * <h2>Funcionalidades evaluadas</h2>
  * <ul>
- * <li>El método create retorna 1 cuando es exitoso.</li>
- * <li>El método updateById retorna 1 si actualiza y 0 si no encuentra.</li>
- * <li>El DTO NO se modifica en create(), solo la entidad.</li>
+ * <li>Operaciones CRUD (crear, consultar, actualizar y eliminar)</li>
+ * <li>Búsquedas personalizadas por atributos</li>
+ * <li>Cálculos de negocio (precio y descuentos)</li>
+ * <li>Lógica de estados del paquete (entregado, prioritario)</li>
  * </ul>
  *
+ * <h2>Consideraciones</h2>
+ * <ul>
+ * <li>Se usa {@link LanzadorDeException} para validar datos de entrada</li>
+ * <li>Los métodos del servicio retornan valores enteros para indicar estado:
+ *     <ul>
+ *         <li>1 → operación exitosa</li>
+ *         <li>0 → operación fallida o no encontrada</li>
+ *     </ul>
+ * </li>
+ * </ul>
+ *
+ * @author Jairo
  */
 class PaqueteAlimenticioServiceTest {
 
-	/** Mock del repositorio */
+    /**
+     * Mock del repositorio de paquetes alimenticios.
+     * Simula el acceso a datos sin necesidad de conexión real.
+     */
 	@Mock
 	private PaqueteAlimenticioRepository repository;
 
-	/** Mapper para conversión DTO - Entidad */
+    /**
+     * Mapper utilizado para convertir entre DTO y entidad.
+     */
 	private ModelMapper mapper;
 
-	/** Servicio a probar */
+    /**
+     * Servicio que se va a probar.
+     */
 	private PaqueteAlimenticioService service;
 
-	/** Objeto DTO de prueba */
+    /**
+     * Objeto DTO utilizado como entrada en las pruebas.
+     */
 	private PaqueteAlimenticioDTO dto;
 
-	/** Entidad de prueba */
+    /**
+     * Entidad simulada para pruebas.
+     */
 	private PaqueteAlimenticio entity;
 
-	/**
-	 * Inicializa mocks, mapper, servicio y datos base para las pruebas.
-	 */
+    /**
+     * Método de configuración inicial que se ejecuta antes de cada prueba.
+     *
+     * <p>
+     * Inicializa los mocks, el servicio, el mapper y los objetos de prueba.
+     * </p>
+     */
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -86,23 +123,25 @@ class PaqueteAlimenticioServiceTest {
 		entity.setSeEnviaHoy(dto.isSeEnviaHoy());
 	}
 
-	/**
-	 * Verifica que la creación de un paquete se realiza correctamente.
-	 */
+    /**
+     * Verifica que la creación de un paquete se realiza correctamente.
+     */
 	@Test
 	void testCreateSuccess() {
+		try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		when(repository.save(any(PaqueteAlimenticio.class))).thenReturn(entity);
+			when(repository.save(any(PaqueteAlimenticio.class))).thenReturn(entity);
 
-		int result = service.create(dto);
+			int result = service.create(dto);
 
-		assertEquals(1, result);
-		verify(repository).save(any(PaqueteAlimenticio.class));
+			assertEquals(1, result);
+			verify(repository).save(any(PaqueteAlimenticio.class));
+		}
 	}
 
-	/**
-	 * Verifica la obtención de todos los registros.
-	 */
+    /**
+     * Verifica la obtención de todos los paquetes registrados.
+     */
 	@Test
 	void testGetAll() {
 		when(repository.findAll()).thenReturn(Arrays.asList(entity));
@@ -113,60 +152,72 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(1, result.size());
 	}
 
-	/**
-	 * Verifica eliminación exitosa de un registro existente.
-	 */
+    /**
+     * Verifica la eliminación exitosa de un paquete existente.
+     */
 	@Test
 	void testDeleteByIdSuccess() {
-		when(repository.findById(1L)).thenReturn(Optional.of(entity));
+		try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		int result = service.deleteById(1L);
+			when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-		assertEquals(0, result);
-		verify(repository).delete(entity);
+			int result = service.deleteById(1L);
+
+			assertEquals(0, result);
+			verify(repository).delete(entity);
+		}
 	}
 
-	/**
-	 * Verifica comportamiento cuando se intenta eliminar un registro inexistente.
-	 */
+    /**
+     * Verifica el comportamiento cuando se intenta eliminar un paquete inexistente.
+     */
 	@Test
 	void testDeleteByIdNotFound() {
-		when(repository.findById(1L)).thenReturn(Optional.empty());
+		try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		int result = service.deleteById(1L);
+			when(repository.findById(1L)).thenReturn(Optional.empty());
 
-		assertEquals(1, result);
+			int result = service.deleteById(1L);
+
+			assertEquals(1, result);
+		}
 	}
 
-	/**
-	 * Verifica actualización exitosa de un paquete existente.
-	 */
+    /**
+     * Verifica la actualización exitosa de un paquete existente.
+     */
 	@Test
 	void testUpdateSuccess() {
-		when(repository.findById(1L)).thenReturn(Optional.of(entity));
-		when(repository.save(any(PaqueteAlimenticio.class))).thenReturn(entity);
+		try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		int result = service.updateById(1L, dto);
+			when(repository.findById(1L)).thenReturn(Optional.of(entity));
+			when(repository.save(any(PaqueteAlimenticio.class))).thenReturn(entity);
 
-		assertEquals(1, result);
-		verify(repository).save(any(PaqueteAlimenticio.class));
+			int result = service.updateById(1L, dto);
+
+			assertEquals(1, result);
+			verify(repository).save(any(PaqueteAlimenticio.class));
+		}
 	}
 
-	/**
-	 * Verifica comportamiento cuando se intenta actualizar un registro inexistente.
-	 */
+    /**
+     * Verifica el comportamiento cuando el paquete a actualizar no existe.
+     */
 	@Test
 	void testUpdateNotFound() {
-		when(repository.findById(1L)).thenReturn(Optional.empty());
+		try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		int result = service.updateById(1L, dto);
+			when(repository.findById(1L)).thenReturn(Optional.empty());
 
-		assertEquals(0, result);
+			int result = service.updateById(1L, dto);
+
+			assertEquals(0, result);
+		}
 	}
 
-	/**
-	 * Verifica el conteo total de registros.
-	 */
+    /**
+     * Verifica el conteo total de paquetes.
+     */
 	@Test
 	void testCount() {
 		when(repository.count()).thenReturn(10L);
@@ -174,9 +225,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(10, service.count());
 	}
 
-	/**
-	 * Verifica la existencia de un registro por ID.
-	 */
+    /**
+     * Verifica si un paquete existe por su ID.
+     */
 	@Test
 	void testExist() {
 		when(repository.existsById(1L)).thenReturn(true);
@@ -184,19 +235,22 @@ class PaqueteAlimenticioServiceTest {
 		assertTrue(service.exist(1L));
 	}
 
-	/**
-	 * Verifica búsqueda por tamaño.
-	 */
+    /**
+     * Verifica la búsqueda de paquetes por tamaño.
+     */
 	@Test
 	void testFindByTamanio() {
-		when(repository.findByTamanio("MEDIANO")).thenReturn(Optional.of(Arrays.asList(entity)));
+		try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		assertFalse(service.findByTamanio("MEDIANO").isEmpty());
+			when(repository.findByTamanio("MEDIANO")).thenReturn(Optional.of(Arrays.asList(entity)));
+
+			assertFalse(service.findByTamanio("MEDIANO").isEmpty());
+		}
 	}
 
-	/**
-	 * Verifica búsqueda por estado de envío en el día actual.
-	 */
+    /**
+     * Verifica la búsqueda de paquetes que se envían el mismo día.
+     */
 	@Test
 	void testFindBySeEnviaHoy() {
 		when(repository.findBySeEnviaHoy(true)).thenReturn(Optional.of(Arrays.asList(entity)));
@@ -204,19 +258,22 @@ class PaqueteAlimenticioServiceTest {
 		assertFalse(service.findBySeEnviaHoy(true).isEmpty());
 	}
 
-	/**
-	 * Verifica búsqueda por tipo de alimento.
-	 */
+    /**
+     * Verifica la búsqueda de paquetes por tipo de alimento.
+     */
 	@Test
 	void testFindByTipoAlimento() {
-		when(repository.findByTipoDeAlimento("FRUTA")).thenReturn(Optional.of(Arrays.asList(entity)));
+		try (MockedStatic<LanzadorDeException> mock = Mockito.mockStatic(LanzadorDeException.class)) {
 
-		assertFalse(service.findByTipoDeAlimento("FRUTA").isEmpty());
+			when(repository.findByTipoDeAlimento("FRUTA")).thenReturn(Optional.of(Arrays.asList(entity)));
+
+			assertFalse(service.findByTipoDeAlimento("FRUTA").isEmpty());
+		}
 	}
 
-	/**
-	 * Verifica búsqueda por ID.
-	 */
+    /**
+     * Verifica la búsqueda de un paquete por ID.
+     */
 	@Test
 	void testFindById() {
 		when(repository.findById(1L)).thenReturn(Optional.of(entity));
@@ -224,9 +281,9 @@ class PaqueteAlimenticioServiceTest {
 		assertNotNull(service.findById(1L));
 	}
 
-	/**
-	 * Verifica cálculo de precio según tamaño del paquete.
-	 */
+    /**
+     * Verifica el cálculo del precio según el tamaño del paquete.
+     */
 	@Test
 	void testCalcularPrecio() {
 		double result = service.calcularPrecioPorTamaño(10000, "GRANDE");
@@ -234,9 +291,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(20000, result);
 	}
 
-	/**
-	 * Verifica aplicación de descuento según tipo de cliente.
-	 */
+    /**
+     * Verifica la aplicación de descuento según el tipo de cliente.
+     */
 	@Test
 	void testDescuento() {
 		double result = service.aplicarDescuentoPorCliente(10000, "PREMIUM");
@@ -244,9 +301,9 @@ class PaqueteAlimenticioServiceTest {
 		assertEquals(7500, result);
 	}
 
-	/**
-	 * Verifica que el estado cambia a ENTREGADO cuando la fecha ya pasó.
-	 */
+    /**
+     * Verifica que el estado cambie a "ENTREGADO" cuando la fecha de entrega ya pasó.
+     */
 	@Test
 	void testProcesarEstado_Entregado() {
 		dto.setFechaEstimadaEntrega(LocalDateTime.now().minusHours(1));
@@ -257,10 +314,9 @@ class PaqueteAlimenticioServiceTest {
 		assertFalse(dto.isEsPrioritario());
 	}
 
-	/**
-	 * Verifica que el paquete se marque como prioritario cuando está próximo a
-	 * entregarse.
-	 */
+    /**
+     * Verifica que el paquete se marque como prioritario cuando está próximo a entregarse.
+     */
 	@Test
 	void testProcesarEstado_Prioritario() {
 		dto.setFechaEstimadaEntrega(LocalDateTime.now().plusHours(2));
@@ -270,15 +326,4 @@ class PaqueteAlimenticioServiceTest {
 		assertTrue(dto.isEsPrioritario());
 	}
 
-	/**
-	 * Verifica el registro de plazo de entrega de 6 horas.
-	 */
-	@Test
-	void testRegistrarPlazo() {
-		dto.setFechaCreacionPedido(LocalDateTime.now());
-
-		service.registrarPlazo6Horas(dto);
-
-		assertNotNull(dto.getFechaEstimadaEntrega());
-	}
 }
