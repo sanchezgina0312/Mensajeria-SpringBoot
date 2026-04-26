@@ -47,6 +47,27 @@ public class ClienteNormalController {
 	}
 
 	/**
+	 * MÉTODO AGREGADO: Valida las credenciales del cliente para iniciar sesión.
+	 *
+	 * @param cedula      Cédula del cliente.
+	 * @param contrasenia Contraseña del cliente.
+	 * @return El objeto ClienteNormalDTO si es válido, o un error de autorización.
+	 */
+	@GetMapping("/login")
+	public ResponseEntity<?> login(@RequestParam String cedula, @RequestParam String contrasenia) {
+		try {
+			ClienteNormalDTO cliente = clienteNormalService.validarLogin(cedula, contrasenia);
+			if (cliente != null) {
+				return new ResponseEntity<>(cliente, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("Cédula o contraseña incorrectas", HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error al procesar el ingreso", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/**
 	 * Crea un nuevo cliente normal en el sistema.
 	 *
 	 * @param nombre      Nombre completo del cliente.

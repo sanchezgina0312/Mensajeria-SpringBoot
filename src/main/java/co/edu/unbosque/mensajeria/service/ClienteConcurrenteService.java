@@ -55,7 +55,6 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
         LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
         LanzadorDeException.verificarTelefono(data.getTelefono());
         LanzadorDeException.verificarContrasena(data.getContrasenia());
-
         LanzadorDeException.verificarDuplicado(clienteConcurrenteRep.existsByCedula(data.getCedula()),
                 "La cédula " + data.getCedula() + " ya se encuentra registrada para un cliente concurrente.");
         
