@@ -41,7 +41,8 @@ public class PaqueteCartaController {
 			@RequestParam String direccionDestino, 
 			@RequestParam String tamanio,
 			@RequestParam String ciudadDestino, 
-			@RequestParam String tipoCarta) {
+			@RequestParam String tipoCarta,
+			@RequestParam boolean esPrioritario) {
 
 		try {
 			PaqueteCartaDTO dto = new PaqueteCartaDTO();
@@ -50,6 +51,7 @@ public class PaqueteCartaController {
 			dto.setTamanio(tamanio);
 			dto.setCiudadDestino(ciudadDestino);
 			dto.setTipoCarta(tipoCarta);
+			dto.setEsPrioritario(esPrioritario);
 
 			int resultado = paqueteCartaSer.create(dto);
 

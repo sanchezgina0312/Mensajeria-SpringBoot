@@ -56,7 +56,8 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		entity.setFechaCreacionPedido(LocalDateTime.now());
 		entity.setFechaEstimadaEntrega(LocalDateTime.now().plusDays(2));
 		entity.setEstadoPedido("EN_PROCESO");
-
+		entity.setEsPrioritario(data.isEsPrioritario());
+		
 		double precioBase = 5000;
 		double precioFinal = calcularPrecioPorTamaño(precioBase, data.getTamanio());
 		entity.setPrecioFinal(precioFinal);
