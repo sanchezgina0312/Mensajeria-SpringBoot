@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.edu.unbosque.mensajeria.dto.AdministradorDTO;
 import co.edu.unbosque.mensajeria.dto.ClienteConcurrenteDTO;
+import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.ContraseniaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.CorreoInvalidoException;
@@ -53,6 +55,29 @@ public class ClienteConcurrenteController {
 	public ClienteConcurrenteController() {
 	}
 
+	
+	/**
+	 * MÉTODO AGREGADO: Valida las credenciales del cliente para iniciar sesión.
+	 *
+	 * @param cedula      Cédula del cliente.
+	 * @param contrasenia Contraseña del cliente.
+	 * @return El objeto ClienteNormalDTO si es válido, o un error de autorización.
+	 */
+	@PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String cedula, @RequestParam String contrasenia) {
+        List<ClienteConcurrenteDTO> lista = clienteConcurrenteService.findByCedula(cedula);
+        
+        if (lista.isEmpty()) {
+            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+        }
+        ClienteConcurrenteDTO clienteConcurrente = lista.get(0);
+        if (clienteConcurrente.getContrasenia().equals(contrasenia)) {
+            return new ResponseEntity<>("Bienvenido " + clienteConcurrente.getNombre(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
+        }
+    }
+	
 	/**
 	 * Crea un nuevo cliente concurrente en el sistema.
 	 *

@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.edu.unbosque.mensajeria.dto.ClienteConcurrenteDTO;
+import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.entity.ClienteConcurrente;
+import co.edu.unbosque.mensajeria.entity.ClienteNormal;
 import co.edu.unbosque.mensajeria.repository.ClienteConcurrenteRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
@@ -41,6 +43,27 @@ public class ClienteConcurrenteService implements CRUDOperation<ClienteConcurren
      */
     public ClienteConcurrenteService() {
     }
+    
+    /**
+	 * MÉTODO AGREGADO: Valida las credenciales para el inicio de sesión.
+	 * * @param cedula Cédula ingresada.
+	 * @param contrasenia Contraseña ingresada.
+	 * @return ClienteNormalDTO si es válido, null en caso contrario.
+	 */
+	public ClienteConcurrenteDTO validarLogin(String cedula, String contrasenia) {
+
+		Optional<List<ClienteConcurrente>> encontrados = clienteConcurrenteRep.findByCedula(cedula);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			ClienteConcurrente cliente = encontrados.get().get(0); 
+			
+		
+			if (cliente.getContrasenia().equals(contrasenia)) {
+				return mapper.map(cliente, ClienteConcurrenteDTO.class);
+			}
+		}
+		return null; 
+	}
 
     /**
      * Crea un nuevo cliente concurrente.
