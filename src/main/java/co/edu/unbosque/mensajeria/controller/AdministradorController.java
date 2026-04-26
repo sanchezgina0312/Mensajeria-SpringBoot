@@ -373,4 +373,19 @@ public class AdministradorController {
             return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);
         }
     }
+    
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String usuario, @RequestParam String contrasenia) {
+        List<AdministradorDTO> lista = administradorSer.findByUsuario(usuario);
+        
+        if (lista.isEmpty()) {
+            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+        }
+        AdministradorDTO admin = lista.get(0);
+        if (admin.getContrasenia().equals(contrasenia)) {
+            return new ResponseEntity<>("Bienvenido " + admin.getNombre(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
