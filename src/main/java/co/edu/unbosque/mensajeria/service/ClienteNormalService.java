@@ -50,7 +50,6 @@ public class ClienteNormalService implements CRUDOperation<ClienteNormalDTO> {
 		LanzadorDeException.verificarNombre(data.getNombre());
 		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
 		LanzadorDeException.verificarTelefono(data.getTelefono());
-		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
 		LanzadorDeException.verificarContrasena(data.getContrasenia());
 
 		LanzadorDeException.verificarDuplicado(clienteNormalRep.existsByCedula(data.getCedula()),
