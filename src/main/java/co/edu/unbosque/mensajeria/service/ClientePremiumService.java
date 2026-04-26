@@ -8,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.dto.ClientePremiumDTO;
+import co.edu.unbosque.mensajeria.entity.ClienteNormal;
 import co.edu.unbosque.mensajeria.entity.ClientePremium;
 import co.edu.unbosque.mensajeria.repository.ClientePremiumRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
@@ -252,5 +254,26 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 	 */
 	public void setMapper(ModelMapper mapper) {
 		this.mapper = mapper;
+	}
+	
+	/**
+	 * MÉTODO AGREGADO: Valida las credenciales para el inicio de sesión.
+	 * * @param cedula Cédula ingresada.
+	 * @param contrasenia Contraseña ingresada.
+	 * @return ClienteNormalDTO si es válido, null en caso contrario.
+	 */
+	public ClientePremiumDTO validarLogin(String cedula, String contrasenia) {
+	
+		Optional<List<ClientePremium>> encontrados = clientePremiumRep.findByCedula(cedula);
+
+		if (encontrados.isPresent() && !encontrados.get().isEmpty()) {
+			ClientePremium cliente = encontrados.get().get(0);
+			
+			// Verificamos si la contraseña coincide
+			if (cliente.getContrasenia().equals(contrasenia)) {
+				return mapper.map(cliente, ClientePremiumDTO.class);
+			}
+		}
+		return null;
 	}
 }

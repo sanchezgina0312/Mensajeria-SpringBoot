@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.edu.unbosque.mensajeria.dto.ClienteConcurrenteDTO;
 import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.ContraseniaInvalidaException;
@@ -53,19 +54,21 @@ public class ClienteNormalController {
 	 * @param contrasenia Contraseña del cliente.
 	 * @return El objeto ClienteNormalDTO si es válido, o un error de autorización.
 	 */
-	@GetMapping("/login")
-	public ResponseEntity<?> login(@RequestParam String cedula, @RequestParam String contrasenia) {
-		try {
-			ClienteNormalDTO cliente = clienteNormalService.validarLogin(cedula, contrasenia);
-			if (cliente != null) {
-				return new ResponseEntity<>(cliente, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>("Cédula o contraseña incorrectas", HttpStatus.UNAUTHORIZED);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<>("Error al procesar el ingreso", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+
+	@PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String cedula, @RequestParam String contrasenia) {
+        List<ClienteNormalDTO> lista = clienteNormalService.findByCedula(cedula);
+        
+        if (lista.isEmpty()) {
+            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+        }
+        ClienteNormalDTO clienteNormal= lista.get(0);
+        if (clienteNormal.getContrasenia().equals(contrasenia)) {
+            return new ResponseEntity<>("Bienvenido " + clienteNormal.getNombre(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
+        }
+    }
 
 	/**
 	 * Crea un nuevo cliente normal en el sistema.

@@ -379,7 +379,7 @@ public class AdministradorController {
         List<AdministradorDTO> lista = administradorSer.findByUsuario(usuario);
         
         if (lista.isEmpty()) {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Administrador no encontrado", HttpStatus.NOT_FOUND);
         }
         AdministradorDTO admin = lista.get(0);
         if (admin.getContrasenia().equals(contrasenia)) {

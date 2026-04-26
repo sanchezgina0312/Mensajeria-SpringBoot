@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.dto.ClientePremiumDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.ContraseniaInvalidaException;
@@ -52,6 +53,28 @@ public class ClientePremiumController {
 	 */
 	public ClientePremiumController() {
 	}
+	
+	/**
+	 * MÉTODO AGREGADO: Valida las credenciales del cliente para iniciar sesión.
+	 *
+	 * @param cedula      Cédula del cliente.
+	 * @param contrasenia Contraseña del cliente.
+	 * @return El objeto ClienteNormalDTO si es válido, o un error de autorización.
+	 */
+	@PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String cedula, @RequestParam String contrasenia) {
+        List<ClientePremiumDTO> lista = clientePremiumService.findByCedula(cedula);
+        
+        if (lista.isEmpty()) {
+            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+        }
+        ClientePremiumDTO clientePremium= lista.get(0);
+        if (clientePremium.getContrasenia().equals(contrasenia)) {
+            return new ResponseEntity<>("Bienvenido " + clientePremium.getNombre(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
+        }
+    }
 
 	/**
 	 * Crea un nuevo cliente premium en el sistema.
