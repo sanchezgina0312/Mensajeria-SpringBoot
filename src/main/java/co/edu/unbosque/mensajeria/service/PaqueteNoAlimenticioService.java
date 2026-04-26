@@ -55,6 +55,7 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
 		PaqueteNoAlimenticio entity = mapper.map(data, PaqueteNoAlimenticio.class);
+		entity.setIdCliente(data.getIdCliente());
 		entity.setFechaCreacionPedido(LocalDateTime.now());
 		entity.setFechaEstimadaEntrega(LocalDateTime.now().plusDays(3));
 		entity.setEstadoPedido("EN_PROCESO");
@@ -255,20 +256,21 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		return dtoList;
 	}
 	
-	public List<PaqueteNoAlimenticioDTO> findByIdCLiente(long idCliente) {
-		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByIdCliente(idCliente);
-		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
-		
-		if(encontrados.isPresent()) {
-			for(PaqueteNoAlimenticio p : encontrados.get()) {//no requiere lista aparte
-				PaqueteNoAlimenticioDTO dto = mapper.map(p, PaqueteNoAlimenticioDTO.class);
-				dtoList.add(dto);
-			}
-		}
-		
-        return dtoList;
-    }
-
+	public List<PaqueteNoAlimenticioDTO> findByIdCliente(long idCliente) {
+	    Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByIdCliente(idCliente);
+	    List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
+	    
+	    if(encontrados.isPresent()) {
+	        for(PaqueteNoAlimenticio p : encontrados.get()) {
+	            PaqueteNoAlimenticioDTO dto = mapper.map(p, PaqueteNoAlimenticioDTO.class);
+	         
+	            procesarEstadoYTiempoDTO(dto); 
+	            
+	            dtoList.add(dto);
+	        }
+	    }
+	    return dtoList;
+	}
 	/**
 	 * Calcula el precio basado en el tamaño del paquete no alimenticio.
 	 */

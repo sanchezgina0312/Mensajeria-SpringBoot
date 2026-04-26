@@ -52,6 +52,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
 		PaqueteAlimenticio entity = mapper.map(data, PaqueteAlimenticio.class);
+		entity.setIdCliente(data.getIdCliente());
 		entity.setFechaCreacionPedido(LocalDateTime.now());
 		entity.setFechaEstimadaEntrega(LocalDateTime.now().plusDays(1));
 		entity.setEstadoPedido("EN_PROCESO");
@@ -115,7 +116,7 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 			LanzadorDeException.verificarTipoAlimento(data.getTipoDeAlimento());
 
 			boolean valorPrevio = entity.isSeEnviaHoy();
-
+			entity.setIdCliente(data.getIdCliente());
 			entity.setDireccionDestino(data.getDireccionDestino());
 			entity.setCiudadDestino(data.getCiudadDestino());
 			entity.setTamanio(data.getTamanio());
@@ -267,20 +268,20 @@ public class PaqueteAlimenticioService implements CRUDOperation<PaqueteAlimentic
 		return dtoList;
 	}
 
-	public List<PaqueteAlimenticioDTO> findByIdCLiente(long idCliente) {
-		Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByIdCliente(idCliente);
-		List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
-		
-		if(encontrados.isPresent()) {
-			for(PaqueteAlimenticio p : encontrados.get()) {//no requiere lista aparte
-				PaqueteAlimenticioDTO dto = mapper.map(p, PaqueteAlimenticioDTO.class);
-				dtoList.add(dto);
-			}
-		}
-		
-        return dtoList;
-    }
-	
+	public List<PaqueteAlimenticioDTO> findByIdCliente(long idCliente) {
+	    Optional<List<PaqueteAlimenticio>> encontrados = paqueteAlimenticioRep.findByIdCliente(idCliente);
+	    List<PaqueteAlimenticioDTO> dtoList = new ArrayList<>();
+	    
+	    if(encontrados.isPresent()) {
+	        for(PaqueteAlimenticio p : encontrados.get()) {
+	            PaqueteAlimenticioDTO dto = mapper.map(p, PaqueteAlimenticioDTO.class);
+	         
+	            procesarEstadoYTiempoDTO(dto); 
+	            dtoList.add(dto);
+	        }
+	    }
+	    return dtoList;
+	}
 	/**
 	 * Calcula el precio basado en el tamaño del paquete.
 	 */

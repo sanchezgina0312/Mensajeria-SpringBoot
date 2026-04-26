@@ -83,10 +83,11 @@ public class PaqueteAlimenticioController {
 	// http://localhost:8080/paquetealimenticio/crear?remitente=Juan&destinatario=Ana&direccionDestino=Calle+10&ciudadDestino=Bogota&fechaEntrega=2024-05-20T14:30:00&tamanio=Grande&tipoAlimento=Perecedero
 	@PostMapping("/crear")
 	public ResponseEntity<String> crear(@RequestParam String direccionDestino, @RequestParam String tamanio,
-			@RequestParam String ciudadDestino, @RequestParam boolean seEnviaHoy, @RequestParam String tipoDeAlimento) {
+			@RequestParam long idCliente,@RequestParam String ciudadDestino, @RequestParam boolean seEnviaHoy, @RequestParam String tipoDeAlimento) {
 
 		try {
 			PaqueteAlimenticioDTO dto = new PaqueteAlimenticioDTO();
+			dto.setIdCliente(idCliente);
 			dto.setDireccionDestino(direccionDestino);
 			dto.setTamanio(tamanio);
 			dto.setCiudadDestino(ciudadDestino);
@@ -463,7 +464,7 @@ public class PaqueteAlimenticioController {
 	
 	@GetMapping("/historialporid")
     public ResponseEntity<List<PaqueteAlimenticioDTO>> verHistorial(@RequestParam long idCliente) {
-        List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByIdCLiente(idCliente);
+        List<PaqueteAlimenticioDTO> lista = paqueteAlimenticioSer.findByIdCliente(idCliente);
         
         if(lista.isEmpty()) {
         	return new ResponseEntity<>(lista, HttpStatus.NO_CONTENT);

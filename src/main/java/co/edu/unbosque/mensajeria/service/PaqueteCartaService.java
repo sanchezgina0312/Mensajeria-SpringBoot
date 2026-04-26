@@ -52,6 +52,7 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		LanzadorDeException.verificarCiudad(data.getCiudadDestino());
 
 		PaqueteCarta entity = mapper.map(data, PaqueteCarta.class);
+		entity.setIdCliente(data.getIdCliente());
 		entity.setFechaCreacionPedido(LocalDateTime.now());
 		entity.setFechaEstimadaEntrega(LocalDateTime.now().plusDays(2));
 		entity.setEstadoPedido("EN_PROCESO");
@@ -255,19 +256,20 @@ public class PaqueteCartaService implements CRUDOperation<PaqueteCartaDTO> {
 		return dtoList;
 	}
 	
-	public List<PaqueteCartaDTO> findByIdCLiente(long idCliente) {
-		Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByIdCliente(idCliente);
-		List<PaqueteCartaDTO> dtoList = new ArrayList<>();
-		
-		if(encontrados.isPresent()) {
-			for(PaqueteCarta p : encontrados.get()) {//no requiere lista aparte
-				PaqueteCartaDTO dto = mapper.map(p, PaqueteCartaDTO.class);
-				dtoList.add(dto);
-			}
-		}
-		
-        return dtoList;
-    }
+	public List<PaqueteCartaDTO> findByIdCliente(long idCliente) {
+	    Optional<List<PaqueteCarta>> encontrados = paqueteCartaRep.findByIdCliente(idCliente);
+	    List<PaqueteCartaDTO> dtoList = new ArrayList<>();
+	    
+	    if(encontrados.isPresent()) {
+	        for(PaqueteCarta p : encontrados.get()) {
+	            PaqueteCartaDTO dto = mapper.map(p, PaqueteCartaDTO.class);
+	            // LLAMADA AL MOTOR DE TIEMPO
+	            procesarEstadoYTiempoDTO(dto); 
+	            dtoList.add(dto);
+	        }
+	    }
+	    return dtoList;
+	}
 
 	/**
 	 * Calcula el precio basado en el tamaño del paquete de carta.
