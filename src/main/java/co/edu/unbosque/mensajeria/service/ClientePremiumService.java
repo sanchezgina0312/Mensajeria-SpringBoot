@@ -43,7 +43,6 @@ public class ClientePremiumService implements CRUDOperation<ClientePremiumDTO> {
 		LanzadorDeException.verificarNombre(data.getNombre());
 		LanzadorDeException.verificarCorreoElectronico(data.getCorreo());
 		LanzadorDeException.verificarTelefono(data.getTelefono());
-		LanzadorDeException.verificarMetodoPago(data.getMetodoPago());
 		LanzadorDeException.verificarContrasena(data.getContrasenia());
 
 		LanzadorDeException.verificarDuplicado(clientePremiumRep.existsByCedula(data.getCedula()),

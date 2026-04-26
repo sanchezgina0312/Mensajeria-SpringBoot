@@ -68,4 +68,5 @@ public interface AdministradorRepository extends CrudRepository<Administrador, L
 	 * @return true si la cédula ya existe, false en caso contrario.
 	 */
 	public boolean existsByCedula(String cedula);
+	
 }
