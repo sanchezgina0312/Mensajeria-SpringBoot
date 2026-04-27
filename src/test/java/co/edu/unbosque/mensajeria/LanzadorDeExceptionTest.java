@@ -105,7 +105,7 @@ class LanzadorDeExceptionTest {
 	 */
 	@Test
 	void metodoPagoValido() {
-		assertDoesNotThrow(() -> LanzadorDeException.verificarMetodoPago("EFECTIVO"));
+	    assertDoesNotThrow(() -> LanzadorDeException.verificarMetodoPago("PSE"));
 	}
 
 	/**
