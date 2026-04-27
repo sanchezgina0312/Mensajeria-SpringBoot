@@ -22,7 +22,7 @@ public class Administrador extends Trabajador {
 	private String usuario = "admin";
 	
 	/** Contraseña del administrador para el acceso al sistema. Inicializada por defecto en "1234". */
-	private String contrasenia = "1234";
+	private String contrasenia = "Administrador-1234*";
 
 	/**
 	 * Constructor vacío. <br>

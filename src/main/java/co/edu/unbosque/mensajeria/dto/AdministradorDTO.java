@@ -19,7 +19,7 @@ public class AdministradorDTO extends Trabajador {
 	private String usuario = "admin";
 	
 	/** Contraseña del administrador. Por defecto inicializada en "1234". */
-	private String contrasenia = "1234";
+	private String contrasenia = "Administrador-1234*";
 
 	/**
 	 * Constructor vacío. <br>
