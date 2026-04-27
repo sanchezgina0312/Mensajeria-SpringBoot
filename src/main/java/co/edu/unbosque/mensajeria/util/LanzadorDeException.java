@@ -126,9 +126,9 @@ public class LanzadorDeException {
 	}
 
 	/**
-	 * Valida que el método de pago sea uno de los predefinidos. 
-	 * @param metodoPago
-	 * método a validar.
+	 * Valida que el método de pago sea uno de los predefinidos.
+	 * 
+	 * @param metodoPago método a validar.
 	 */
 	public static void verificarMetodoPago(String metodoPago) {
 		if (metodoPago == null || metodoPago.isEmpty()) {
