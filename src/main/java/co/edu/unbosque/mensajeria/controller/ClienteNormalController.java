@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.edu.unbosque.mensajeria.dto.ClienteConcurrenteDTO;
 import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.ContraseniaInvalidaException;
@@ -57,19 +56,19 @@ public class ClienteNormalController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestParam String cedula, @RequestParam String contrasenia) {
-	    List<ClienteNormalDTO> lista = clienteNormalService.findByCedula(cedula);
-	    
-	    if (lista.isEmpty()) {
-	        return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
-	    }
+		List<ClienteNormalDTO> lista = clienteNormalService.findByCedula(cedula);
 
-	    ClienteNormalDTO cliente = lista.get(0); 
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+		}
 
-	    if (cliente.getContrasenia().equals(contrasenia)) {
-	        return new ResponseEntity<>(cliente, HttpStatus.OK);
-	    } else {
-	        return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
-	    }
+		ClienteNormalDTO cliente = lista.get(0);
+
+		if (cliente.getContrasenia().equals(contrasenia)) {
+			return new ResponseEntity<>(cliente, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 	/**

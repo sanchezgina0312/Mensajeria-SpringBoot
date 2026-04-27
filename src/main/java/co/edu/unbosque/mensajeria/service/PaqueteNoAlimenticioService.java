@@ -9,22 +9,19 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import co.edu.unbosque.mensajeria.dto.PaqueteAlimenticioDTO;
-import co.edu.unbosque.mensajeria.dto.PaqueteCartaDTO;
 import co.edu.unbosque.mensajeria.dto.PaqueteNoAlimenticioDTO;
-import co.edu.unbosque.mensajeria.entity.PaqueteAlimenticio;
-import co.edu.unbosque.mensajeria.entity.PaqueteCarta;
 import co.edu.unbosque.mensajeria.entity.PaqueteNoAlimenticio;
 import co.edu.unbosque.mensajeria.repository.PaqueteNoAlimenticioRepository;
 import co.edu.unbosque.mensajeria.util.LanzadorDeException;
 
 /**
- * Servicio encargado de gestionar las operaciones CRUD de los paquetes no alimenticios.
+ * Servicio encargado de gestionar las operaciones CRUD de los paquetes no
+ * alimenticios.
  * <p>
- * Permite crear, consultar, actualizar y eliminar paquetes no alimenticios, así como
- * realizar cálculos de precios por tamaño, gestionar la fragilidad del envío y 
- * procesar tiempos de entrega estimados.
- * Utiliza ModelMapper para la conversión entre entidades y DTOs.
+ * Permite crear, consultar, actualizar y eliminar paquetes no alimenticios, así
+ * como realizar cálculos de precios por tamaño, gestionar la fragilidad del
+ * envío y procesar tiempos de entrega estimados. Utiliza ModelMapper para la
+ * conversión entre entidades y DTOs.
  * </p>
  */
 @Service
@@ -44,8 +41,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	}
 
 	/**
-	 * Crea un nuevo paquete no alimenticio.
-	 * * @param data datos del paquete no alimenticio
+	 * Crea un nuevo paquete no alimenticio. * @param data datos del paquete no
+	 * alimenticio
+	 * 
 	 * @return 1 si se crea correctamente
 	 */
 	@Override
@@ -69,8 +67,8 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	}
 
 	/**
-	 * Obtiene todos los paquetes no alimenticios.
-	 * * @return lista de paquetes no alimenticios
+	 * Obtiene todos los paquetes no alimenticios. * @return lista de paquetes no
+	 * alimenticios
 	 */
 	@Override
 	public List<PaqueteNoAlimenticioDTO> getAll() {
@@ -93,8 +91,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	}
 
 	/**
-	 * Elimina un paquete no alimenticio por ID.
-	 * * @param id identificador del paquete
+	 * Elimina un paquete no alimenticio por ID. * @param id identificador del
+	 * paquete
+	 * 
 	 * @return 0 si se elimina, 1 si no existe
 	 */
 	@Override
@@ -110,8 +109,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	}
 
 	/**
-	 * Actualiza un paquete no alimenticio existente.
-	 * * @param id identificador del paquete
+	 * Actualiza un paquete no alimenticio existente. * @param id identificador del
+	 * paquete
+	 * 
 	 * @param data nuevos datos
 	 * @return 1 si se actualiza correctamente, 0 si no existe
 	 */
@@ -143,8 +143,7 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	}
 
 	/**
-	 * Cuenta los paquetes no alimenticios registrados.
-	 * * @return total de paquetes
+	 * Cuenta los paquetes no alimenticios registrados. * @return total de paquetes
 	 */
 	@Override
 	public long count() {
@@ -152,8 +151,9 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	}
 
 	/**
-	 * Verifica si existe un paquete no alimenticio por ID.
-	 * * @param id identificador
+	 * Verifica si existe un paquete no alimenticio por ID. * @param id
+	 * identificador
+	 * 
 	 * @return true si existe, false si no
 	 */
 	@Override
@@ -255,22 +255,23 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 		}
 		return dtoList;
 	}
-	
+
 	public List<PaqueteNoAlimenticioDTO> findByIdCliente(long idCliente) {
-	    Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByIdCliente(idCliente);
-	    List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
-	    
-	    if(encontrados.isPresent()) {
-	        for(PaqueteNoAlimenticio p : encontrados.get()) {
-	            PaqueteNoAlimenticioDTO dto = mapper.map(p, PaqueteNoAlimenticioDTO.class);
-	         
-	            procesarEstadoYTiempoDTO(dto); 
-	            
-	            dtoList.add(dto);
-	        }
-	    }
-	    return dtoList;
+		Optional<List<PaqueteNoAlimenticio>> encontrados = paqueteNoAlimenticioRep.findByIdCliente(idCliente);
+		List<PaqueteNoAlimenticioDTO> dtoList = new ArrayList<>();
+
+		if (encontrados.isPresent()) {
+			for (PaqueteNoAlimenticio p : encontrados.get()) {
+				PaqueteNoAlimenticioDTO dto = mapper.map(p, PaqueteNoAlimenticioDTO.class);
+
+				procesarEstadoYTiempoDTO(dto);
+
+				dtoList.add(dto);
+			}
+		}
+		return dtoList;
 	}
+
 	/**
 	 * Calcula el precio basado en el tamaño del paquete no alimenticio.
 	 */
@@ -294,7 +295,8 @@ public class PaqueteNoAlimenticioService implements CRUDOperation<PaqueteNoAlime
 	}
 
 	/**
-	 * Procesa el estado del pedido y verifica la prioridad según el tiempo restante.
+	 * Procesa el estado del pedido y verifica la prioridad según el tiempo
+	 * restante.
 	 */
 	public void procesarEstadoYTiempoDTO(PaqueteNoAlimenticioDTO dto) {
 		LocalDateTime ahora = LocalDateTime.now();
