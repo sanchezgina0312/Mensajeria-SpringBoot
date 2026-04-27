@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.edu.unbosque.mensajeria.dto.ClienteNormalDTO;
 import co.edu.unbosque.mensajeria.dto.ClientePremiumDTO;
 import co.edu.unbosque.mensajeria.exception.CedulaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.ContraseniaInvalidaException;
@@ -53,7 +52,7 @@ public class ClientePremiumController {
 	 */
 	public ClientePremiumController() {
 	}
-	
+
 	/**
 	 * MÉTODO AGREGADO: Valida las credenciales del cliente para iniciar sesión.
 	 *
@@ -63,18 +62,18 @@ public class ClientePremiumController {
 	 */
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestParam String cedula, @RequestParam String contrasenia) {
-	    List<ClientePremiumDTO> lista = clientePremiumService.findByCedula(cedula);
-	    
-	    if (lista.isEmpty()) {
-	        return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
-	    }
-	    ClientePremiumDTO cliente = lista.get(0); 
+		List<ClientePremiumDTO> lista = clientePremiumService.findByCedula(cedula);
 
-	    if (cliente.getContrasenia().equals(contrasenia)) {
-	        return new ResponseEntity<>(cliente, HttpStatus.OK);
-	    } else {
-	        return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
-	    }
+		if (lista.isEmpty()) {
+			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+		}
+		ClientePremiumDTO cliente = lista.get(0);
+
+		if (cliente.getContrasenia().equals(contrasenia)) {
+			return new ResponseEntity<>(cliente, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 	/**
