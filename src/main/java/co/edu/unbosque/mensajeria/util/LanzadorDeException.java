@@ -18,15 +18,16 @@ import co.edu.unbosque.mensajeria.exception.TelefonoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TipoDeAlimentoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TipoDeCartaInvalidaException;
 import co.edu.unbosque.mensajeria.exception.TipoManipuladorInvalidoException;
-import co.edu.unbosque.mensajeria.exception.TipoPedidoInvalidoException;
 import co.edu.unbosque.mensajeria.exception.TurnoInvalidoException;
 
 /**
- * Clase utilitaria que centraliza la validación de datos del dominio del sistema de mensajería.
+ * Clase utilitaria que centraliza la validación de datos del dominio del
+ * sistema de mensajería.
  * <p>
- * Cada método verifica las reglas de negocio correspondientes a un campo específico
- * y lanza una excepción personalizada en caso de que el valor no cumpla con los requisitos.
- * Todos los métodos son estáticos, por lo que no es necesario instanciar la clase.
+ * Cada método verifica las reglas de negocio correspondientes a un campo
+ * específico y lanza una excepción personalizada en caso de que el valor no
+ * cumpla con los requisitos. Todos los métodos son estáticos, por lo que no es
+ * necesario instanciar la clase.
  * </p>
  *
  * @author Angie Villarreal
@@ -37,8 +38,10 @@ public class LanzadorDeException {
 	/**
 	 * Verifica que el nombre proporcionado sea válido según las reglas del sistema.
 	 * * @param nombre el nombre completo a validar.
-	 * @throws NombreInvalidoException si el nombre contiene espacios dobles, caracteres no permitidos
-	 * o tiene menos de dos palabras.
+	 * 
+	 * @throws NombreInvalidoException si el nombre contiene espacios dobles,
+	 *                                 caracteres no permitidos o tiene menos de dos
+	 *                                 palabras.
 	 */
 	public static void verificarNombre(String nombre) {
 		if (nombre == null || nombre.trim().isEmpty()) {
@@ -59,8 +62,10 @@ public class LanzadorDeException {
 	/**
 	 * Verifica que el correo electrónico proporcionado tenga un formato válido.
 	 * * @param correo la dirección de correo electrónico a validar.
+	 * 
 	 * @return true si el correo tiene un formato válido.
-	 * @throws CorreoInvalidoException si el correo no cumple con el formato esperado.
+	 * @throws CorreoInvalidoException si el correo no cumple con el formato
+	 *                                 esperado.
 	 */
 	public static boolean verificarCorreoElectronico(String correo) {
 		Pattern pattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
@@ -75,8 +80,9 @@ public class LanzadorDeException {
 	}
 
 	/**
-	 * Verifica que la cédula cumpla con el formato numérico y longitud.
-	 * * @param cedula el número de cédula a validar.
+	 * Verifica que la cédula cumpla con el formato numérico y longitud. * @param
+	 * cedula el número de cédula a validar.
+	 * 
 	 * @throws CedulaInvalidaException si la cédula no es válida.
 	 */
 	public static void verificarCedula(String cedula) {
@@ -95,8 +101,9 @@ public class LanzadorDeException {
 	}
 
 	/**
-	 * Verifica que la dirección cumpla con el formato estándar colombiano.
-	 * * @param direccion la dirección a validar.
+	 * Verifica que la dirección cumpla con el formato estándar colombiano. * @param
+	 * direccion la dirección a validar.
+	 * 
 	 * @throws DireccionInvalidaException si el formato es incorrecto.
 	 */
 	public static void verificarDireccion(String direccion) {
@@ -109,7 +116,8 @@ public class LanzadorDeException {
 		if (!direccion.matches("^[A-Za-z0-9#\\-\\.\\s]+$")) {
 			throw new DireccionInvalidaException("La dirección contiene caracteres inválidos");
 		}
-		if (!direccion.matches("^(Calle|Carrera|Transversal|Diagonal|Avenida|Av|Cl|Cra|Tv|Dg)\\s+[0-9A-Za-z]+\\s+#\\s*[0-9A-Za-z]+-\\s*[0-9A-Za-z]+.*$")) {
+		if (!direccion.matches(
+				"^(Calle|Carrera|Transversal|Diagonal|Avenida|Av|Cl|Cra|Tv|Dg)\\s+[0-9A-Za-z]+\\s+#\\s*[0-9A-Za-z]+-\\s*[0-9A-Za-z]+.*$")) {
 			throw new DireccionInvalidaException("La dirección no cumple con un formato válido en Colombia");
 		}
 		if (direccion.length() < 5 || direccion.length() > 100) {
@@ -118,22 +126,23 @@ public class LanzadorDeException {
 	}
 
 	/**
-	 * Valida que el método de pago sea uno de los predefinidos.
-	 * * @param metodoPago método a validar.
+	 * Valida que el método de pago sea uno de los predefinidos. 
+	 * @param metodoPago
+	 * método a validar.
 	 */
 	public static void verificarMetodoPago(String metodoPago) {
 		if (metodoPago == null || metodoPago.isEmpty()) {
 			throw new MetodoDePagoInvalidoException("El método de pago no puede estar vacío");
 		}
 		metodoPago = metodoPago.toUpperCase().trim();
-		if (!metodoPago.matches("Tarjeta De Crédito|Tarjeta Debito|PSE")) {
+		if (!metodoPago.matches("TARJETA DE CRÉDITO|TARJETA DEBITO|PSE")) {
 			throw new MetodoDePagoInvalidoException("Método de pago no válido");
 		}
 	}
 
 	/**
-	 * Valida el formato de placa colombiana (tres letras y tres números).
-	 * * @param placa placa a validar.
+	 * Valida el formato de placa colombiana (tres letras y tres números). * @param
+	 * placa placa a validar.
 	 */
 	public static void verificarPlaca(String placa) {
 		if (placa == null || placa.isEmpty()) {
@@ -145,8 +154,7 @@ public class LanzadorDeException {
 	}
 
 	/**
-	 * Valida el tamaño del paquete.
-	 * * @param tamano tamaño a validar.
+	 * Valida el tamaño del paquete. * @param tamano tamaño a validar.
 	 */
 	public static void verificarTamanoPaquete(String tamano) {
 		if (tamano == null || tamano.isEmpty()) {
@@ -264,11 +272,11 @@ public class LanzadorDeException {
 			throw new CedulaInvalidaException(mensaje);
 		}
 	}
-	
+
 	/**
-	 * Verifica que la contraseña cumpla con criterios de seguridad:
-	 * Mínimo 8 caracteres, una mayúscula y un número.
-	 * * @param contrasena clave a validar.
+	 * Verifica que la contraseña cumpla con criterios de seguridad: Mínimo 8
+	 * caracteres, una mayúscula y un número. * @param contrasena clave a validar.
+	 * 
 	 * @throws ContraseniaInvalidaException si la clave es débil o inválida.
 	 */
 	public static void verificarContrasena(String contrasena) {
